@@ -1,0 +1,2342 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1C0F06">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Cotto & Servito — Gastronomia artigianale a Ceprano (FR). Piatti pronti, consegna a domicilio e ritiro in negozio.">
+<title>Cotto & Servito — L'Oasi della Buona Tavola</title>
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     COTTO & SERVITO — Professional Redesign v2
+     Tone: Elegante · Raffinato · Autentico
+  ============================================================ */
+
+  :root {
+    --cream:       #FAF7F2;
+    --cream-warm:  #F2EBE0;
+    --gold:        #B8965A;
+    --gold-light:  #D4AF7A;
+    --gold-pale:   #EDE0C8;
+    --espresso:    #1C0F06;
+    --bark:        #4A2C12;
+    --bark-mid:    #7A4E28;
+    --green-it:    #007A3A;
+    --red-it:      #C0272D;
+    --white:       #FFFEFB;
+    --text:        #1C0F06;
+    --text-soft:   #6B4423;
+
+    --font-display: 'Cormorant Garamond', 'Playfair Display', serif;
+    --font-body:    'Outfit', sans-serif;
+
+    --beige-light: #E8D8C0;
+    --brown-dark:  #3A1F08;
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+  }
+  .cursor-dot {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s var(--ease-out), width 0.3s, height 0.3s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(184,150,90,0.6);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s var(--ease-out), width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  body.cursor-hover .cursor-dot { width: 12px; height: 12px; background: var(--red-it); }
+  body.cursor-hover .cursor-ring { width: 56px; height: 56px; border-color: rgba(192,39,45,0.5); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 4rem;
+    transition: padding 0.4s var(--ease-out), background 0.4s, box-shadow 0.4s;
+  }
+  nav.scrolled {
+    padding: 0.8rem 4rem;
+    background: rgba(26,15,6,0.96);
+    backdrop-filter: blur(16px) saturate(1.5);
+    box-shadow: 0 1px 0 rgba(184,150,90,0.15);
+  }
+  nav .logo {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--white);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+  nav .logo em { color: var(--gold-light); font-style: italic; }
+  nav ul { display: flex; gap: 2.5rem; list-style: none; }
+  nav ul a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.2s;
+  }
+  nav ul a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold-light);
+    transition: width 0.3s var(--ease-out);
+  }
+  nav ul a:hover { color: var(--white); }
+  nav ul a:hover::after { width: 100%; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-img {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.38) saturate(0.7);
+    transform: scale(1.06);
+    transition: transform 12s var(--ease-out);
+  }
+  #hero.in-view .hero-bg-img { transform: scale(1.0); }
+  .hero-bg-pattern {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      linear-gradient(to bottom, rgba(26,15,6,0.6) 0%, transparent 40%, rgba(26,15,6,0.75) 100%);
+  }
+  .tricolore-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--green-it) 33.33%, white 33.33%, white 66.66%, var(--red-it) 66.66%);
+    z-index: 10;
+  }
+  .hero-content {
+    text-align: center; z-index: 3; padding: 2rem;
+    max-width: 860px;
+  }
+  .hero-tagline {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 2rem;
+    opacity: 0; animation: fadeUp 1s 0.2s var(--ease-out) forwards;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 11vw, 8.5rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+    opacity: 0; animation: fadeUp 1.1s 0.5s var(--ease-out) forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); font-weight: 300; }
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 3.5rem;
+    opacity: 0; animation: fadeUp 1s 0.85s var(--ease-out) forwards;
+  }
+  .hero-line {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1.5rem; margin-bottom: 3rem;
+    opacity: 0; animation: fadeUp 1s 1.1s var(--ease-out) forwards;
+  }
+  .hero-line span { display: block; }
+  .hero-line .line-bar { width: 60px; height: 1px; background: var(--gold); }
+  .hero-line .line-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--red-it); }
+  .hero-desc {
+    max-width: 480px; margin: 0 auto 3.5rem;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.95rem; line-height: 1.9; font-weight: 300;
+    letter-spacing: 0.02em;
+    opacity: 0; animation: fadeUp 1s 1.3s var(--ease-out) forwards;
+  }
+  .hero-cta {
+    display: inline-flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
+    opacity: 0; animation: fadeUp 1s 1.55s var(--ease-out) forwards;
+  }
+  .btn-primary {
+    padding: 1rem 2.8rem;
+    background: var(--red-it);
+    color: white; text-decoration: none;
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500;
+    border: 1px solid var(--red-it);
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,0.08);
+    transform: translateX(-101%);
+    transition: transform 0.4s var(--ease-out);
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary:hover { background: #a0202a; border-color: #a0202a; }
+  .btn-secondary {
+    padding: 1rem 2.8rem;
+    background: transparent; color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500;
+    border: 1px solid rgba(184,150,90,0.45);
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+  }
+  .btn-secondary:hover { border-color: var(--gold-light); color: white; background: rgba(184,150,90,0.08); }
+
+  .scroll-indicator {
+    position: absolute; bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    opacity: 0; animation: fadeUp 1s 2.2s forwards;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem; z-index: 3;
+  }
+  .scroll-indicator p {
+    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); font-family: var(--font-body);
+  }
+  .scroll-indicator span {
+    display: block; width: 1px; height: 55px;
+    background: rgba(255,255,255,0.2); margin: 0 auto; position: relative; overflow: hidden;
+  }
+  .scroll-indicator span::after {
+    content: ''; position: absolute; top: -100%; left: 0;
+    width: 100%; height: 100%; background: var(--gold-light);
+    animation: scrollLine 2s 2.8s infinite;
+  }
+  @keyframes scrollLine { 0% { top: -100%; } 100% { top: 200%; } }
+
+  /* ── SECTION COMMONS ── */
+  .section-inner { max-width: 1140px; margin: 0 auto; }
+
+  .section-label {
+    font-family: var(--font-body);
+    font-size: 0.65rem; letter-spacing: 0.45em; text-transform: uppercase;
+    color: var(--green-it); font-weight: 500;
+    margin-bottom: 1.2rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before {
+    content: ''; display: block; width: 30px; height: 1px; background: currentColor; flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 300;
+    color: var(--bark);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+  }
+  .section-title em { color: var(--gold); font-style: italic; }
+
+  /* ── STORIA ── */
+  #storia {
+    background: var(--white);
+    padding: 9rem 2rem;
+    position: relative;
+  }
+  #storia::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 40%; height: 3px;
+    background: linear-gradient(to right, var(--gold), transparent);
+  }
+  .storia-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center; margin-top: 4rem;
+  }
+  .storia-text p {
+    color: var(--text-soft); font-size: 1rem; line-height: 1.9;
+    margin-bottom: 1.6rem; font-weight: 300;
+  }
+  .storia-text p strong { color: var(--bark); font-weight: 600; }
+  .valori { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; }
+  .valore-card {
+    padding: 1.5rem 1.5rem 1.5rem 1.25rem;
+    border-left: 2px solid var(--gold);
+    background: var(--cream-warm);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .valore-card:hover { background: var(--gold-pale); border-color: var(--bark); }
+  .valore-card h4 {
+    font-family: var(--font-display);
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--bark); margin-bottom: 0.4rem;
+  }
+  .valore-card p { font-size: 0.82rem; color: var(--text-soft); line-height: 1.65; margin: 0; }
+  .storia-visual { position: relative; }
+  .storia-image-placeholder {
+    width: 100%; aspect-ratio: 3/4;
+    background: var(--gold-pale); overflow: hidden; position: relative;
+  }
+  .storia-image-placeholder img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .since-badge {
+    position: absolute; bottom: -1.5rem; right: -1.5rem;
+    width: 120px; height: 120px;
+    background: var(--red-it);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; color: white; text-align: center;
+    box-shadow: 0 8px 32px rgba(192,39,45,0.3);
+  }
+  .since-badge span:first-child { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.8; }
+  .since-badge span:last-child { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; line-height: 1; }
+
+  /* ── TECNOLOGIA ── */
+  #tecnologia { background: var(--espresso); padding: 9rem 2rem; color: white; }
+  #tecnologia .section-label { color: var(--gold-light); }
+  #tecnologia .section-title { color: white; }
+  #tecnologia .section-title em { color: var(--gold-light); }
+  .tech-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 4rem; }
+  .tech-card {
+    padding: 2.5rem;
+    background: rgba(255,255,255,0.03);
+    border-top: 1px solid rgba(184,150,90,0.25);
+    transition: background 0.4s;
+    position: relative; overflow: hidden;
+  }
+  .tech-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px; background: var(--gold);
+    transition: width 0.5s var(--ease-out);
+  }
+  .tech-card:hover { background: rgba(184,150,90,0.06); }
+  .tech-card:hover::after { width: 100%; }
+  .tech-number {
+    font-family: var(--font-display);
+    font-size: 4rem; font-weight: 300;
+    color: rgba(184,150,90,0.18);
+    line-height: 1; margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  .tech-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem; font-weight: 400;
+    color: var(--gold-light); margin-bottom: 1rem;
+  }
+  .tech-card p { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.8; font-weight: 300; }
+  .shelf-life-banner {
+    margin-top: 4rem; padding: 2.5rem 3rem;
+    border: 1px solid rgba(184,150,90,0.2);
+    display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+  }
+  .shelf-stat { text-align: center; flex: 1; min-width: 130px; padding: 1rem; }
+  .shelf-stat .num {
+    font-family: var(--font-display);
+    font-size: 3rem; font-weight: 300;
+    color: var(--gold-light); display: block; line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .shelf-stat .lbl {
+    font-size: 0.68rem; color: rgba(255,255,255,0.4);
+    letter-spacing: 0.18em; text-transform: uppercase; margin-top: 0.5rem; display: block;
+  }
+  .shelf-divider { width: 1px; height: 50px; background: rgba(184,150,90,0.2); flex-shrink: 0; }
+
+  /* ── MENU / PRODOTTI ── */
+  #menu { background: var(--cream); padding: 9rem 2rem; }
+  .menu-tabs {
+    display: flex; gap: 0; margin: 3rem 0;
+    border-bottom: 1px solid rgba(184,150,90,0.25);
+  }
+  .tab-btn {
+    padding: 0.9rem 2rem;
+    background: none; border: none;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    font-family: var(--font-body);
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-soft); cursor: pointer; font-weight: 500;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn:hover { color: var(--bark); }
+  .tab-btn.active { color: var(--red-it); border-bottom-color: var(--red-it); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: tabFade 0.4s var(--ease-out); }
+  @keyframes tabFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 1.5rem; }
+  .product-card {
+    background: var(--white);
+    border: 1px solid rgba(184,150,90,0.15);
+    overflow: hidden;
+    transition: transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+  }
+  .product-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(26,15,6,0.10); }
+  .product-img { width: 100%; aspect-ratio: 4/3; background: var(--gold-pale); display: block; overflow: hidden; position: relative; }
+  .product-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s var(--ease-out); }
+  .product-card:hover .product-img img { transform: scale(1.07); }
+  .product-img::after { display: none; }
+  .product-body { padding: 1.5rem; }
+  .product-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem; font-weight: 400;
+    color: var(--bark); margin-bottom: 0.3rem;
+  }
+  .product-weight { font-size: 0.75rem; color: var(--text-soft); opacity: 0.65; margin-bottom: 1rem; letter-spacing: 0.05em; }
+  .product-prices { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 0.75rem; border-top: 1px solid rgba(184,150,90,0.15); }
+  .price-buy { font-size: 0.72rem; color: var(--text-soft); opacity: 0.55; }
+  .price-sell { font-family: var(--font-display); font-size: 1.35rem; color: var(--red-it); font-weight: 600; letter-spacing: -0.01em; }
+
+  /* ── GALLERIA ── */
+  #galleria { background: var(--espresso); padding: 9rem 2rem; color: white; }
+  #galleria .section-label { color: var(--gold-light); }
+  #galleria .section-title { color: white; }
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 6px; margin-top: 3rem;
+  }
+  .gallery-item {
+    background: var(--bark); aspect-ratio: 1;
+    overflow: hidden; position: relative; cursor: none;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.7s var(--ease-out), filter 0.4s;
+    filter: saturate(0.85) brightness(0.9);
+  }
+  .gallery-item:hover img { transform: scale(1.1); filter: saturate(1) brightness(1); }
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,15,6,0.85) 0%, transparent 55%);
+    display: flex; align-items: flex-end; padding: 1.2rem;
+    opacity: 0; transition: opacity 0.4s var(--ease-out);
+  }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-overlay span {
+    font-family: var(--font-display);
+    font-size: 1.05rem; color: white; font-style: italic; font-weight: 300;
+  }
+  .gallery-item.tall { grid-row: span 2; aspect-ratio: auto; }
+  .gallery-item.wide { grid-column: span 2; aspect-ratio: 2/1; }
+  .gallery-upload-note {
+    text-align: center; margin-top: 2rem;
+    color: rgba(255,255,255,0.25); font-size: 0.78rem; font-style: italic; letter-spacing: 0.05em;
+  }
+
+  /* ── CONTATTI ── */
+  #contatti { background: var(--cream-warm); padding: 9rem 2rem; }
+  .contatti-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 4rem; align-items: start; }
+  .contatti-info h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 300; color: var(--bark); margin-bottom: 2.5rem; }
+  .contact-row { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(184,150,90,0.2); }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-icon {
+    width: 42px; height: 42px;
+    background: var(--gold-pale); border: 1px solid rgba(184,150,90,0.3);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem;
+  }
+  .contact-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green-it); font-weight: 500; margin-bottom: 0.3rem; }
+  .contact-value { color: var(--text); font-size: 0.95rem; line-height: 1.55; }
+  .social-links { display: flex; gap: 0.8rem; margin-top: 2.5rem; }
+  .social-btn {
+    padding: 0.75rem 1.6rem; border: 1px solid rgba(184,150,90,0.4);
+    color: var(--bark); text-decoration: none;
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+    transition: all 0.3s;
+  }
+  .social-btn:hover { background: var(--bark); color: white; border-color: var(--bark); }
+  .map-placeholder {
+    width: 100%; height: 370px;
+    background: var(--gold-pale); border: 1px solid rgba(184,150,90,0.25);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem; color: var(--text-soft); font-size: 0.9rem;
+  }
+  .map-placeholder .map-icon { font-size: 2rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--espresso);
+    padding: 4rem 2rem 2.5rem;
+    color: rgba(255,255,255,0.35); text-align: center;
+    border-top: 1px solid rgba(184,150,90,0.12);
+  }
+  footer .footer-logo { font-family: var(--font-display); font-size: 2rem; font-weight: 300; color: white; margin-bottom: 0.5rem; letter-spacing: 0.03em; }
+  footer .footer-logo em { color: var(--gold-light); font-style: italic; }
+  footer p { font-size: 0.82rem; line-height: 1.8; font-weight: 300; }
+  footer .footer-divider { width: 1px; height: 40px; background: rgba(184,150,90,0.3); margin: 1.5rem auto; }
+  footer .footer-piva { font-size: 0.7rem; color: rgba(255,255,255,0.2); letter-spacing: 0.05em; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(36px);
+    transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.22s; }
+  .reveal-delay-3 { transition-delay: 0.34s; }
+
+  /* ── RESPONSIVE ── */
+  /* ══════════════════════════════════════════════════
+     RESPONSIVE — TABLET (≤ 900px)
+  ══════════════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav.scrolled { padding: 0.7rem 1.5rem; }
+    nav ul { gap: 1.2rem; }
+
+    .storia-grid, .contatti-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .tech-grid { grid-template-columns: 1fr; gap: 1px; }
+    .gallery-grid { grid-template-columns: repeat(2,1fr); }
+    .gallery-item.wide { grid-column: span 1; aspect-ratio: 1; }
+    .gallery-item.tall { grid-row: span 1; aspect-ratio: 1; }
+    .valori { grid-template-columns: 1fr; }
+    .since-badge { bottom: 0; right: 0; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .delivery-options { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* ══════════════════════════════════════════════════
+     RESPONSIVE — MOBILE (≤ 600px)
+     Full mobile-first redesign
+  ══════════════════════════════════════════════════ */
+  @media (max-width: 600px) {
+    /* ── Base ── */
+    body { cursor: auto; font-size: 15px; }
+    .cursor { display: none; }
+    * { -webkit-tap-highlight-color: transparent; }
+
+    /* ── Nav → hamburger ── */
+    nav {
+      padding: 0.9rem 1.2rem;
+      background: rgba(26,15,6,0.97);
+      backdrop-filter: blur(12px);
+    }
+    nav.scrolled { padding: 0.7rem 1.2rem; }
+    nav ul { display: none; }
+    nav .logo { font-size: 1.2rem; }
+
+    /* Hamburger button */
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: rgba(255,255,255,0.8);
+      transition: transform 0.3s var(--ease-out), opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    .mobile-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--espresso);
+      z-index: 180;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      transform: translateY(-100%);
+      transition: transform 0.45s var(--ease-out);
+    }
+    .mobile-nav.open { transform: translateY(0); }
+    .mobile-nav a {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      font-style: italic;
+      transition: color 0.2s;
+    }
+    .mobile-nav a:active { color: var(--gold-light); }
+    .mobile-nav .tricolore-mini {
+      width: 60px; height: 3px;
+      background: linear-gradient(to right, var(--green-it) 33%, white 33%, white 66%, var(--red-it) 66%);
+      margin-bottom: 1rem;
+    }
+
+    /* ── Hero ── */
+    #hero { min-height: 100svh; }
+    .hero-content { padding: 1.2rem; }
+    .hero-tagline { font-size: 0.6rem; letter-spacing: 0.3em; margin-bottom: 1.2rem; }
+    .hero-title { font-size: clamp(2.8rem, 14vw, 4rem); margin-bottom: 0.3rem; }
+    .hero-subtitle { font-size: 1rem; margin-bottom: 2rem; }
+    .hero-line { margin-bottom: 1.5rem; }
+    .hero-line .line-bar { width: 35px; }
+    .hero-desc { font-size: 0.88rem; margin-bottom: 2.5rem; }
+    .hero-cta { flex-direction: column; align-items: center; gap: 0.8rem; width: 100%; }
+    .btn-primary, .btn-secondary {
+      width: 100%; max-width: 320px;
+      padding: 1rem; text-align: center;
+      font-size: 0.7rem;
+    }
+    .scroll-indicator { display: none; }
+
+    /* ── Sections ── */
+    #storia, #tecnologia, #menu, #galleria, #contatti {
+      padding: 5rem 1.2rem;
+    }
+    .section-inner { padding: 0; }
+    .section-label { font-size: 0.6rem; margin-bottom: 0.8rem; }
+    .section-title { font-size: clamp(1.8rem, 8vw, 2.4rem); margin-bottom: 1.5rem; }
+
+    /* ── Storia ── */
+    .storia-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .storia-text p { font-size: 0.9rem; }
+    .valori { grid-template-columns: 1fr; gap: 0.8rem; }
+    .valore-card { padding: 1.2rem; }
+    .valore-card h4 { font-size: 0.95rem; }
+    .storia-image-placeholder { aspect-ratio: 4/3; }
+    .since-badge { width: 90px; height: 90px; bottom: -1rem; right: 0; }
+    .since-badge span:last-child { font-size: 1.4rem; }
+
+    /* ── Tecnologia ── */
+    .tech-grid { grid-template-columns: 1fr; gap: 1px; }
+    .tech-card { padding: 1.8rem 1.5rem; }
+    .tech-number { font-size: 3rem; }
+    .tech-card h3 { font-size: 1.1rem; }
+    .shelf-life-banner {
+      flex-direction: column;
+      gap: 0; padding: 1.5rem;
+    }
+    .shelf-divider { width: 60px; height: 1px; margin: 0 auto; }
+    .shelf-stat { padding: 1.2rem 0; }
+    .shelf-stat .num { font-size: 2.2rem; }
+
+    /* ── Menu ── */
+    .menu-tabs {
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      gap: 0;
+      padding-bottom: 0;
+    }
+    .menu-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      white-space: nowrap;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.65rem;
+      flex-shrink: 0;
+    }
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+    }
+    .product-card { border-radius: 0; }
+    .product-img { aspect-ratio: 1; }
+    .product-body { padding: 0.9rem; }
+    .product-name { font-size: 0.9rem; }
+    .product-weight { font-size: 0.68rem; margin-bottom: 0.6rem; }
+    .price-sell { font-size: 1.1rem; }
+    .add-to-cart {
+      transform: translateY(0);
+      font-size: 0.6rem;
+      padding: 0.6rem;
+      letter-spacing: 0.12em;
+    }
+
+    /* ── Galleria ── */
+    .gallery-grid {
+      grid-template-columns: repeat(2,1fr);
+      gap: 4px;
+    }
+    .gallery-item.tall, .gallery-item.wide {
+      grid-row: span 1; grid-column: span 1; aspect-ratio: 1;
+    }
+    .gallery-overlay { opacity: 1; background: linear-gradient(to top, rgba(26,15,6,0.6) 0%, transparent 50%); }
+    .gallery-overlay span { font-size: 0.85rem; }
+
+    /* ── Contatti ── */
+    .contatti-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contatti-info h3 { font-size: 1.3rem; }
+    .contact-row { gap: 0.9rem; padding-bottom: 1.2rem; margin-bottom: 1.2rem; }
+    .contact-icon { width: 36px; height: 36px; font-size: 0.85rem; flex-shrink: 0; }
+    .contact-value { font-size: 0.88rem; }
+    .social-links { gap: 0.6rem; }
+    .social-btn { padding: 0.65rem 1.2rem; font-size: 0.65rem; }
+    .map-placeholder { height: 220px; }
+
+    /* ── Footer ── */
+    footer { padding: 3rem 1.2rem 2rem; }
+    footer .footer-logo { font-size: 1.5rem; }
+    footer p { font-size: 0.78rem; }
+
+    /* ── Cart FAB ── */
+    .cart-fab { bottom: 1.5rem; right: 1.2rem; width: 54px; height: 54px; }
+    .cart-fab svg { width: 20px; height: 20px; }
+
+    /* ── Cart Drawer (full screen on mobile) ── */
+    .cart-drawer { width: 100vw; border-radius: 0; }
+    .drawer-header { padding: 1.2rem 1.2rem 1rem; }
+    .drawer-header h2 { font-size: 1.3rem; }
+    .cart-items { padding: 1rem 1.2rem; }
+    .cart-item { grid-template-columns: 58px 1fr auto; gap: 0.75rem; padding: 1rem 0; }
+    .cart-item-img { width: 58px; height: 46px; }
+    .cart-item-info .name { font-size: 0.88rem; }
+    .cart-footer { padding: 1.2rem 1.2rem 1.5rem; }
+    .cart-subtotal .total-price { font-size: 1.5rem; }
+    .cart-checkout-btn { padding: 1rem; font-size: 0.7rem; }
+
+    /* ── Checkout (full screen on mobile) ── */
+    .checkout-modal { padding: 0; align-items: flex-end; }
+    .checkout-box {
+      max-height: 95svh;
+      padding: 1.8rem 1.2rem 2rem;
+      border-radius: 0;
+      width: 100%;
+      transform: translateY(100%);
+    }
+    .checkout-modal.open .checkout-box { transform: translateY(0); }
+    .checkout-steps { margin-bottom: 1.5rem; overflow-x: auto; }
+    .checkout-step { font-size: 0.58rem; padding: 0.5rem 0.6rem; white-space: nowrap; flex-shrink: 0; }
+    .checkout-box h3 { font-size: 1.3rem; margin-bottom: 1.2rem; }
+    .delivery-options { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+    .delivery-opt { padding: 1rem 0.8rem; }
+    .opt-icon { font-size: 1.4rem; }
+    .opt-title { font-size: 0.88rem; }
+    .opt-desc { font-size: 0.68rem; }
+    .form-row { grid-template-columns: 1fr; gap: 0.7rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.75rem 0.9rem;
+      font-size: 16px; /* prevents iOS zoom */
+    }
+    .time-slots { gap: 0.4rem; }
+    .time-slot { padding: 0.5rem 0.8rem; font-size: 0.75rem; }
+    .payment-method { padding: 1rem; }
+    .checkout-nav { margin-top: 1.5rem; gap: 0.8rem; }
+    .btn-back, .btn-next { padding: 0.8rem 1.4rem; font-size: 0.68rem; }
+    .success-icon { width: 60px; height: 60px; font-size: 1.5rem; }
+    .success-panel h3 { font-size: 1.6rem; }
+    .success-panel p { font-size: 0.85rem; }
+    .success-actions { flex-direction: column; align-items: stretch; }
+    .success-actions a, .success-actions button {
+      text-align: center; justify-content: center; padding: 0.9rem;
+    }
+
+    /* ── Toast ── */
+    .toast { white-space: normal; text-align: center; left: 1rem; right: 1rem; width: auto; transform: translateX(0) translateY(20px); }
+    .toast.show { transform: translateX(0) translateY(0); }
+  }
+
+  /* ══ Extra small (≤ 380px) ══ */
+  @media (max-width: 380px) {
+    .hero-title { font-size: 2.6rem; }
+    .products-grid { grid-template-columns: 1fr; }
+    .delivery-options { grid-template-columns: 1fr; }
+    .checkout-steps { font-size: 0.54rem; }
+  }
+
+  /* Hamburger — hidden on desktop */
+  .hamburger { display: none; }
+
+  /* Mobile nav — hidden on desktop */
+  .mobile-nav { display: none; }
+
+  @media (max-width: 600px) {
+    .hamburger { display: flex; }
+    .mobile-nav { display: flex; }
+  }
+
+  /* Cart FAB button */
+  .cart-fab {
+    position: fixed;
+    bottom: 2.5rem; right: 2.5rem;
+    z-index: 350;
+    width: 62px; height: 62px;
+    background: var(--red-it);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none;
+    box-shadow: 0 8px 30px rgba(192,39,45,0.4);
+    transition: transform 0.3s var(--ease-out), box-shadow 0.3s;
+    border: none;
+  }
+  .cart-fab:hover { transform: scale(1.08); box-shadow: 0 12px 40px rgba(192,39,45,0.5); }
+  .cart-fab svg { width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 1.8; }
+  .cart-badge {
+    position: absolute; top: -4px; right: -4px;
+    min-width: 22px; height: 22px; padding: 0 5px;
+    background: var(--espresso); color: var(--gold-light);
+    border-radius: 11px;
+    font-size: 0.68rem; font-weight: 600; font-family: var(--font-body);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: scale(0);
+    transition: opacity 0.2s, transform 0.3s var(--ease-out);
+  }
+  .cart-badge.show { opacity: 1; transform: scale(1); }
+
+  /* Add to cart on product card */
+  .product-card { position: relative; }
+  .add-to-cart {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: var(--bark);
+    color: var(--gold-light);
+    border: none; cursor: none;
+    padding: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
+    transform: translateY(100%);
+    transition: transform 0.3s var(--ease-out), background 0.2s;
+    width: 100%;
+  }
+  .add-to-cart:hover { background: var(--espresso); }
+  .product-card:hover .add-to-cart { transform: translateY(0); }
+
+  /* Drawer overlay */
+  .drawer-overlay {
+    position: fixed; inset: 0; z-index: 400;
+    background: rgba(26,15,6,0);
+    pointer-events: none;
+    transition: background 0.4s;
+  }
+  .drawer-overlay.open { background: rgba(26,15,6,0.55); pointer-events: all; backdrop-filter: blur(4px); }
+
+  /* Cart Drawer */
+  .cart-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(480px, 100vw);
+    background: var(--white);
+    z-index: 500;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.45s var(--ease-out);
+    box-shadow: -20px 0 60px rgba(26,15,6,0.15);
+  }
+  .cart-drawer.open { transform: translateX(0); }
+
+  .drawer-header {
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 1px solid rgba(184,150,90,0.2);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .drawer-header h2 {
+    font-family: var(--font-display); font-size: 1.6rem; font-weight: 300; color: var(--bark);
+  }
+  .drawer-close {
+    width: 38px; height: 38px; background: none; border: 1px solid rgba(184,150,90,0.3);
+    cursor: none; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .drawer-close:hover { background: var(--gold-pale); }
+  .drawer-close svg { width: 16px; height: 16px; stroke: var(--bark); stroke-width: 1.5; fill: none; }
+
+  .cart-items {
+    flex: 1; overflow-y: auto; padding: 1.5rem 2rem;
+    scrollbar-width: thin; scrollbar-color: rgba(184,150,90,0.3) transparent;
+  }
+  .cart-empty {
+    text-align: center; padding: 4rem 2rem; color: var(--text-soft);
+  }
+  .cart-empty p { font-family: var(--font-display); font-size: 1.1rem; font-style: italic; margin-bottom: 0.5rem; }
+  .cart-empty span { font-size: 0.8rem; opacity: 0.6; }
+
+  .cart-item {
+    display: grid; grid-template-columns: 70px 1fr auto;
+    gap: 1rem; align-items: center;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid rgba(184,150,90,0.12);
+    animation: slideIn 0.3s var(--ease-out);
+  }
+  @keyframes slideIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
+  .cart-item-img { width: 70px; height: 55px; object-fit: cover; background: var(--gold-pale); }
+  .cart-item-info .name { font-family: var(--font-display); font-size: 0.95rem; color: var(--bark); margin-bottom: 0.2rem; }
+  .cart-item-info .weight { font-size: 0.72rem; color: var(--text-soft); opacity: 0.65; }
+  .cart-item-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+  .cart-item-price { font-family: var(--font-display); font-size: 1rem; color: var(--red-it); font-weight: 600; }
+  .qty-controls { display: flex; align-items: center; gap: 0.5rem; }
+  .qty-btn {
+    width: 26px; height: 26px; border: 1px solid rgba(184,150,90,0.4);
+    background: none; cursor: none; font-size: 0.9rem; color: var(--bark);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .qty-btn:hover { background: var(--gold-pale); }
+  .qty-val { font-size: 0.85rem; min-width: 20px; text-align: center; color: var(--text); }
+
+  .cart-footer {
+    padding: 1.5rem 2rem 2rem; border-top: 1px solid rgba(184,150,90,0.2); flex-shrink: 0;
+    background: var(--cream);
+  }
+  .cart-subtotal {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;
+  }
+  .cart-subtotal span:first-child { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-soft); }
+  .cart-subtotal .total-price { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; color: var(--bark); }
+  .cart-checkout-btn {
+    width: 100%; padding: 1.1rem;
+    background: var(--red-it); color: white; border: none; cursor: none;
+    font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500;
+    transition: background 0.3s;
+  }
+  .cart-checkout-btn:hover { background: #a0202a; }
+  .cart-note { font-size: 0.7rem; color: var(--text-soft); opacity: 0.5; text-align: center; margin-top: 0.75rem; }
+
+  /* ── CHECKOUT MODAL ── */
+  .checkout-modal {
+    position: fixed; inset: 0; z-index: 600;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .checkout-modal.open { opacity: 1; pointer-events: all; }
+  .checkout-modal-bg {
+    position: absolute; inset: 0;
+    background: rgba(26,15,6,0.7); backdrop-filter: blur(8px);
+  }
+  .checkout-box {
+    position: relative; z-index: 1;
+    background: var(--white);
+    width: 100%; max-width: 640px;
+    max-height: 90vh; overflow-y: auto;
+    padding: 3rem;
+    scrollbar-width: thin;
+    transform: translateY(30px);
+    transition: transform 0.4s var(--ease-out);
+    box-shadow: 0 40px 100px rgba(26,15,6,0.3);
+  }
+  .checkout-modal.open .checkout-box { transform: translateY(0); }
+
+  .checkout-steps {
+    display: flex; gap: 0; margin-bottom: 2.5rem;
+  }
+  .checkout-step {
+    flex: 1; text-align: center; padding: 0.6rem;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(106,68,35,0.35); font-weight: 500;
+    border-bottom: 2px solid rgba(184,150,90,0.15);
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .checkout-step.active { color: var(--red-it); border-bottom-color: var(--red-it); }
+  .checkout-step.done { color: var(--green-it); border-bottom-color: var(--green-it); }
+
+  .checkout-panel { display: none; }
+  .checkout-panel.active { display: block; animation: tabFade 0.35s var(--ease-out); }
+
+  .checkout-box h3 {
+    font-family: var(--font-display); font-size: 1.5rem; font-weight: 300;
+    color: var(--bark); margin-bottom: 1.8rem;
+  }
+
+  /* Delivery choice */
+  .delivery-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+  .delivery-opt {
+    border: 1px solid rgba(184,150,90,0.3); padding: 1.5rem;
+    cursor: none; transition: border-color 0.2s, background 0.2s;
+    text-align: center;
+  }
+  .delivery-opt:hover { background: var(--cream); }
+  .delivery-opt.selected { border-color: var(--red-it); background: rgba(192,39,45,0.04); }
+  .delivery-opt input { display: none; }
+  .delivery-opt .opt-icon { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
+  .delivery-opt .opt-title { font-family: var(--font-display); font-size: 1rem; color: var(--bark); margin-bottom: 0.2rem; }
+  .delivery-opt .opt-desc { font-size: 0.75rem; color: var(--text-soft); opacity: 0.7; }
+
+  /* Form fields */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-row.full { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-soft); font-weight: 500; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(184,150,90,0.3);
+    background: var(--cream);
+    font-family: var(--font-body); font-size: 0.92rem; color: var(--text);
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--gold); background: var(--white);
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  /* Time slot */
+  .time-slots { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+  .time-slot {
+    padding: 0.5rem 1rem; border: 1px solid rgba(184,150,90,0.3);
+    font-size: 0.78rem; color: var(--text-soft); cursor: none;
+    transition: all 0.2s;
+  }
+  .time-slot:hover { background: var(--cream-warm); }
+  .time-slot.selected { background: var(--bark); color: white; border-color: var(--bark); }
+
+  /* Order summary in checkout */
+  .order-summary-mini {
+    background: var(--cream); border: 1px solid rgba(184,150,90,0.2);
+    padding: 1.5rem; margin-bottom: 2rem;
+  }
+  .order-summary-mini h4 { font-family: var(--font-display); font-size: 0.9rem; color: var(--bark); margin-bottom: 1rem; letter-spacing: 0.05em; }
+  .summary-item { display: flex; justify-content: space-between; font-size: 0.83rem; color: var(--text-soft); padding: 0.3rem 0; }
+  .summary-total { display: flex; justify-content: space-between; border-top: 1px solid rgba(184,150,90,0.25); padding-top: 0.8rem; margin-top: 0.5rem; }
+  .summary-total span:first-child { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); }
+  .summary-total .tot { font-family: var(--font-display); font-size: 1.3rem; color: var(--bark); }
+
+  /* Payment info box */
+  .payment-info {
+    border: 1px solid rgba(184,150,90,0.3); padding: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .payment-method {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.2rem; border: 1px solid rgba(184,150,90,0.2); margin-bottom: 0.8rem;
+    cursor: none; transition: all 0.2s;
+  }
+  .payment-method.selected { border-color: var(--bark); background: var(--cream); }
+  .payment-method input[type=radio] { display: none; }
+  .payment-radio {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid rgba(184,150,90,0.4); flex-shrink: 0; margin-top: 2px;
+    transition: border-color 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .payment-method.selected .payment-radio { border-color: var(--bark); }
+  .payment-method.selected .payment-radio::after {
+    content: ''; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--bark); display: block;
+  }
+  .payment-details .pm-title { font-size: 0.88rem; font-weight: 500; color: var(--bark); margin-bottom: 0.2rem; }
+  .payment-details .pm-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.5; }
+  .bonifico-details {
+    background: var(--gold-pale); border-left: 3px solid var(--gold);
+    padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.82rem; line-height: 1.8; color: var(--bark);
+  }
+  .bonifico-details strong { font-weight: 600; }
+
+  /* Checkout nav buttons */
+  .checkout-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; }
+  .btn-back {
+    background: none; border: 1px solid rgba(184,150,90,0.35);
+    padding: 0.85rem 1.8rem; cursor: none; color: var(--text-soft);
+    font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-back:hover { background: var(--cream-warm); color: var(--bark); }
+  .btn-next {
+    background: var(--red-it); color: white; border: none;
+    padding: 0.85rem 2.2rem; cursor: none;
+    font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
+    transition: background 0.3s;
+  }
+  .btn-next:hover { background: #a0202a; }
+
+  /* Success panel */
+  .success-panel { text-align: center; padding: 2rem 0; }
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(0,122,58,0.1); border: 2px solid var(--green-it);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem;
+    font-size: 1.8rem;
+  }
+  .success-panel h3 { font-family: var(--font-display); font-size: 2rem; font-weight: 300; color: var(--bark); margin-bottom: 0.8rem; }
+  .success-panel p { font-size: 0.9rem; color: var(--text-soft); line-height: 1.8; margin-bottom: 0.5rem; }
+  .order-number { font-family: var(--font-display); font-size: 1.1rem; color: var(--red-it); margin: 1rem 0; }
+  .success-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+  .btn-close-modal {
+    padding: 0.9rem 2.2rem; border: 1px solid rgba(184,150,90,0.4);
+    background: none; color: var(--bark); cursor: none;
+    font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-close-modal:hover { background: var(--bark); color: white; }
+
+  /* ── Email toast ── */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--espresso); color: white;
+    padding: 0.9rem 1.8rem;
+    font-size: 0.82rem; letter-spacing: 0.05em;
+    border-left: 3px solid var(--green-it);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s var(--ease-out);
+    z-index: 9999; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { border-left-color: var(--red-it); }
+
+</style>
+</head>
+<body>
+<div class="cursor cursor-dot" style="position:fixed;pointer-events:none;z-index:9999;"></div>
+<div class="cursor cursor-ring" style="position:fixed;pointer-events:none;z-index:9998;"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Cotto <em>&</em> Servito</div>
+  <ul>
+    <li><a href="#storia">La Storia</a></li>
+    <li><a href="#menu">I Prodotti</a></li>
+    <li><a href="#galleria">Galleria</a></li>
+    <li><a href="#contatti">Contatti</a></li>
+  </ul>
+  <!-- Hamburger (visibile solo su mobile) -->
+  <button class="hamburger" id="hamburgerBtn" aria-label="Apri menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile fullscreen nav -->
+<div class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="tricolore-mini"></div>
+  <a href="#storia"    onclick="closeMobileNav()">La Storia</a>
+  <a href="#menu"      onclick="closeMobileNav()">I Prodotti</a>
+  <a href="#galleria"  onclick="closeMobileNav()">Galleria</a>
+  <a href="#contatti"  onclick="closeMobileNav()">Contatti</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="tricolore-bar"></div>
+  <div class="hero-bg-img"></div>
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <p class="hero-tagline">L'Oasi del Ristoro della Buona Tavola · Ceprano (FR)</p>
+    <h1 class="hero-title">Cotto <em>&</em><br>Servito</h1>
+    <p class="hero-subtitle">Cucina artigianale, già pronta per te</p>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">Piatti fatti a mano con passione, confezionati in vaschette bio senza additivi. Pronti da scaldare, pronti da gustare.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn-primary">Scopri i Prodotti</a>
+      <a href="#storia" class="btn-secondary">La Nostra Storia</a>
+    </div>
+  </div>
+  <div class="scroll-indicator" aria-hidden="true">
+    <p>Scorri</p>
+    <span></span>
+  </div>
+</section>
+
+<!-- STORIA -->
+<section id="storia">
+  <div class="section-inner">
+    <span class="section-label reveal">Dal 2000</span>
+    <h2 class="section-title reveal">La nostra <em>storia</em>,<br>la nostra passione</h2>
+
+    <div class="storia-grid">
+      <div class="storia-text reveal">
+        <p>Siamo <strong>L'Oasi della Buona Tavola</strong>, un'attività artigianale locale con sede a <strong>Ceprano (FR)</strong>, attiva nel settore ristorativo dal 2000. Da Rita Fortuna, Bar, Tavola Calda e Pizzeria.</p>
+        <p>Grazie alla nostra passione per la cucina e all'utilizzo di tecnologie innovative, abbiamo avviato la linea <strong>Cotto & Servito</strong>: prodotti artigianali in monoporzioni fatte a mano, già pronte da gustare.</p>
+        <p>Ogni piatto nasce dall'amore per la tradizione, dalla selezione rigorosa delle materie prime locali e da una lavorazione completamente a mano. Non siamo una fabbrica — siamo artigiani.</p>
+
+        <div class="valori">
+          <div class="valore-card">
+            <h4>100% Artigianale</h4>
+            <p>Preparazioni manuali, ricette tradizionali, nessun processo industriale.</p>
+          </div>
+          <div class="valore-card">
+            <h4>Senza Additivi</h4>
+            <p>Prodotto naturale, senza conservanti né sostanze aggiunte.</p>
+          </div>
+          <div class="valore-card">
+            <h4>Bio & Sostenibile</h4>
+            <p>Vaschette biodegradabili ed ecologiche, rispettose dell'ambiente.</p>
+          </div>
+          <div class="valore-card">
+            <h4>Materie Prime Locali</h4>
+            <p>Fornitori del territorio per garantire freschezza e qualità garantita.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="storia-visual reveal">
+        <div class="storia-image-placeholder">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=800&fit=crop&q=80" alt="La nostra cucina artigianale" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+        <div class="since-badge">
+          <span>Dal</span>
+          <span>2000</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECNOLOGIA -->
+<section id="tecnologia">
+  <div class="section-inner">
+    <span class="section-label reveal" style="color: var(--beige-light);">Innovazione</span>
+    <h2 class="section-title reveal">Il nostro metodo,<br><em>garanzia di qualità</em></h2>
+
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <div class="tech-number">01</div>
+        <h3>Tecnologia M.A.P.</h3>
+        <p>Confezionamento in Atmosfera Protetta con N₂ e CO₂ che conserva integrità e freschezza senza additivi, in modo naturale e igienico.</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-number">02</div>
+        <h3>Abbattimento Rapido</h3>
+        <p>Cottura ad alta temperatura seguita da rapido abbattimento termico con abbattitore professionale per massima sicurezza alimentare.</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-number">03</div>
+        <h3>Vaschetta Bio</h3>
+        <p>Packaging ecologico, biodegradabile e resistente fino a 220°C. Riscaldabile sia chiusa che aperta, in forno o microonde.</p>
+      </div>
+    </div>
+
+    <div class="shelf-life-banner reveal">
+      <div class="shelf-stat">
+        <span class="num">30</span>
+        <span class="lbl">Giorni di shelf life in frigo</span>
+      </div>
+      <div class="shelf-divider"></div>
+      <div class="shelf-stat">
+        <span class="num">220°</span>
+        <span class="lbl">Resistenza vaschetta</span>
+      </div>
+      <div class="shelf-divider"></div>
+      <div class="shelf-stat">
+        <span class="num">500W</span>
+        <span class="lbl">Riscaldabile in microonde</span>
+      </div>
+      <div class="shelf-divider"></div>
+      <div class="shelf-stat">
+        <span class="num">0</span>
+        <span class="lbl">Additivi e conservanti</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU / PRODOTTI -->
+<section id="menu">
+  <div class="section-inner">
+    <span class="section-label reveal">Menu</span>
+    <h2 class="section-title reveal">I nostri <em>prodotti</em></h2>
+
+    <div class="menu-tabs">
+      <button class="tab-btn active" onclick="showTab('primi')">Primi Piatti</button>
+      <button class="tab-btn" onclick="showTab('secondi')">Secondi Piatti</button>
+      <button class="tab-btn" onclick="showTab('fritti')">Fritti</button>
+      <button class="tab-btn" onclick="showTab('dolci')">Dolci</button>
+    </div>
+
+    <!-- PRIMI -->
+    <div id="tab-primi" class="tab-content active">
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80" alt="Lasagna al Ragù" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Lasagna al Ragù</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €3.99</span>
+              <span class="price-sell">€5,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Lasagna al Ragù`,price:5.30,img:`https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80" alt="Lasagna Porcini e Salsiccia" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Lasagna Porcini e Salsiccia</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.30</span>
+              <span class="price-sell">€5,70</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Lasagna Porcini e Salsiccia`,price:5.70,img:`https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80" alt="Cannelloni alla Carne" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Cannelloni alla Carne</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.30</span>
+              <span class="price-sell">€5,70</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Cannelloni alla Carne`,price:5.70,img:`https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80" alt="Cannelloni Ricotta e Spinaci" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Cannelloni Ricotta e Spinaci</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.30</span>
+              <span class="price-sell">€5,70</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Cannelloni Ricotta e Spinaci`,price:5.70,img:`https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1519984388953-d2406bc725e1?w=400&h=300&fit=crop&q=80" alt="Crepes Prosciutto Cotto e Mozzarella" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Crepes Prosciutto Cotto e Mozzarella</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €3.70</span>
+              <span class="price-sell">€4,90</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Crepes Prosciutto Cotto e Mozzarella`,price:4.90,img:`https://images.unsplash.com/photo-1519984388953-d2406bc725e1?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=400&h=300&fit=crop&q=80" alt="Parmigiana di Melanzane" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Parmigiana di Melanzane</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.30</span>
+              <span class="price-sell">€5,70</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Parmigiana di Melanzane`,price:5.70,img:`https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=300&fit=crop&q=80" alt="Risotto alla Pescatora" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Risotto alla Pescatora</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.80</span>
+              <span class="price-sell">€6,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Risotto alla Pescatora`,price:6.30,img:`https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80" alt="Gnocchi alla Crema di Scampi" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Gnocchi alla Crema di Scampi</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €3.99</span>
+              <span class="price-sell">€5,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Gnocchi alla Crema di Scampi`,price:5.30,img:`https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80" alt="Gnocchi alla Sorrentina" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Gnocchi alla Sorrentina</h3>
+            <p class="product-weight">400g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.30</span>
+              <span class="price-sell">€5,70</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Gnocchi alla Sorrentina`,price:5.70,img:`https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80" alt="Insalata di Riso" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Insalata di Riso</h3>
+            <p class="product-weight">350g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €3.99</span>
+              <span class="price-sell">€5,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Insalata di Riso`,price:5.30,img:`https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80`,weight:`350g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80" alt="Insalata di Farro" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Insalata di Farro</h3>
+            <p class="product-weight">300g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.60</span>
+              <span class="price-sell">€6,10</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Insalata di Farro`,price:6.10,img:`https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80`,weight:`300g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECONDI -->
+    <div id="tab-secondi" class="tab-content">
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&q=80" alt="Arista di Maiale e Olive" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Arista di Maiale e Olive</h3>
+            <p class="product-weight">250g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.80</span>
+              <span class="price-sell">€6,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Arista di Maiale e Olive`,price:6.30,img:`https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=80" alt="Broccoletti e Salsiccia" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Broccoletti e Salsiccia</h3>
+            <p class="product-weight">250g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.80</span>
+              <span class="price-sell">€6,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Broccoletti e Salsiccia`,price:6.30,img:`https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&h=300&fit=crop&q=80" alt="Polpette di Manzo e Fagioli" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Polpette di Manzo e Fagioli</h3>
+            <p class="product-weight">250g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.80</span>
+              <span class="price-sell">€6,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Polpette di Manzo e Fagioli`,price:6.30,img:`https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80" alt="Peperone Ripieno al Riso" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Peperone Ripieno al Riso</h3>
+            <p class="product-weight">250g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.66</span>
+              <span class="price-sell">€6,10</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Peperone Ripieno al Riso`,price:6.10,img:`https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80" alt="Peperone Ripieno alla Carne" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Peperone Ripieno alla Carne</h3>
+            <p class="product-weight">250g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.80</span>
+              <span class="price-sell">€6,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Peperone Ripieno alla Carne`,price:6.30,img:`https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&h=300&fit=crop&q=80" alt="Alette di Pollo e Patatine" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Alette di Pollo e Patatine</h3>
+            <p class="product-weight">250g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.80</span>
+              <span class="price-sell">€6,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Alette di Pollo e Patatine`,price:6.30,img:`https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1598103442097-8b74394b95c0?w=400&h=300&fit=crop&q=80" alt="Scaloppina di Pollo e Patatine" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Scaloppina di Pollo e Patatine</h3>
+            <p class="product-weight">250g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.80</span>
+              <span class="price-sell">€6,30</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Scaloppina di Pollo e Patatine`,price:6.30,img:`https://images.unsplash.com/photo-1598103442097-8b74394b95c0?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&q=80" alt="Maxi Hamburger di Vitello" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Maxi Hamburger di Vitello</h3>
+            <p class="product-weight">200g · monoporzione</p>
+            <div class="product-prices">
+              <span class="price-buy">Acq. €4.90</span>
+              <span class="price-sell">€6,50</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Maxi Hamburger di Vitello`,price:6.50,img:`https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&q=80`,weight:`200g · monoporzione`})">+ Aggiungi al carrello</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRITTI -->
+    <div id="tab-fritti" class="tab-content">
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80" alt="Supplì" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Supplì</h3>
+            <p class="product-weight">4 pz da 70g</p>
+            <div class="product-prices">
+              <span class="price-buy">€10.80/kg</span>
+              <span class="price-sell">€10,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Supplì`,price:10.80,img:`https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80`,weight:`4 pz da 70g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80" alt="Crocchette di Patate" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Crocchette di Patate</h3>
+            <p class="product-weight">4 pz da 70g</p>
+            <div class="product-prices">
+              <span class="price-buy">€10.80/kg</span>
+              <span class="price-sell">€10,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Crocchette di Patate`,price:10.80,img:`https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80`,weight:`4 pz da 70g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80" alt="Crocchettine di Patate" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Crocchettine di Patate</h3>
+            <p class="product-weight">6 pz da 30g</p>
+            <div class="product-prices">
+              <span class="price-buy">€9.80/kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Crocchettine di Patate`,price:9.80,img:`https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80`,weight:`6 pz da 30g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1559181567-c3190dff4aaa?w=400&h=300&fit=crop&q=80" alt="Olive all'Ascolana" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Olive all'Ascolana</h3>
+            <p class="product-weight">6 pz da 30g</p>
+            <div class="product-prices">
+              <span class="price-buy">€9.80/kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Olive all'Ascolana`,price:9.80,img:`https://images.unsplash.com/photo-1559181567-c3190dff4aaa?w=400&h=300&fit=crop&q=80`,weight:`6 pz da 30g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&h=300&fit=crop&q=80" alt="Bocconcini di Melanzana" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Bocconcini di Melanzana</h3>
+            <p class="product-weight">Venduto al kg · min. 500g</p>
+            <div class="product-prices">
+              <span class="price-buy">€9.80/kg</span>
+              <span class="price-sell">€9,80/kg</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Bocconcini di Melanzana`,price:9.80,img:`https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&h=300&fit=crop&q=80`,weight:`Venduto al kg · min. 500g`})">+ Aggiungi al carrello</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOLCI -->
+    <div id="tab-dolci" class="tab-content">
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80" alt="Tozzetti alle Mandorle" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Tozzetti alle Mandorle</h3>
+            <p class="product-weight">4 confezioni da 250g</p>
+            <div class="product-prices">
+              <span class="price-buy">al kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Tozzetti alle Mandorle`,price:9.80,img:`https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop&q=80" alt="Tozzetti al Cioccolato" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Tozzetti al Cioccolato</h3>
+            <p class="product-weight">4 confezioni da 250g</p>
+            <div class="product-prices">
+              <span class="price-buy">al kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Tozzetti al Cioccolato`,price:9.80,img:`https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80" alt="Ciambelline al Vino Rosso" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Ciambelline al Vino Rosso</h3>
+            <p class="product-weight">4 confezioni da 250g</p>
+            <div class="product-prices">
+              <span class="price-buy">al kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Ciambelline al Vino Rosso`,price:9.80,img:`https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80" alt="Ciambelline al Vino Bianco" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Ciambelline al Vino Bianco</h3>
+            <p class="product-weight">4 confezioni da 250g</p>
+            <div class="product-prices">
+              <span class="price-buy">al kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Ciambelline al Vino Bianco`,price:9.80,img:`https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=400&h=300&fit=crop&q=80" alt="Pan di Spagna con Canditi" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Pan di Spagna con Canditi</h3>
+            <p class="product-weight">4 confezioni da 250g</p>
+            <div class="product-prices">
+              <span class="price-buy">al kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Pan di Spagna con Canditi`,price:9.80,img:`https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=400&h=300&fit=crop&q=80" alt="Muffin" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Muffin</h3>
+            <p class="product-weight">4 confezioni da 250g</p>
+            <div class="product-prices">
+              <span class="price-buy">al kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Muffin`,price:9.80,img:`https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
+        </div>
+        <div class="product-card">
+          <div class="product-img"><img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&h=300&fit=crop&q=80" alt="Crostata alla Ciliegia" loading="lazy"></div>
+          <div class="product-body">
+            <h3 class="product-name">Crostata alla Ciliegia</h3>
+            <p class="product-weight">4 confezioni da 250g</p>
+            <div class="product-prices">
+              <span class="price-buy">al kg</span>
+              <span class="price-sell">€9,80</span>
+            </div>
+          </div>
+          <button class="add-to-cart" onclick="addToCart({name:`Crostata alla Ciliegia`,price:9.80,img:`https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- GALLERIA -->
+<section id="galleria">
+  <div class="section-inner">
+    <span class="section-label reveal" style="color: var(--beige-light);">Galleria</span>
+    <h2 class="section-title reveal">I nostri <em>piatti</em></h2>
+
+    <div class="gallery-grid">
+      <div class="gallery-item tall">
+        <img src="https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=600&h=800&fit=crop&q=80" alt="Lasagna artigianale">
+        <div class="gallery-overlay"><span>Lasagna</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&q=80" alt="Cucina artigianale">
+        <div class="gallery-overlay"><span>Cucina</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=400&fit=crop&q=80" alt="Risotto">
+        <div class="gallery-overlay"><span>Risotto</span></div>
+      </div>
+      <div class="gallery-item tall">
+        <img src="https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=600&h=800&fit=crop&q=80" alt="Parmigiana">
+        <div class="gallery-overlay"><span>Parmigiana</span></div>
+      </div>
+      <div class="gallery-item wide">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=400&fit=crop&q=80" alt="Insalate fresche">
+        <div class="gallery-overlay"><span>Insalate fresche</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=400&fit=crop&q=80" alt="Fritti">
+        <div class="gallery-overlay"><span>Fritti</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=400&fit=crop&q=80" alt="Dolci">
+        <div class="gallery-overlay"><span>Dolci</span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop&q=80" alt="Hamburger">
+        <div class="gallery-overlay"><span>Hamburger</span></div>
+      </div>
+    </div>
+
+    <p class="gallery-upload-note">📷 Sostituisci con le fotografie reali dei tuoi piatti per un effetto ancora più autentico</p>
+  </div>
+</section>
+
+<!-- CONTATTI -->
+<section id="contatti">
+  <div class="section-inner">
+    <span class="section-label reveal">Dove siamo</span>
+    <h2 class="section-title reveal">Vieni a <em>trovarci</em></h2>
+
+    <div class="contatti-grid">
+      <div class="contatti-info reveal">
+        <h3>L'Oasi della Buona Tavola</h3>
+
+        <div class="contact-row">
+          <div class="contact-icon">📍</div>
+          <div>
+            <p class="contact-label">Indirizzo</p>
+            <p class="contact-value">Via Ori Martin n.4<br>03024 Ceprano (FR)</p>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-icon">📞</div>
+          <div>
+            <p class="contact-label">Telefono</p>
+            <p class="contact-value">
+              Marco: <a href="tel:3922340754" style="color: var(--brown-dark);">392 234 0754</a><br>
+              Maurizio: <a href="tel:3889552404" style="color: var(--brown-dark);">388 955 2404</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <p class="contact-label">PEC</p>
+            <p class="contact-value">fortunarita@pec.it</p>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-icon">🏪</div>
+          <div>
+            <p class="contact-label">Servizi</p>
+            <p class="contact-value">Bar · Tavola Calda · Pizzeria<br>Gastronomia da Asporto</p>
+          </div>
+        </div>
+
+        <div class="social-links">
+          <a href="https://www.instagram.com/cotto_da_servire_" target="_blank" class="social-btn">Instagram</a>
+          <a href="https://www.facebook.com/cotto-da-servire" target="_blank" class="social-btn">Facebook</a>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="map-placeholder">
+          <span class="map-icon">🗺️</span>
+          <span style="font-weight:700; color: var(--brown-dark);">Via Ori Martin n.4, Ceprano (FR)</span>
+          <a href="https://maps.google.com/?q=Via+Ori+Martin+4+Ceprano+FR" target="_blank" style="color: var(--red-it); font-size: 0.85rem; text-decoration: none; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Apri in Google Maps →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Cotto <em>&</em> Servito</div>
+  <p>L'Oasi del Ristoro della Buona Tavola · Di Rita Fortuna</p>
+  <div class="footer-divider"></div>
+  <p class="footer-piva">P.IVA: 02131930600 · C.F: FRT RTI 71R60C479Z · Via Ori Martin n.4, 03024 Ceprano (FR)</p>
+  <p style="margin-top: 0.5rem; font-size: 0.7rem; color: rgba(255,255,255,0.2);">© 2025 Cotto & Servito. Tutti i diritti riservati.</p>
+</footer>
+
+
+<script>
+  /* ══ EMAILJS CONFIG ══
+     1. Vai su https://www.emailjs.com e crea un account gratuito
+     2. Crea un "Email Service" (Gmail consigliato) → copia il Service ID
+     3. Crea un "Email Template" → copia il Template ID
+     4. Vai su Account → copia il Public Key
+     5. Sostituisci i tre valori qui sotto
+  */
+  const EMAILJS_PUBLIC_KEY  = 'IL_TUO_PUBLIC_KEY';   // ← sostituisci
+  const EMAILJS_SERVICE_ID  = 'IL_TUO_SERVICE_ID';   // ← sostituisci
+  const EMAILJS_TEMPLATE_ID = 'IL_TUO_TEMPLATE_ID';  // ← sostituisci
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  function buildEmailBody(ordN, nome, tel, email, total){
+    const righe = cart.map(i => `• ${i.name} × ${i.qty}  →  €${(i.price*i.qty).toFixed(2)}`).join('\n');
+    const consegnaTxt = deliveryMode === 'ritiro'
+      ? `Ritiro in negozio — orario: ${selectedTime}\nData: ${document.getElementById('pickup-date').value || 'da concordare'}`
+      : `Consegna a domicilio\nIndirizzo: ${document.getElementById('f-indirizzo')?.value} ${document.getElementById('f-citta')?.value} ${document.getElementById('f-cap')?.value}\nData: ${document.getElementById('delivery-date')?.value || 'da concordare'} · Fascia: ${document.getElementById('delivery-time')?.value}`;
+    const pagamentoTxt = paymentMode === 'contanti' ? 'Contanti alla consegna/ritiro' : 'Bonifico bancario anticipato';
+    const note = document.getElementById('f-note')?.value || '—';
+    return `Nuovo ordine ricevuto dal sito Cotto & Servito!\n\n` +
+      `═══════════════════════════\n` +
+      `N° ORDINE: ${ordN}\n` +
+      `═══════════════════════════\n\n` +
+      `CLIENTE\nNome: ${nome}\nTelefono: ${tel}\nEmail: ${email || '—'}\n\n` +
+      `PRODOTTI ORDINATI\n${righe}\n\nTOTALE: €${total}\n\n` +
+      `CONSEGNA\n${consegnaTxt}\n\n` +
+      `PAGAMENTO\n${pagamentoTxt}\n\n` +
+      `NOTE\n${note}`;
+  }
+
+  function showToast(msg, isError=false){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError?' error':'') + ' show';
+    setTimeout(()=>t.classList.remove('show'), 4000);
+  }
+
+  async function sendOrderEmail(ordN){
+    const nome  = document.getElementById('f-nome').value;
+    const tel   = document.getElementById('f-tel').value;
+    const email = document.getElementById('f-email').value;
+    const total = cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2).replace('.',',');
+
+    const templateParams = {
+      to_email:      'cottoeservito@email.it', // ← metti la tua email
+      order_number:  ordN,
+      client_name:   nome,
+      client_phone:  tel,
+      client_email:  email || '—',
+      delivery_mode: deliveryMode === 'ritiro' ? 'Ritiro in negozio' : 'Consegna a domicilio',
+      payment_mode:  paymentMode === 'contanti' ? 'Contanti' : 'Bonifico bancario',
+      total:         '€' + total,
+      order_body:    buildEmailBody(ordN, nome, tel, email, total),
+    };
+
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      console.log('✅ Email ordine inviata');
+      showToast('✅ Notifica ordine inviata via email');
+    } catch(err) {
+      console.warn('⚠️ Email non inviata (configura EmailJS):', err);
+      showToast('⚠️ Ordine confermato — configura EmailJS per le notifiche', true);
+    }
+  }
+
+  /* ── Mobile Nav (Hamburger) ── */
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileNav    = document.getElementById('mobileNav');
+
+  function openMobileNav(){
+    hamburgerBtn.classList.add('open');
+    mobileNav.classList.add('open');
+    mobileNav.setAttribute('aria-hidden','false');
+    hamburgerBtn.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileNav(){
+    hamburgerBtn.classList.remove('open');
+    mobileNav.classList.remove('open');
+    mobileNav.setAttribute('aria-hidden','true');
+    hamburgerBtn.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  hamburgerBtn.addEventListener('click', ()=>{
+    hamburgerBtn.classList.contains('open') ? closeMobileNav() : openMobileNav();
+  });
+  // Close on ESC
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMobileNav(); closeDrawer(); closeCheckout(); }});
+
+  /* ── Touch swipe to close cart drawer ── */
+  let touchStartX = 0;
+  cartDrawer.addEventListener('touchstart', e=>{ touchStartX = e.touches[0].clientX; }, {passive:true});
+  cartDrawer.addEventListener('touchend',   e=>{
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(dx > 80) closeDrawer(); // swipe right → close
+  }, {passive:true});
+
+  /* ── Touch swipe to close checkout (swipe down) ── */
+  const checkoutBox = document.querySelector('.checkout-box');
+  let touchStartY = 0;
+  checkoutBox.addEventListener('touchstart', e=>{ touchStartY = e.touches[0].clientY; }, {passive:true});
+  checkoutBox.addEventListener('touchend',   e=>{
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if(dy > 100 && checkoutBox.scrollTop === 0) closeCheckout();
+  }, {passive:true});
+
+  /* ── Cursor ── */
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  function animateCursor(){
+    rx+=(mx-rx)*0.18; ry+=(my-ry)*0.18;
+    if(dot){dot.style.left=mx+'px';dot.style.top=my+'px';}
+    if(ring){ring.style.left=rx+'px';ring.style.top=ry+'px';}
+    requestAnimationFrame(animateCursor);
+  }
+  if(dot&&ring){
+    animateCursor();
+    const hoverEls = ()=>document.querySelectorAll('a,button,.gallery-item,.product-card,.valore-card,.delivery-opt,.time-slot,.payment-method');
+    const attachHover = ()=>{ hoverEls().forEach(el=>{ el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover')); el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover')); }); };
+    attachHover();
+    setInterval(attachHover, 2000);
+  }
+
+  /* ── Nav scroll ── */
+  const nav=document.querySelector('nav');
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true});
+
+  /* ── Hero ── */
+  document.getElementById('hero').classList.add('in-view');
+
+  /* ── Tab switching ── */
+  function showTab(name){
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('tab-'+name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  /* ── Reveal observer ── */
+  const revealObs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target);}});
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+  document.querySelectorAll('.product-card').forEach((el,i)=>{
+    el.classList.add('reveal'); el.style.transitionDelay=(i%4)*0.08+'s'; revealObs.observe(el);
+  });
+  document.querySelectorAll('.tech-card').forEach((el,i)=>{
+    el.classList.add('reveal'); el.style.transitionDelay=i*0.12+'s'; revealObs.observe(el);
+  });
+
+  /* ── Counter animation ── */
+  function animateCounter(el,target,suffix,duration){
+    let start=null;
+    const step=ts=>{ if(!start)start=ts; const p=Math.min((ts-start)/duration,1); const e=1-Math.pow(1-p,3); el.textContent=Math.round(e*target)+suffix; if(p<1)requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  const statsObs=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.querySelectorAll('.num').forEach(num=>{
+          const t=num.textContent.trim(); const m=t.match(/^(\d+)(.*)/);
+          if(m)animateCounter(num,parseInt(m[1]),m[2],1400);
+        }); statsObs.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.5});
+  document.querySelectorAll('.shelf-life-banner').forEach(el=>statsObs.observe(el));
+
+  /* ══ CART LOGIC ══ */
+  let cart = [];
+  let deliveryMode = 'ritiro';
+  let paymentMode = 'contanti';
+  let selectedTime = '09:00–11:00';
+  let currentStep = 1;
+
+  const cartFab = document.getElementById('cartFab');
+  const cartDrawer = document.getElementById('cartDrawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const drawerClose = document.getElementById('drawerClose');
+  const cartBadge = document.getElementById('cartBadge');
+  const cartItemsEl = document.getElementById('cartItems');
+  const cartTotalEl = document.getElementById('cartTotal');
+  const checkoutModal = document.getElementById('checkoutModal');
+  const checkoutBg = document.getElementById('checkoutBg');
+
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  ['pickup-date','delivery-date'].forEach(id=>{ const el=document.getElementById(id); if(el)el.min=today; });
+
+  function openDrawer(){ cartDrawer.classList.add('open'); drawerOverlay.classList.add('open'); }
+  function closeDrawer(){ cartDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }
+  cartFab.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerOverlay.addEventListener('click', ()=>{ closeDrawer(); closeCheckout(); });
+
+  function addToCart(product){
+    const existing = cart.find(i=>i.name===product.name);
+    if(existing){ existing.qty++; }
+    else { cart.push({...product, qty:1}); }
+    updateCart();
+    // Bounce FAB
+    cartFab.style.transform='scale(1.25)';
+    setTimeout(()=>cartFab.style.transform='',300);
+  }
+
+  function updateCart(){
+    const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const count = cart.reduce((s,i)=>s+i.qty,0);
+    cartBadge.textContent = count;
+    cartBadge.classList.toggle('show', count>0);
+    cartTotalEl.textContent = '€'+total.toFixed(2).replace('.',',');
+    renderCartItems();
+  }
+
+  function renderCartItems(){
+    if(cart.length===0){
+      cartItemsEl.innerHTML='<div class="cart-empty"><p>Il carrello è vuoto</p><span>Aggiungi i tuoi piatti preferiti</span></div>';
+      return;
+    }
+    cartItemsEl.innerHTML = cart.map((item,idx)=>`
+      <div class="cart-item">
+        ${item.img ? `<img class="cart-item-img" src="${item.img}" alt="${item.name}">` : '<div class="cart-item-img"></div>'}
+        <div class="cart-item-info">
+          <div class="name">${item.name}</div>
+          <div class="weight">${item.weight}${item.weight && item.weight.includes('kg') ? ' <span style="color:var(--red-it);font-size:0.68rem;">· prezzo al kg</span>' : ''}</div>
+        </div>
+        <div class="cart-item-controls">
+          <div class="cart-item-price">€${(item.price*item.qty).toFixed(2).replace('.',',')}</div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function changeQty(idx, delta){
+    cart[idx].qty += delta;
+    if(cart[idx].qty <= 0) cart.splice(idx,1);
+    updateCart();
+  }
+
+  /* Checkout flow */
+  document.getElementById('goToCheckout').addEventListener('click', ()=>{
+    if(cart.length===0) return;
+    closeDrawer();
+    goStep(1);
+    checkoutModal.classList.add('open');
+  });
+  checkoutBg.addEventListener('click', closeCheckout);
+
+  function closeCheckout(){ checkoutModal.classList.remove('open'); }
+  function closeAll(){ closeCheckout(); cart=[]; updateCart(); }
+
+  function goStep(n){
+    // Validate step 2 required fields before going to step 3
+    if(n===3){
+        const nome=document.getElementById('f-nome').value.trim();
+        const tel=document.getElementById('f-tel').value.trim();
+        if(!nome||!tel){ alert('Inserisci almeno nome e telefono per continuare.'); return; }
+        if(deliveryMode==='consegna'){
+          const ind=document.getElementById('f-indirizzo').value.trim();
+          if(!ind){ alert('Inserisci l\'indirizzo di consegna.'); return; }
+        }
+    }
+    currentStep = n;
+    document.querySelectorAll('.checkout-panel').forEach((p,i)=>{
+      p.classList.toggle('active', i+1===n);
+    });
+    document.querySelectorAll('.checkout-step').forEach((s,i)=>{
+      s.classList.remove('active','done');
+      if(i+1===n) s.classList.add('active');
+      else if(i+1<n) s.classList.add('done');
+    });
+    if(n===3) renderCheckoutSummary();
+    if(n===4) renderConfirmation();
+  }
+
+  function renderCheckoutSummary(){
+    const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const delivery = deliveryMode==='consegna' ? '<div class="summary-item"><span>Consegna</span><span>Da concordare</span></div>' : '';
+    document.getElementById('checkout-summary').innerHTML = `
+      <h4>Riepilogo ordine</h4>
+      ${cart.map(i=>`<div class="summary-item"><span>${i.name} × ${i.qty}</span><span>€${(i.price*i.qty).toFixed(2).replace('.',',')}</span></div>`).join('')}
+      ${delivery}
+      <div class="summary-total"><span>Totale</span><span class="tot">€${total.toFixed(2).replace('.',',')}</span></div>
+    `;
+    document.getElementById('bonifico-importo').textContent = '€'+total.toFixed(2).replace('.',',');
+  }
+
+  function renderConfirmation(){
+    const nome = document.getElementById('f-nome').value;
+    const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const ordN = 'CS-' + Date.now().toString().slice(-6);
+    document.getElementById('order-num').textContent = 'N° ordine: ' + ordN;
+    let msg = '';
+    if(paymentMode==='contanti'){
+      msg = deliveryMode==='ritiro'
+        ? `Grazie ${nome}! Il tuo ordine è confermato. Potrai pagare in contanti al momento del ritiro in negozio.`
+        : `Grazie ${nome}! Il tuo ordine è confermato. Pagherai €${total.toFixed(2).replace('.',',')} in contanti alla consegna.`;
+    } else {
+      msg = `Grazie ${nome}! Riceverai le istruzioni per il bonifico bancario. L'ordine sarà confermato alla ricezione del pagamento (€${total.toFixed(2).replace('.',',')}).`;
+    }
+    document.getElementById('success-msg').textContent = msg;
+
+    // 📧 Invia email di notifica
+    sendOrderEmail(ordN);
+  }
+
+  /* Delivery selection */
+  function selectDelivery(mode){
+    deliveryMode = mode;
+    document.getElementById('opt-ritiro').classList.toggle('selected', mode==='ritiro');
+    document.getElementById('opt-consegna').classList.toggle('selected', mode==='consegna');
+    document.getElementById('ritiro-info').style.display = mode==='ritiro' ? '' : 'none';
+    document.getElementById('consegna-info').style.display = mode==='consegna' ? '' : 'none';
+    document.getElementById('address-fields').style.display = mode==='consegna' ? '' : 'none';
+  }
+
+  /* Time slot selection */
+  function selectTime(el){
+    document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTime = el.textContent;
+  }
+
+  /* Payment selection */
+  function selectPayment(mode){
+    paymentMode = mode;
+    document.getElementById('pm-contanti').classList.toggle('selected', mode==='contanti');
+    document.getElementById('pm-bonifico').classList.toggle('selected', mode==='bonifico');
+    document.getElementById('bonifico-box').style.display = mode==='bonifico' ? '' : 'none';
+  }
+</script>
+
+<!-- CART FAB -->
+<div class="toast" id="toast"></div>
+<button class="cart-fab" id="cartFab" aria-label="Apri carrello">
+  <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+  <span class="cart-badge" id="cartBadge">0</span>
+</button>
+
+<!-- DRAWER OVERLAY -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="drawer-header">
+    <h2>Il tuo <em>carrello</em></h2>
+    <button class="drawer-close" id="drawerClose">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <p>Il carrello è vuoto</p>
+      <span>Aggiungi i tuoi piatti preferiti</span>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Totale</span>
+      <span class="total-price" id="cartTotal">€0.00</span>
+    </div>
+    <button class="cart-checkout-btn" id="goToCheckout">Procedi all'Ordine →</button>
+    <p class="cart-note">Ritiro in negozio o consegna · Pagamento alla consegna o bonifico</p>
+    <p class="cart-note" style="margin-top:0.3rem;font-size:0.68rem;">* I prodotti al kg verranno pesati in negozio · il prezzo è indicativo</p>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-modal" id="checkoutModal">
+  <div class="checkout-modal-bg" id="checkoutBg"></div>
+  <div class="checkout-box">
+
+    <!-- STEPS -->
+    <div class="checkout-steps">
+      <div class="checkout-step active" id="step-ind-1">1 · Consegna</div>
+      <div class="checkout-step" id="step-ind-2">2 · Dati</div>
+      <div class="checkout-step" id="step-ind-3">3 · Pagamento</div>
+      <div class="checkout-step" id="step-ind-4">4 · Conferma</div>
+    </div>
+
+    <!-- STEP 1: Delivery -->
+    <div class="checkout-panel active" id="panel-1">
+      <h3>Come vuoi ricevere il tuo ordine?</h3>
+      <div class="delivery-options">
+        <div class="delivery-opt selected" id="opt-ritiro" onclick="selectDelivery('ritiro')">
+          <input type="radio" name="delivery" value="ritiro" checked>
+          <span class="opt-icon">🏪</span>
+          <div class="opt-title">Ritiro in negozio</div>
+          <div class="opt-desc">Via Ori Martin n.4, Ceprano (FR)</div>
+        </div>
+        <div class="delivery-opt" id="opt-consegna" onclick="selectDelivery('consegna')">
+          <input type="radio" name="delivery" value="consegna">
+          <span class="opt-icon">🚚</span>
+          <div class="opt-title">Consegna a domicilio</div>
+          <div class="opt-desc">Disponibile nelle zone limitrofe</div>
+        </div>
+      </div>
+
+      <div id="ritiro-info">
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Scegli il giorno di ritiro</label>
+            <input type="date" id="pickup-date" min="">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Fascia oraria preferita</label>
+          <div class="time-slots">
+            <div class="time-slot selected" onclick="selectTime(this)">09:00–11:00</div>
+            <div class="time-slot" onclick="selectTime(this)">11:00–13:00</div>
+            <div class="time-slot" onclick="selectTime(this)">15:00–17:00</div>
+            <div class="time-slot" onclick="selectTime(this)">17:00–19:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="consegna-info" style="display:none;">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Giorno di consegna</label>
+            <input type="date" id="delivery-date" min="">
+          </div>
+          <div class="form-group">
+            <label>Fascia oraria</label>
+            <select id="delivery-time">
+              <option>09:00 – 12:00</option>
+              <option>14:00 – 18:00</option>
+              <option>18:00 – 20:00</option>
+            </select>
+          </div>
+        </div>
+        <p style="font-size:0.78rem;color:var(--text-soft);opacity:0.7;margin-top:0.5rem;">
+          ⚠️ La consegna è disponibile entro 15 km da Ceprano. Ti contatteremo per confermare la disponibilità.
+        </p>
+      </div>
+
+      <div class="checkout-nav">
+        <span></span>
+        <button class="btn-next" onclick="goStep(2)">Continua →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Customer data -->
+    <div class="checkout-panel" id="panel-2">
+      <h3>I tuoi <em>dati</em></h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" id="f-nome" placeholder="Mario">
+        </div>
+        <div class="form-group">
+          <label>Cognome *</label>
+          <input type="text" id="f-cognome" placeholder="Rossi">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Telefono *</label>
+          <input type="tel" id="f-tel" placeholder="+39 333 000 0000">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="f-email" placeholder="mario@email.it">
+        </div>
+      </div>
+      <div id="address-fields" style="display:none;">
+        <div class="form-row full">
+          <div class="form-group">
+            <label>Indirizzo di consegna *</label>
+            <input type="text" id="f-indirizzo" placeholder="Via Roma 1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Città *</label>
+            <input type="text" id="f-citta" placeholder="Ceprano">
+          </div>
+          <div class="form-group">
+            <label>CAP *</label>
+            <input type="text" id="f-cap" placeholder="03024">
+          </div>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Note per l'ordine</label>
+          <textarea id="f-note" placeholder="Allergie, preferenze, istruzioni particolari…"></textarea>
+        </div>
+      </div>
+      <div class="checkout-nav">
+        <button class="btn-back" onclick="goStep(1)">← Indietro</button>
+        <button class="btn-next" onclick="goStep(3)">Continua →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Payment -->
+    <div class="checkout-panel" id="panel-3">
+      <h3>Metodo di <em>pagamento</em></h3>
+      <div class="order-summary-mini" id="checkout-summary"></div>
+      <div class="payment-method selected" id="pm-contanti" onclick="selectPayment('contanti')">
+        <div class="payment-radio"></div>
+        <div class="payment-details">
+          <div class="pm-title">💵 Contanti alla consegna / al ritiro</div>
+          <div class="pm-desc">Paghi direttamente in negozio al momento del ritiro o al corriere alla consegna.</div>
+        </div>
+      </div>
+      <div class="payment-method" id="pm-bonifico" onclick="selectPayment('bonifico')">
+        <div class="payment-radio"></div>
+        <div class="payment-details">
+          <div class="pm-title">🏦 Bonifico bancario anticipato</div>
+          <div class="pm-desc">Riceverai le coordinate bancarie. L'ordine viene confermato alla ricezione del pagamento.</div>
+        </div>
+      </div>
+      <div class="bonifico-details" id="bonifico-box" style="display:none;">
+        <strong>Intestatario:</strong> Rita Fortuna — L'Oasi della Buona Tavola<br>
+        <strong>IBAN:</strong> IT00 X000 0000 0000 0000 0000 000 <span style="opacity:0.5;font-size:0.75rem;">(da inserire)</span><br>
+        <strong>Causale:</strong> Ordine Cotto &amp; Servito — [tuo nome]<br>
+        <strong>Importo:</strong> <span id="bonifico-importo"></span>
+      </div>
+      <div class="checkout-nav">
+        <button class="btn-back" onclick="goStep(2)">← Indietro</button>
+        <button class="btn-next" onclick="goStep(4)">Conferma Ordine →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Confirmation -->
+    <div class="checkout-panel" id="panel-4">
+      <div class="success-panel">
+        <div class="success-icon">✓</div>
+        <h3>Ordine <em>ricevuto!</em></h3>
+        <p class="order-number" id="order-num"></p>
+        <p id="success-msg"></p>
+        <p style="margin-top:1rem;font-size:0.82rem;opacity:0.6;">Ti contatteremo al numero fornito per confermare i dettagli.</p>
+        <div class="success-actions">
+          <button class="btn-close-modal" onclick="closeAll()">Chiudi</button>
+          <a href="https://wa.me/393922340754" target="_blank" class="btn-next" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;">
+            💬 Contattaci su WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
