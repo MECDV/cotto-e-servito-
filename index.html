@@ -2051,8 +2051,8 @@
         <p style="margin-top:1rem;font-size:0.82rem;opacity:0.6;">Ti contatteremo al numero fornito per confermare i dettagli.</p>
         <div class="success-actions">
           <button class="btn-close-modal" onclick="closeAll()">Chiudi</button>
-          <a href="https://wa.me/393922340754" target="_blank" class="btn-next" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;">
-            💬 Contattaci su WhatsApp
+          <a href="https://wa.me/393922340754" target="_blank" class="btn-next" id="whatsappOrderBtn" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;">
+            💬 Invia l'ordine su WhatsApp
           </a>
         </div>
       </div>
@@ -2453,6 +2453,15 @@
 
     // 📧 Invia email di notifica
     sendOrderEmail(ordN);
+
+    // 💬 Precompila il messaggio del bottone WhatsApp con i dettagli dell'ordine
+    const cognome = document.getElementById('f-cognome').value.trim();
+    const nomeCompleto = (nome + ' ' + cognome).trim();
+    const tel = document.getElementById('f-tel').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const totalStr = total.toFixed(2).replace('.',',');
+    const waText = buildEmailBody(ordN, nomeCompleto, tel, email, totalStr);
+    document.getElementById('whatsappOrderBtn').href = 'https://wa.me/393922340754?text=' + encodeURIComponent(waText);
   }
 
   /* Delivery selection */
