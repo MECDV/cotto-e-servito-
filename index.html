@@ -125,6 +125,20 @@
   nav ul a:hover { color: var(--white); }
   nav ul a:hover::after { width: 100%; }
 
+  /* ── Nav account button ── */
+  .nav-account-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: transparent;
+    cursor: none;
+    flex-shrink: 0;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .nav-account-btn:hover { border-color: var(--gold-light); background: rgba(184,150,90,0.12); }
+  .nav-account-btn svg { width: 16px; height: 16px; stroke: var(--white); fill: none; stroke-width: 1.6; }
+
   /* ── HERO ── */
   #hero {
     min-height: 100vh;
@@ -1125,6 +1139,9 @@
     <li><a href="#galleria">Galleria</a></li>
     <li><a href="#contatti">Contatti</a></li>
   </ul>
+  <button class="nav-account-btn" id="accountBtn" aria-label="Iscriviti">
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  </button>
   <!-- Hamburger (visibile solo su mobile) -->
   <button class="hamburger" id="hamburgerBtn" aria-label="Apri menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -1822,6 +1839,50 @@
   </div>
 </div>
 
+<!-- SIGNUP DRAWER -->
+<div class="cart-drawer" id="signupDrawer">
+  <div class="drawer-header">
+    <h2>Resta <em>aggiornato</em></h2>
+    <button class="drawer-close" id="signupClose">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-items">
+    <div id="signup-form-wrap">
+      <p style="font-size:0.85rem;color:var(--text-soft);line-height:1.7;margin-bottom:1.5rem;">
+        Iscriviti per ricevere offerte, novità sul menu e comunicazioni da Cotto &amp; Servito. Nessuna password richiesta.
+      </p>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" id="s-nome" placeholder="Mario Rossi">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="s-email" placeholder="mario@email.it">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Telefono</label>
+          <input type="tel" id="s-tel" placeholder="+39 333 000 0000 (opzionale)">
+        </div>
+      </div>
+      <button class="btn-next" style="width:100%;justify-content:center;" id="signupSubmit" onclick="submitSignup()">Iscriviti →</button>
+      <p style="font-size:0.68rem;color:var(--text-soft);opacity:0.6;margin-top:1rem;">
+        Inviando il modulo accetti di essere ricontattato da Cotto &amp; Servito. I tuoi dati vengono inviati solo alla gastronomia, non creiamo un account con password.
+      </p>
+    </div>
+    <div class="success-panel" id="signup-success" style="display:none;">
+      <div class="success-icon">✓</div>
+      <h3>Iscrizione inviata!</h3>
+      <p>Grazie, ti contatteremo presto con le nostre novità.</p>
+    </div>
+  </div>
+</div>
+
 <!-- CHECKOUT MODAL -->
 <div class="checkout-modal" id="checkoutModal">
   <div class="checkout-modal-bg" id="checkoutBg"></div>
@@ -2080,6 +2141,34 @@
     }
   }
 
+  /* ══ ISCRIZIONE (riusa la stessa configurazione EmailJS dell'ordine) ══ */
+  async function sendSignupEmail(nome, email, tel){
+    const notConfigured = (typeof emailjs === 'undefined') || EMAILJS_PUBLIC_KEY === 'IL_TUO_PUBLIC_KEY';
+    if (notConfigured) {
+      console.warn('⚠️ EmailJS non configurato: iscrizione confermata a schermo, nessuna email inviata.');
+      showToast('⚠️ Iscrizione registrata — configura EmailJS per le notifiche', true);
+      return;
+    }
+    const templateParams = {
+      to_email:      'cottoeservito@email.it', // ← metti la tua email
+      order_number:  'ISCRIZIONE',
+      client_name:   nome,
+      client_phone:  tel || '—',
+      client_email:  email,
+      delivery_mode: '—',
+      payment_mode:  '—',
+      total:         '—',
+      order_body:    `Nuova iscrizione dal sito Cotto & Servito!\n\nNome: ${nome}\nEmail: ${email}\nTelefono: ${tel || '—'}`,
+    };
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      console.log('✅ Email iscrizione inviata');
+    } catch(err) {
+      console.warn('⚠️ Email iscrizione non inviata:', err);
+      showToast('⚠️ Iscrizione registrata — configura EmailJS per le notifiche', true);
+    }
+  }
+
   /* ── Mobile Nav (Hamburger) ── */
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const mobileNav    = document.getElementById('mobileNav');
@@ -2193,7 +2282,38 @@
   function closeDrawer(){ cartDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }
   cartFab.addEventListener('click', openDrawer);
   drawerClose.addEventListener('click', closeDrawer);
-  drawerOverlay.addEventListener('click', ()=>{ closeDrawer(); closeCheckout(); });
+  drawerOverlay.addEventListener('click', ()=>{ closeDrawer(); closeCheckout(); closeSignupDrawer(); });
+
+  /* ── Signup drawer ── */
+  const accountBtn    = document.getElementById('accountBtn');
+  const signupDrawer  = document.getElementById('signupDrawer');
+  const signupClose   = document.getElementById('signupClose');
+
+  function openSignupDrawer(){ signupDrawer.classList.add('open'); drawerOverlay.classList.add('open'); }
+  function closeSignupDrawer(){ signupDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }
+  accountBtn.addEventListener('click', openSignupDrawer);
+  signupClose.addEventListener('click', closeSignupDrawer);
+
+  function submitSignup(){
+    const nome  = document.getElementById('s-nome').value.trim();
+    const email = document.getElementById('s-email').value.trim();
+    const tel   = document.getElementById('s-tel').value.trim();
+    if(!nome || !email || !email.includes('@')){
+      alert('Inserisci nome e un\'email valida per iscriverti.');
+      return;
+    }
+    sendSignupEmail(nome, email, tel);
+    document.getElementById('signup-form-wrap').style.display = 'none';
+    document.getElementById('signup-success').style.display = 'block';
+    document.getElementById('s-nome').value = '';
+    document.getElementById('s-email').value = '';
+    document.getElementById('s-tel').value = '';
+    setTimeout(()=>{
+      closeSignupDrawer();
+      document.getElementById('signup-form-wrap').style.display = 'block';
+      document.getElementById('signup-success').style.display = 'none';
+    }, 2500);
+  }
 
   /* ── Touch swipe to close cart drawer ── */
   let touchStartX = 0;
@@ -2201,6 +2321,13 @@
   cartDrawer.addEventListener('touchend',   e=>{
     const dx = e.changedTouches[0].clientX - touchStartX;
     if(dx > 80) closeDrawer(); // swipe right → close
+  }, {passive:true});
+
+  let signupTouchStartX = 0;
+  signupDrawer.addEventListener('touchstart', e=>{ signupTouchStartX = e.touches[0].clientX; }, {passive:true});
+  signupDrawer.addEventListener('touchend',   e=>{
+    const dx = e.changedTouches[0].clientX - signupTouchStartX;
+    if(dx > 80) closeSignupDrawer(); // swipe right → close
   }, {passive:true});
 
   /* ── Touch swipe to close checkout (swipe down) ── */
