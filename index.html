@@ -943,6 +943,36 @@
   .cart-checkout-btn:hover { background: #a0202a; }
   .cart-note { font-size: 0.7rem; color: var(--text-soft); opacity: 0.5; text-align: center; margin-top: 0.75rem; }
 
+  /* ── Checkbox consenso email ── */
+  .consent-row {
+    display: flex; align-items: flex-start; gap: 0.8rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(184,150,90,0.3);
+    background: var(--cream);
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .consent-row:hover { border-color: var(--gold); background: var(--cream-warm); }
+  .consent-row.checked { border-color: var(--bark); background: rgba(74,44,18,0.04); }
+  .consent-row input[type=checkbox] { display: none; }
+  .consent-box {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border: 2px solid rgba(184,150,90,0.5);
+    background: white; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .consent-row.checked .consent-box { background: var(--bark); border-color: var(--bark); }
+  .consent-box::after { content: ''; display: none; }
+  .consent-row.checked .consent-box::after {
+    content: '✓'; display: block;
+    color: white; font-size: 0.8rem; font-weight: 700; line-height: 1;
+  }
+  .consent-text { font-size: 0.85rem; color: var(--text-soft); line-height: 1.55; }
+  .consent-text strong { color: var(--bark); font-weight: 600; }
+  .consent-required { color: var(--red-it); font-size: 0.72rem; letter-spacing: 0.1em; margin-top: 0.2rem; display: block; }
+
   /* ── CHECKOUT MODAL ── */
   .checkout-modal {
     position: fixed; inset: 0; z-index: 600;
@@ -1977,10 +2007,20 @@
           <input type="tel" id="f-tel" placeholder="+39 333 000 0000">
         </div>
         <div class="form-group">
-          <label>Email</label>
+          <label id="email-label">Email</label>
           <input type="email" id="f-email" placeholder="mario@email.it">
         </div>
       </div>
+
+      <label class="consent-row" id="consent-row" onclick="toggleConsent()">
+        <input type="checkbox" id="f-consent-email">
+        <div class="consent-box" id="consent-box"></div>
+        <div class="consent-text">
+          <strong>Voglio ricevere la conferma dell'ordine via email</strong>
+          <span class="consent-required">* obbligatorio per completare l'ordine</span>
+        </div>
+      </label>
+
       <div id="address-fields" style="display:none;">
         <div class="form-row full">
           <div class="form-group">
@@ -2455,6 +2495,10 @@
           const ind=document.getElementById('f-indirizzo').value.trim();
           if(!ind){ alert('Inserisci l\'indirizzo di consegna.'); return; }
         }
+        const consent=document.getElementById('f-consent-email');
+        if(!consent.checked){ alert('Devi accettare di ricevere la conferma via email per completare l\'ordine.'); return; }
+        const emailVal=document.getElementById('f-email').value.trim();
+        if(!emailVal||!emailVal.includes('@')){ alert('Inserisci un\'email valida per ricevere la conferma dell\'ordine.'); return; }
     }
     currentStep = n;
     document.querySelectorAll('.checkout-panel').forEach((p,i)=>{
@@ -2508,6 +2552,16 @@
     const totalStr = total.toFixed(2).replace('.',',');
     const waText = buildEmailBody(ordN, nomeCompleto, tel, email, totalStr);
     document.getElementById('whatsappOrderBtn').href = 'https://wa.me/393922340754?text=' + encodeURIComponent(waText);
+  }
+
+  /* Consenso email */
+  function toggleConsent(){
+    const cb = document.getElementById('f-consent-email');
+    const row = document.getElementById('consent-row');
+    const lbl = document.getElementById('email-label');
+    cb.checked = !cb.checked;
+    row.classList.toggle('checked', cb.checked);
+    lbl.textContent = cb.checked ? 'Email *' : 'Email';
   }
 
   /* Delivery selection */
