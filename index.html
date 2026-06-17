@@ -434,9 +434,9 @@
     font-size: 1.1rem; font-weight: 400;
     color: var(--bark); margin-bottom: 0.3rem;
   }
+  .product-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.55; margin-bottom: 0.6rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .product-weight { font-size: 0.75rem; color: var(--text-soft); opacity: 0.65; margin-bottom: 1rem; letter-spacing: 0.05em; }
-  .product-prices { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 0.75rem; border-top: 1px solid rgba(184,150,90,0.15); }
-  .price-buy { font-size: 0.72rem; color: var(--text-soft); opacity: 0.55; }
+  .product-prices { display: flex; justify-content: flex-end; align-items: flex-end; padding-top: 0.75rem; border-top: 1px solid rgba(184,150,90,0.15); }
   .price-sell { font-family: var(--font-display); font-size: 1.35rem; color: var(--red-it); font-weight: 600; letter-spacing: -0.01em; }
 
   /* ── GALLERIA ── */
@@ -1349,400 +1349,24 @@
       <button class="tab-btn" onclick="showTab(event,'dolci')">Dolci</button>
     </div>
 
-    <!-- PRIMI -->
+    <!-- prodotti caricati dinamicamente da products.json -->
     <div id="tab-primi" class="tab-content active">
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80" alt="Lasagna al Ragù" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Lasagna al Ragù</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €3.99</span>
-              <span class="price-sell">€5,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Lasagna al Ragù`,price:5.30,img:`https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80" alt="Lasagna Porcini e Salsiccia" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Lasagna Porcini e Salsiccia</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.30</span>
-              <span class="price-sell">€5,70</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Lasagna Porcini e Salsiccia`,price:5.70,img:`https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80" alt="Cannelloni alla Carne" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Cannelloni alla Carne</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.30</span>
-              <span class="price-sell">€5,70</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Cannelloni alla Carne`,price:5.70,img:`https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80" alt="Cannelloni Ricotta e Spinaci" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Cannelloni Ricotta e Spinaci</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.30</span>
-              <span class="price-sell">€5,70</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Cannelloni Ricotta e Spinaci`,price:5.70,img:`https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1519984388953-d2406bc725e1?w=400&h=300&fit=crop&q=80" alt="Crepes Prosciutto Cotto e Mozzarella" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Crepes Prosciutto Cotto e Mozzarella</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €3.70</span>
-              <span class="price-sell">€4,90</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Crepes Prosciutto Cotto e Mozzarella`,price:4.90,img:`https://images.unsplash.com/photo-1519984388953-d2406bc725e1?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=400&h=300&fit=crop&q=80" alt="Parmigiana di Melanzane" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Parmigiana di Melanzane</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.30</span>
-              <span class="price-sell">€5,70</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Parmigiana di Melanzane`,price:5.70,img:`https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=300&fit=crop&q=80" alt="Risotto alla Pescatora" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Risotto alla Pescatora</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.80</span>
-              <span class="price-sell">€6,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Risotto alla Pescatora`,price:6.30,img:`https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80" alt="Gnocchi alla Crema di Scampi" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Gnocchi alla Crema di Scampi</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €3.99</span>
-              <span class="price-sell">€5,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Gnocchi alla Crema di Scampi`,price:5.30,img:`https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80" alt="Gnocchi alla Sorrentina" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Gnocchi alla Sorrentina</h3>
-            <p class="product-weight">400g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.30</span>
-              <span class="price-sell">€5,70</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Gnocchi alla Sorrentina`,price:5.70,img:`https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80`,weight:`400g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80" alt="Insalata di Riso" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Insalata di Riso</h3>
-            <p class="product-weight">350g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €3.99</span>
-              <span class="price-sell">€5,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Insalata di Riso`,price:5.30,img:`https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80`,weight:`350g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80" alt="Insalata di Farro" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Insalata di Farro</h3>
-            <p class="product-weight">300g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.60</span>
-              <span class="price-sell">€6,10</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Insalata di Farro`,price:6.10,img:`https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80`,weight:`300g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-      </div>
+      <div class="products-grid" id="grid-primi"></div>
     </div>
 
     <!-- SECONDI -->
     <div id="tab-secondi" class="tab-content">
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&q=80" alt="Arista di Maiale e Olive" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Arista di Maiale e Olive</h3>
-            <p class="product-weight">250g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.80</span>
-              <span class="price-sell">€6,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Arista di Maiale e Olive`,price:6.30,img:`https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=80" alt="Broccoletti e Salsiccia" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Broccoletti e Salsiccia</h3>
-            <p class="product-weight">250g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.80</span>
-              <span class="price-sell">€6,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Broccoletti e Salsiccia`,price:6.30,img:`https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&h=300&fit=crop&q=80" alt="Polpette di Manzo e Fagioli" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Polpette di Manzo e Fagioli</h3>
-            <p class="product-weight">250g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.80</span>
-              <span class="price-sell">€6,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Polpette di Manzo e Fagioli`,price:6.30,img:`https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80" alt="Peperone Ripieno al Riso" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Peperone Ripieno al Riso</h3>
-            <p class="product-weight">250g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.66</span>
-              <span class="price-sell">€6,10</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Peperone Ripieno al Riso`,price:6.10,img:`https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80" alt="Peperone Ripieno alla Carne" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Peperone Ripieno alla Carne</h3>
-            <p class="product-weight">250g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.80</span>
-              <span class="price-sell">€6,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Peperone Ripieno alla Carne`,price:6.30,img:`https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&h=300&fit=crop&q=80" alt="Alette di Pollo e Patatine" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Alette di Pollo e Patatine</h3>
-            <p class="product-weight">250g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.80</span>
-              <span class="price-sell">€6,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Alette di Pollo e Patatine`,price:6.30,img:`https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1598103442097-8b74394b95c0?w=400&h=300&fit=crop&q=80" alt="Scaloppina di Pollo e Patatine" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Scaloppina di Pollo e Patatine</h3>
-            <p class="product-weight">250g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.80</span>
-              <span class="price-sell">€6,30</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Scaloppina di Pollo e Patatine`,price:6.30,img:`https://images.unsplash.com/photo-1598103442097-8b74394b95c0?w=400&h=300&fit=crop&q=80`,weight:`250g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&q=80" alt="Maxi Hamburger di Vitello" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Maxi Hamburger di Vitello</h3>
-            <p class="product-weight">200g · monoporzione</p>
-            <div class="product-prices">
-              <span class="price-buy">Acq. €4.90</span>
-              <span class="price-sell">€6,50</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Maxi Hamburger di Vitello`,price:6.50,img:`https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&q=80`,weight:`200g · monoporzione`})">+ Aggiungi al carrello</button>
-        </div>
-      </div>
+      <div class="products-grid" id="grid-secondi"></div>
     </div>
 
     <!-- FRITTI -->
     <div id="tab-fritti" class="tab-content">
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80" alt="Supplì" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Supplì</h3>
-            <p class="product-weight">4 pz da 70g</p>
-            <div class="product-prices">
-              <span class="price-buy">€10.80/kg</span>
-              <span class="price-sell">€10,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Supplì`,price:10.80,img:`https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80`,weight:`4 pz da 70g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80" alt="Crocchette di Patate" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Crocchette di Patate</h3>
-            <p class="product-weight">4 pz da 70g</p>
-            <div class="product-prices">
-              <span class="price-buy">€10.80/kg</span>
-              <span class="price-sell">€10,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Crocchette di Patate`,price:10.80,img:`https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80`,weight:`4 pz da 70g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80" alt="Crocchettine di Patate" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Crocchettine di Patate</h3>
-            <p class="product-weight">6 pz da 30g</p>
-            <div class="product-prices">
-              <span class="price-buy">€9.80/kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Crocchettine di Patate`,price:9.80,img:`https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80`,weight:`6 pz da 30g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1559181567-c3190dff4aaa?w=400&h=300&fit=crop&q=80" alt="Olive all'Ascolana" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Olive all'Ascolana</h3>
-            <p class="product-weight">6 pz da 30g</p>
-            <div class="product-prices">
-              <span class="price-buy">€9.80/kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Olive all'Ascolana`,price:9.80,img:`https://images.unsplash.com/photo-1559181567-c3190dff4aaa?w=400&h=300&fit=crop&q=80`,weight:`6 pz da 30g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&h=300&fit=crop&q=80" alt="Bocconcini di Melanzana" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Bocconcini di Melanzana</h3>
-            <p class="product-weight">Venduto al kg · min. 500g</p>
-            <div class="product-prices">
-              <span class="price-buy">€9.80/kg</span>
-              <span class="price-sell">€9,80/kg</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Bocconcini di Melanzana`,price:9.80,img:`https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&h=300&fit=crop&q=80`,weight:`Venduto al kg · min. 500g`})">+ Aggiungi al carrello</button>
-        </div>
-      </div>
+      <div class="products-grid" id="grid-fritti"></div>
     </div>
 
     <!-- DOLCI -->
     <div id="tab-dolci" class="tab-content">
-      <div class="products-grid">
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80" alt="Tozzetti alle Mandorle" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Tozzetti alle Mandorle</h3>
-            <p class="product-weight">4 confezioni da 250g</p>
-            <div class="product-prices">
-              <span class="price-buy">al kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Tozzetti alle Mandorle`,price:9.80,img:`https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop&q=80" alt="Tozzetti al Cioccolato" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Tozzetti al Cioccolato</h3>
-            <p class="product-weight">4 confezioni da 250g</p>
-            <div class="product-prices">
-              <span class="price-buy">al kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Tozzetti al Cioccolato`,price:9.80,img:`https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80" alt="Ciambelline al Vino Rosso" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Ciambelline al Vino Rosso</h3>
-            <p class="product-weight">4 confezioni da 250g</p>
-            <div class="product-prices">
-              <span class="price-buy">al kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Ciambelline al Vino Rosso`,price:9.80,img:`https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80" alt="Ciambelline al Vino Bianco" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Ciambelline al Vino Bianco</h3>
-            <p class="product-weight">4 confezioni da 250g</p>
-            <div class="product-prices">
-              <span class="price-buy">al kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Ciambelline al Vino Bianco`,price:9.80,img:`https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=400&h=300&fit=crop&q=80" alt="Pan di Spagna con Canditi" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Pan di Spagna con Canditi</h3>
-            <p class="product-weight">4 confezioni da 250g</p>
-            <div class="product-prices">
-              <span class="price-buy">al kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Pan di Spagna con Canditi`,price:9.80,img:`https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=400&h=300&fit=crop&q=80" alt="Muffin" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Muffin</h3>
-            <p class="product-weight">4 confezioni da 250g</p>
-            <div class="product-prices">
-              <span class="price-buy">al kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Muffin`,price:9.80,img:`https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
-        </div>
-        <div class="product-card">
-          <div class="product-img"><img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&h=300&fit=crop&q=80" alt="Crostata alla Ciliegia" loading="lazy"></div>
-          <div class="product-body">
-            <h3 class="product-name">Crostata alla Ciliegia</h3>
-            <p class="product-weight">4 confezioni da 250g</p>
-            <div class="product-prices">
-              <span class="price-buy">al kg</span>
-              <span class="price-sell">€9,80</span>
-            </div>
-          </div>
-          <button class="add-to-cart" onclick="addToCart({name:`Crostata alla Ciliegia`,price:9.80,img:`https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&h=300&fit=crop&q=80`,weight:`4 confezioni da 250g`})">+ Aggiungi al carrello</button>
-        </div>
-      </div>
+      <div class="products-grid" id="grid-dolci"></div>
     </div>
     
   </div>
@@ -2351,9 +1975,40 @@
     entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target);}});
   },{threshold:0.12});
   document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
-  document.querySelectorAll('.product-card').forEach((el,i)=>{
-    el.classList.add('reveal'); el.style.transitionDelay=(i%4)*0.08+'s'; revealObs.observe(el);
-  });
+
+  /* ── Prodotti dinamici da products.json ── */
+  async function loadProducts(){
+    try{
+      const res = await fetch('./products.json?t='+Date.now(), {cache:'no-cache'});
+      if(!res.ok) throw new Error('products.json non trovato');
+      const data = await res.json();
+      ['primi','secondi','fritti','dolci'].forEach(cat=>{
+        const grid = document.getElementById('grid-'+cat);
+        if(!grid) return;
+        const list = (data.products||{})[cat]||[];
+        grid.innerHTML = list.map((p,i)=>{
+          const priceStr = '€'+Number(p.price).toFixed(2).replace('.',',');
+          const nameEsc = (p.name||'').replace(/`/g,"'");
+          const imgEsc  = (p.img||'').replace(/`/g,"'");
+          const wEsc    = (p.weight||'').replace(/`/g,"'");
+          return `<div class="product-card reveal" style="transition-delay:${(i%4)*0.08}s">
+            <div class="product-img"><img src="${p.img||''}" alt="${p.name||''}" loading="lazy"></div>
+            <div class="product-body">
+              <h3 class="product-name">${p.name||''}</h3>
+              ${p.description?`<p class="product-desc">${p.description}</p>`:''}
+              <p class="product-weight">${p.weight||''}</p>
+              <div class="product-prices"><span class="price-sell">${priceStr}</span></div>
+            </div>
+            <button class="add-to-cart" onclick="addToCart({name:\`${nameEsc}\`,price:${Number(p.price)},img:\`${imgEsc}\`,weight:\`${wEsc}\`})">+ Aggiungi al carrello</button>
+          </div>`;
+        }).join('');
+        grid.querySelectorAll('.product-card').forEach(el=>revealObs.observe(el));
+      });
+    }catch(err){
+      console.error('Errore caricamento prodotti:',err);
+    }
+  }
+  loadProducts();
   document.querySelectorAll('.tech-card').forEach((el,i)=>{
     el.classList.add('reveal'); el.style.transitionDelay=i*0.12+'s'; revealObs.observe(el);
   });

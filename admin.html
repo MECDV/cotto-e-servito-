@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Prodotti — Cotto &amp; Servito</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #FAF7F2;
+      --espresso: #1C0F06;
+      --bark:     #4A2C12;
+      --gold:     #B8965A;
+      --gold-pale:#F0E6D3;
+      --red:      #C0272D;
+      --text:     #2A1A0E;
+      --text-soft:#7A5C42;
+      --white:    #FFFEFB;
+      --border:   rgba(184,150,90,0.22);
+      --shadow:   0 4px 24px rgba(26,15,6,0.10);
+      --font-d:   'Cormorant Garamond', serif;
+      --font-b:   'Outfit', sans-serif;
+      --ease:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    body { font-family: var(--font-b); background: var(--cream); color: var(--text); min-height: 100vh; }
+
+    /* ── LOGIN SCREEN ── */
+    #loginScreen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--espresso) 0%, var(--bark) 100%);
+      padding: 1.5rem;
+    }
+    .login-card {
+      background: var(--white); border-radius: 16px; padding: 3rem 2.5rem;
+      width: 100%; max-width: 440px; box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+      text-align: center;
+    }
+    .login-logo {
+      font-family: var(--font-d); font-size: 2rem; letter-spacing: 0.05em;
+      color: var(--espresso); margin-bottom: 0.4rem;
+    }
+    .login-logo em { color: var(--gold); font-style: italic; }
+    .login-subtitle { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 2rem; }
+    .login-title { font-size: 1.2rem; font-weight: 500; color: var(--espresso); margin-bottom: 0.5rem; }
+    .login-desc { font-size: 0.85rem; color: var(--text-soft); margin-bottom: 2rem; line-height: 1.6; }
+    .login-field { text-align: left; margin-bottom: 1.2rem; }
+    .login-field label { display: block; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 0.5rem; font-weight: 500; }
+    .login-field input {
+      width: 100%; padding: 0.9rem 1rem; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: var(--font-b); font-size: 0.9rem;
+      background: var(--cream); color: var(--text); outline: none; transition: border-color 0.2s;
+    }
+    .login-field input:focus { border-color: var(--gold); }
+    .btn-login {
+      width: 100%; padding: 1rem; background: var(--espresso); color: var(--white);
+      border: none; border-radius: 8px; font-family: var(--font-b); font-size: 0.9rem;
+      font-weight: 500; cursor: pointer; letter-spacing: 0.08em; transition: background 0.2s;
+      margin-bottom: 1.5rem;
+    }
+    .btn-login:hover { background: var(--bark); }
+    .login-help { font-size: 0.78rem; color: var(--text-soft); line-height: 1.8; }
+    .login-help a { color: var(--gold); text-decoration: none; }
+    .login-help code { background: var(--gold-pale); padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.85em; }
+    .login-error { color: var(--red); font-size: 0.82rem; margin-top: 1rem; min-height: 1.2rem; }
+
+    /* ── HEADER ── */
+    .admin-header {
+      background: var(--espresso); color: var(--white); padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .header-logo { font-family: var(--font-d); font-size: 1.4rem; letter-spacing: 0.05em; }
+    .header-logo em { color: var(--gold); }
+    .header-logo span { font-family: var(--font-b); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-left: 0.8rem; }
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .btn-view { color: var(--gold); font-size: 0.78rem; letter-spacing: 0.1em; text-decoration: none; padding: 0.5rem 1rem; border: 1px solid rgba(184,150,90,0.35); border-radius: 6px; transition: all 0.2s; }
+    .btn-view:hover { background: rgba(184,150,90,0.12); }
+    .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); padding: 0.5rem 1rem; border-radius: 6px; font-family: var(--font-b); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
+
+    /* ── TABS + TOOLBAR ── */
+    .admin-toolbar {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; gap: 1rem; flex-wrap: wrap;
+    }
+    .admin-tabs { display: flex; gap: 0; }
+    .tab-btn {
+      padding: 1.1rem 1.5rem; border: none; background: none; font-family: var(--font-b);
+      font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; cursor: pointer;
+      color: var(--text-soft); border-bottom: 2px solid transparent; transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--espresso); border-bottom-color: var(--gold); }
+    .btn-add {
+      background: var(--red); color: var(--white); border: none; padding: 0.6rem 1.3rem;
+      border-radius: 7px; font-family: var(--font-b); font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; letter-spacing: 0.06em; transition: background 0.2s; white-space: nowrap;
+    }
+    .btn-add:hover { background: #a01f24; }
+
+    /* ── PRODUCTS GRID ── */
+    .admin-content { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+    .cat-panel { display: none; }
+    .cat-panel.active { display: block; }
+    .products-admin-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;
+    }
+    .product-admin-card {
+      background: var(--white); border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--border); box-shadow: var(--shadow); transition: box-shadow 0.2s;
+    }
+    .product-admin-card:hover { box-shadow: 0 8px 40px rgba(26,15,6,0.14); }
+    .pac-img {
+      width: 100%; aspect-ratio: 4/3; background: var(--gold-pale); overflow: hidden;
+    }
+    .pac-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pac-img .no-img {
+      width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; color: var(--text-soft); gap: 0.4rem;
+    }
+    .pac-img .no-img span { font-size: 2rem; }
+    .pac-img .no-img p { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .pac-body { padding: 1rem 1.2rem 0.5rem; }
+    .pac-name { font-family: var(--font-d); font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.3rem; line-height: 1.3; }
+    .pac-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 0.5rem; }
+    .pac-weight { font-size: 0.72rem; color: var(--text-soft); opacity: 0.7; }
+    .pac-price { font-family: var(--font-d); font-size: 1.4rem; color: var(--red); font-weight: 600; }
+    .pac-footer { padding: 0.8rem 1.2rem; display: flex; gap: 0.6rem; border-top: 1px solid var(--border); }
+    .btn-edit {
+      flex: 1; padding: 0.55rem; background: var(--gold-pale); border: 1px solid rgba(184,150,90,0.4);
+      border-radius: 6px; font-family: var(--font-b); font-size: 0.78rem; font-weight: 500;
+      color: var(--bark); cursor: pointer; transition: background 0.2s;
+    }
+    .btn-edit:hover { background: rgba(184,150,90,0.25); }
+    .btn-delete-card {
+      padding: 0.55rem 0.9rem; background: none; border: 1px solid rgba(192,39,45,0.25);
+      border-radius: 6px; color: var(--red); cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+    }
+    .btn-delete-card:hover { background: rgba(192,39,45,0.08); }
+
+    /* ── MODAL BASE ── */
+    .modal { display: none; position: fixed; inset: 0; z-index: 1000; }
+    .modal.open { display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-bg { position: absolute; inset: 0; background: rgba(26,15,6,0.6); backdrop-filter: blur(4px); }
+    .modal-box {
+      position: relative; background: var(--white); border-radius: 16px; width: 100%;
+      max-width: 620px; max-height: 92vh; overflow-y: auto; box-shadow: 0 32px 100px rgba(0,0,0,0.35);
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 1;
+    }
+    .modal-header h2 { font-family: var(--font-d); font-size: 1.5rem; font-weight: 600; color: var(--espresso); }
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--cream);
+      font-size: 1.2rem; color: var(--text-soft); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+    }
+    .modal-close:hover { background: var(--gold-pale); color: var(--espresso); }
+    .modal-body { padding: 1.5rem 2rem; }
+    .modal-footer {
+      padding: 1rem 2rem 1.5rem; display: flex; gap: 0.75rem; justify-content: flex-end;
+      border-top: 1px solid var(--border);
+    }
+    .btn-cancel {
+      padding: 0.75rem 1.5rem; background: none; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: var(--font-b); font-size: 0.85rem; color: var(--text-soft);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-cancel:hover { border-color: var(--text-soft); color: var(--text); }
+    .btn-save {
+      padding: 0.75rem 1.8rem; background: var(--espresso); color: var(--white);
+      border: none; border-radius: 8px; font-family: var(--font-b); font-size: 0.85rem;
+      font-weight: 500; cursor: pointer; transition: background 0.2s; letter-spacing: 0.05em;
+    }
+    .btn-save:hover { background: var(--bark); }
+    .btn-save:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* ── EDIT FORM ── */
+    .image-section { margin-bottom: 1.5rem; }
+    .image-preview {
+      width: 100%; aspect-ratio: 4/3; border-radius: 10px; overflow: hidden;
+      background: var(--gold-pale); margin-bottom: 1rem; position: relative;
+    }
+    .image-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-preview .img-placeholder {
+      width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; color: var(--text-soft); gap: 0.5rem;
+    }
+    .image-preview .img-placeholder span { font-size: 3rem; }
+    .image-preview .img-placeholder p { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .image-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+    .btn-upload-label {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.75rem; border: 1.5px dashed var(--gold); border-radius: 8px;
+      color: var(--bark); font-size: 0.85rem; font-weight: 500; cursor: pointer;
+      transition: background 0.2s; background: var(--gold-pale);
+    }
+    .btn-upload-label:hover { background: rgba(184,150,90,0.2); }
+    .btn-upload-label input { display: none; }
+    .url-section { display: flex; align-items: center; gap: 0.5rem; }
+    .url-divider { font-size: 0.75rem; color: var(--text-soft); white-space: nowrap; opacity: 0.6; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1/-1; }
+    .form-group label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); font-weight: 500; }
+    .form-group label .req { color: var(--red); }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.75rem 0.9rem; border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: var(--font-b); font-size: 0.9rem; background: var(--cream); color: var(--text);
+      outline: none; transition: border-color 0.2s; width: 100%;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); background: var(--white); }
+    .form-group textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+    .price-input { position: relative; }
+    .price-input span { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-soft); font-size: 0.9rem; }
+    .price-input input { padding-left: 1.8rem; }
+    .save-status { padding: 1rem 2rem; font-size: 0.82rem; min-height: 3rem; text-align: center; }
+    .save-status.loading { color: var(--text-soft); }
+    .save-status.success { color: #2d7a3a; background: #e8f5e9; border-radius: 0 0 12px 12px; }
+    .save-status.error   { color: var(--red);  background: #fdecea; border-radius: 0 0 12px 12px; }
+
+    /* ── DELETE MODAL ── */
+    .modal-box.small { max-width: 400px; padding: 2rem; }
+    .modal-box.small h3 { font-family: var(--font-d); font-size: 1.3rem; color: var(--espresso); margin-bottom: 0.75rem; }
+    .modal-box.small p { color: var(--text-soft); font-size: 0.88rem; line-height: 1.6; }
+    .btn-delete-confirm { padding: 0.75rem 1.8rem; background: var(--red); color: var(--white); border: none; border-radius: 8px; font-family: var(--font-b); font-size: 0.85rem; cursor: pointer; }
+    .btn-delete-confirm:hover { background: #a01f24; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; background: var(--espresso); color: var(--white);
+      padding: 1rem 1.5rem; border-radius: 10px; font-size: 0.85rem; z-index: 2000;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3); transform: translateY(120%);
+      transition: transform 0.3s var(--ease); max-width: 380px;
+    }
+    .toast.show { transform: translateY(0); }
+    .toast.success { border-left: 4px solid #4caf50; }
+    .toast.error   { border-left: 4px solid var(--red); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      grid-column: 1/-1; text-align: center; padding: 4rem 2rem;
+      color: var(--text-soft);
+    }
+    .empty-state span { font-size: 3rem; display: block; margin-bottom: 1rem; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width: 600px){
+      .admin-header { padding: 0 1rem; }
+      .header-logo span { display: none; }
+      .admin-toolbar { padding: 0 1rem; }
+      .tab-btn { padding: 0.9rem 0.9rem; font-size: 0.72rem; letter-spacing: 0.04em; }
+      .admin-content { padding: 1rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      .modal-body { padding: 1rem 1.2rem; }
+      .modal-footer { padding: 0.8rem 1.2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════ LOGIN ════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">Cotto <em>&</em> Servito</div>
+    <p class="login-subtitle">Pannello di Gestione</p>
+    <h2 class="login-title">Accedi per modificare i prodotti</h2>
+    <p class="login-desc">Inserisci il tuo <strong>GitHub Personal Access Token</strong> per connetterti al sito.</p>
+    <div class="login-field">
+      <label>GitHub Token</label>
+      <input type="password" id="tokenInput" placeholder="ghp_..." autocomplete="off">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Accedi →</button>
+    <p class="login-help">
+      Non hai ancora il token?<br>
+      Vai su <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>
+      seleziona scope <code>repo</code> → genera → incolla qui.
+    </p>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ════════════════ ADMIN PANEL ════════════════ -->
+<div id="adminPanel" style="display:none">
+  <header class="admin-header">
+    <div class="header-logo">Cotto <em>&</em> Servito <span>Admin</span></div>
+    <div class="header-actions">
+      <a class="btn-view" href="https://mecdv.github.io/cotto-e-servito-/" target="_blank">Vedi sito →</a>
+      <button class="btn-logout" onclick="doLogout()">Esci</button>
+    </div>
+  </header>
+
+  <div class="admin-toolbar">
+    <div class="admin-tabs">
+      <button class="tab-btn active" onclick="showCat('primi',this)">Primi</button>
+      <button class="tab-btn" onclick="showCat('secondi',this)">Secondi</button>
+      <button class="tab-btn" onclick="showCat('fritti',this)">Fritti</button>
+      <button class="tab-btn" onclick="showCat('dolci',this)">Dolci</button>
+    </div>
+    <button class="btn-add" onclick="openAdd()">+ Nuovo prodotto</button>
+  </div>
+
+  <div class="admin-content">
+    <div class="cat-panel active" id="cat-primi">
+      <div class="products-admin-grid" id="grid-admin-primi"></div>
+    </div>
+    <div class="cat-panel" id="cat-secondi">
+      <div class="products-admin-grid" id="grid-admin-secondi"></div>
+    </div>
+    <div class="cat-panel" id="cat-fritti">
+      <div class="products-admin-grid" id="grid-admin-fritti"></div>
+    </div>
+    <div class="cat-panel" id="cat-dolci">
+      <div class="products-admin-grid" id="grid-admin-dolci"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ EDIT / ADD MODAL ════════════════ -->
+<div class="modal" id="editModal">
+  <div class="modal-bg" onclick="closeEdit()"></div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitle">Modifica prodotto</h2>
+      <button class="modal-close" onclick="closeEdit()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Immagine -->
+      <div class="image-section">
+        <div class="image-preview" id="imgPreview">
+          <div class="img-placeholder" id="imgPlaceholder"><span>📷</span><p>Nessuna foto</p></div>
+          <img id="previewImg" src="" alt="" style="display:none">
+        </div>
+        <div class="image-actions">
+          <label class="btn-upload-label">
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this)">
+            📸 Carica foto dal dispositivo
+          </label>
+          <div class="url-section">
+            <span class="url-divider">oppure URL:</span>
+            <input type="text" id="imgUrl" placeholder="https://..." oninput="previewUrl(this.value)" style="flex:1;padding:0.6rem 0.8rem;font-size:0.82rem">
+          </div>
+        </div>
+      </div>
+
+      <!-- Campi -->
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Nome prodotto <span class="req">*</span></label>
+          <input type="text" id="editName" placeholder="Es. Lasagna al Ragù">
+        </div>
+        <div class="form-group">
+          <label>Categoria <span class="req">*</span></label>
+          <select id="editCategory">
+            <option value="primi">Primi Piatti</option>
+            <option value="secondi">Secondi Piatti</option>
+            <option value="fritti">Fritti</option>
+            <option value="dolci">Dolci</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Prezzo finale <span class="req">*</span></label>
+          <div class="price-input">
+            <span>€</span>
+            <input type="number" id="editPrice" step="0.01" min="0" placeholder="5.30">
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Descrizione</label>
+          <textarea id="editDesc" rows="3" placeholder="Breve descrizione del prodotto..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Formato / Peso</label>
+          <input type="text" id="editWeight" placeholder="Es. 400g · monoporzione">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeEdit()">Annulla</button>
+      <button class="btn-save" id="btnSave" onclick="saveProduct()">Salva e pubblica</button>
+    </div>
+    <div class="save-status" id="saveStatus"></div>
+  </div>
+</div>
+
+<!-- ════════════════ DELETE CONFIRM ════════════════ -->
+<div class="modal" id="deleteModal">
+  <div class="modal-bg" onclick="closeDelete()"></div>
+  <div class="modal-box small">
+    <h3>Elimina prodotto</h3>
+    <p style="margin-top:0.75rem">Sei sicuro di voler eliminare <strong id="deleteName"></strong>?<br>Questa operazione è irreversibile.</p>
+    <div class="modal-footer" style="padding:1.5rem 0 0">
+      <button class="btn-cancel" onclick="closeDelete()">Annulla</button>
+      <button class="btn-delete-confirm" onclick="confirmDelete()">Elimina</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ TOAST ════════════════ -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const REPO    = 'MECDV/cotto-e-servito-';
+  const API     = 'https://api.github.com/repos/' + REPO + '/contents/';
+  const CATS    = ['primi','secondi','fritti','dolci'];
+  const CAT_LABELS = {primi:'Primi Piatti',secondi:'Secondi Piatti',fritti:'Fritti',dolci:'Dolci'};
+
+  let products    = null;   // oggetto con tutti i prodotti
+  let prodSha     = null;   // SHA del file products.json su GitHub
+  let editTarget  = null;   // {cat, idx} o null per nuovo prodotto
+  let deleteTarget= null;
+  let pendingFile = null;   // file selezionato per upload
+  let currentCat  = 'primi';
+
+  /* ══ TOKEN ══ */
+  const getToken = () => localStorage.getItem('cotto_token');
+  const setToken = t => localStorage.setItem('cotto_token', t);
+  const clrToken = () => localStorage.removeItem('cotto_token');
+
+  /* ══ STARTUP ══ */
+  window.onload = () => {
+    const t = getToken();
+    if(t) loadData();
+  };
+
+  /* ══ LOGIN ══ */
+  document.getElementById('tokenInput').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+  async function doLogin(){
+    const t = document.getElementById('tokenInput').value.trim();
+    if(!t){ showLoginErr('Inserisci il token.'); return; }
+    setToken(t);
+    showLoginErr('Connessione in corso...');
+    try{
+      await loadData();
+    }catch(err){
+      clrToken();
+      showLoginErr('Token non valido o errore di rete. Riprova.');
+    }
+  }
+
+  function doLogout(){
+    clrToken();
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('tokenInput').value = '';
+    showLoginErr('');
+  }
+
+  function showLoginErr(msg){
+    document.getElementById('loginError').textContent = msg;
+  }
+
+  /* ══ LOAD DATA FROM GITHUB ══ */
+  async function loadData(){
+    const res = await ghGet('products.json');
+    if(res.status === 401) throw new Error('Unauthorized');
+    if(!res.ok) throw new Error('File non trovato');
+    const data = await res.json();
+    prodSha  = data.sha;
+    products = JSON.parse(fromBase64(data.content));
+    // Assicura struttura
+    CATS.forEach(c => { if(!products.products[c]) products.products[c] = []; });
+    showAdmin();
+  }
+
+  function showAdmin(){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display  = 'block';
+    renderAll();
+  }
+
+  /* ══ RENDER ══ */
+  function renderAll(){
+    CATS.forEach(cat => renderCat(cat));
+  }
+
+  function renderCat(cat){
+    const grid = document.getElementById('grid-admin-'+cat);
+    const list = products.products[cat] || [];
+    if(!list.length){
+      grid.innerHTML = `<div class="empty-state"><span>🍽️</span><p>Nessun prodotto in questa categoria.<br>Clicca <strong>+ Nuovo prodotto</strong> per aggiungerne uno.</p></div>`;
+      return;
+    }
+    grid.innerHTML = list.map((p,i) => `
+      <div class="product-admin-card">
+        <div class="pac-img">
+          ${p.img
+            ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" onerror="this.parentNode.innerHTML='<div class=\\'no-img\\'><span>🖼️</span><p>Immagine non trovata</p></div>'">`
+            : `<div class="no-img"><span>📷</span><p>Nessuna foto</p></div>`}
+        </div>
+        <div class="pac-body">
+          <div class="pac-name">${esc(p.name)}</div>
+          ${p.description ? `<div class="pac-desc">${esc(p.description)}</div>` : ''}
+          ${p.weight      ? `<div class="pac-weight">${esc(p.weight)}</div>` : ''}
+        </div>
+        <div class="pac-footer">
+          <div class="pac-price">€${Number(p.price).toFixed(2).replace('.',',')}</div>
+          <button class="btn-edit" onclick="openEdit('${cat}',${i})">✏️ Modifica</button>
+          <button class="btn-delete-card" onclick="openDelete('${cat}',${i})">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* ══ CATEGORIA TABS ══ */
+  function showCat(cat, btn){
+    currentCat = cat;
+    document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('cat-'+cat).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  /* ══ EDIT / ADD ══ */
+  function openAdd(){
+    editTarget = null; pendingFile = null;
+    document.getElementById('modalTitle').textContent = 'Nuovo prodotto';
+    document.getElementById('editName').value    = '';
+    document.getElementById('editCategory').value= currentCat;
+    document.getElementById('editPrice').value   = '';
+    document.getElementById('editDesc').value    = '';
+    document.getElementById('editWeight').value  = '';
+    document.getElementById('imgUrl').value      = '';
+    document.getElementById('fileInput').value   = '';
+    setImgPreview('');
+    document.getElementById('saveStatus').textContent = '';
+    document.getElementById('saveStatus').className   = 'save-status';
+    document.getElementById('btnSave').disabled = false;
+    document.getElementById('editModal').classList.add('open');
+  }
+
+  function openEdit(cat, idx){
+    const p = products.products[cat][idx];
+    if(!p) return;
+    editTarget = {cat, idx}; pendingFile = null;
+    document.getElementById('modalTitle').textContent    = 'Modifica prodotto';
+    document.getElementById('editName').value            = p.name||'';
+    document.getElementById('editCategory').value        = cat;
+    document.getElementById('editPrice').value           = p.price||'';
+    document.getElementById('editDesc').value            = p.description||'';
+    document.getElementById('editWeight').value          = p.weight||'';
+    document.getElementById('imgUrl').value              = p.img||'';
+    document.getElementById('fileInput').value           = '';
+    setImgPreview(p.img||'');
+    document.getElementById('saveStatus').textContent    = '';
+    document.getElementById('saveStatus').className      = 'save-status';
+    document.getElementById('btnSave').disabled          = false;
+    document.getElementById('editModal').classList.add('open');
+  }
+
+  function closeEdit(){
+    document.getElementById('editModal').classList.remove('open');
+  }
+
+  /* ══ IMAGE HANDLING ══ */
+  function handleFile(input){
+    const file = input.files[0];
+    if(!file) return;
+    pendingFile = file;
+    document.getElementById('imgUrl').value = '';
+    const reader = new FileReader();
+    reader.onload = e => setImgPreview(e.target.result);
+    reader.readAsDataURL(file);
+  }
+
+  function previewUrl(url){
+    pendingFile = null;
+    setImgPreview(url);
+  }
+
+  function setImgPreview(src){
+    const img  = document.getElementById('previewImg');
+    const ph   = document.getElementById('imgPlaceholder');
+    if(src){
+      img.src = src; img.style.display = 'block'; ph.style.display = 'none';
+    }else{
+      img.style.display = 'none'; ph.style.display = 'flex';
+    }
+  }
+
+  /* ══ SAVE PRODUCT ══ */
+  async function saveProduct(){
+    const name  = document.getElementById('editName').value.trim();
+    const cat   = document.getElementById('editCategory').value;
+    const price = parseFloat(document.getElementById('editPrice').value);
+    const desc  = document.getElementById('editDesc').value.trim();
+    const weight= document.getElementById('editWeight').value.trim();
+    const imgUrl= document.getElementById('imgUrl').value.trim();
+
+    if(!name){ alert('Inserisci il nome del prodotto.'); return; }
+    if(isNaN(price)||price<=0){ alert('Inserisci un prezzo valido.'); return; }
+
+    const btn = document.getElementById('btnSave');
+    btn.disabled = true;
+    setStatus('loading', 'Salvataggio in corso...');
+
+    try{
+      let finalImg = imgUrl;
+
+      // Carica immagine se selezionata
+      if(pendingFile){
+        setStatus('loading', 'Caricamento foto su GitHub...');
+        finalImg = await uploadImage(pendingFile);
+      }
+
+      const prod = {
+        id:          genId(name),
+        name,
+        description: desc,
+        weight,
+        price:       Math.round(price*100)/100,
+        img:         finalImg
+      };
+
+      // Rimuovi dal vecchio cat se cambiato
+      if(editTarget){
+        const oldCat = editTarget.cat;
+        if(oldCat !== cat){
+          products.products[oldCat].splice(editTarget.idx, 1);
+        } else {
+          products.products[oldCat][editTarget.idx] = prod;
+        }
+        if(oldCat !== cat){
+          products.products[cat].push(prod);
+        }
+      } else {
+        products.products[cat].push(prod);
+      }
+
+      setStatus('loading', 'Pubblicazione su GitHub...');
+      await commitProducts(`Aggiorna prodotto: ${name}`);
+
+      setStatus('success', `✅ Pubblicato! Il sito si aggiornerà entro 1-2 minuti.`);
+      renderAll();
+      setTimeout(closeEdit, 2200);
+    }catch(err){
+      setStatus('error', '❌ Errore: ' + (err.message||'Controlla la connessione.'));
+      btn.disabled = false;
+    }
+  }
+
+  /* ══ DELETE ══ */
+  function openDelete(cat, idx){
+    deleteTarget = {cat, idx};
+    const name = (products.products[cat][idx]||{}).name||'questo prodotto';
+    document.getElementById('deleteName').textContent = name;
+    document.getElementById('deleteModal').classList.add('open');
+  }
+  function closeDelete(){ document.getElementById('deleteModal').classList.remove('open'); }
+
+  async function confirmDelete(){
+    if(!deleteTarget) return;
+    const {cat, idx} = deleteTarget;
+    const name = (products.products[cat][idx]||{}).name||'prodotto';
+    try{
+      products.products[cat].splice(idx, 1);
+      await commitProducts(`Elimina prodotto: ${name}`);
+      renderAll();
+      closeDelete();
+      showToast('Prodotto eliminato e sito aggiornato.', 'success');
+    }catch(err){
+      showToast('Errore durante l\'eliminazione: ' + (err.message||''), 'error');
+    }
+    deleteTarget = null;
+  }
+
+  /* ══ GITHUB API ══ */
+  function ghGet(path){
+    return fetch(API+path, {
+      headers: { Authorization: 'token '+getToken(), 'Cache-Control': 'no-cache' }
+    });
+  }
+
+  async function commitProducts(message){
+    const token   = getToken();
+    const content = toBase64(JSON.stringify(products, null, 2));
+    const body    = { message, content, branch: 'main' };
+    if(prodSha) body.sha = prodSha;
+
+    const res = await fetch(API+'products.json', {
+      method: 'PUT',
+      headers: { Authorization: 'token '+token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const d = await res.json().catch(()=>({}));
+      throw new Error(d.message||'Commit fallito ('+res.status+')');
+    }
+    const data = await res.json();
+    prodSha = data.content.sha;
+  }
+
+  async function uploadImage(file){
+    const token = getToken();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async e => {
+        try{
+          const base64   = e.target.result.split(',')[1];
+          const ext      = (file.name.split('.').pop()||'jpg').toLowerCase();
+          const filename = Date.now()+'.'+ext;
+          const res = await fetch(API+'images/'+filename, {
+            method: 'PUT',
+            headers: { Authorization: 'token '+token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message:'Carica immagine: '+filename, content: base64, branch:'main' })
+          });
+          if(res.ok){
+            resolve('https://mecdv.github.io/cotto-e-servito-/images/'+filename);
+          } else {
+            const d = await res.json().catch(()=>({}));
+            reject(new Error(d.message||'Upload immagine fallito'));
+          }
+        }catch(err){ reject(err); }
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ══ UTILS ══ */
+  function genId(name){
+    return name.toLowerCase()
+      .replace(/[àáâ]/g,'a').replace(/[èéê]/g,'e').replace(/[ìíî]/g,'i')
+      .replace(/[òóô]/g,'o').replace(/[ùúû]/g,'u')
+      .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  }
+
+  function toBase64(str){
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+
+  function fromBase64(str){
+    return decodeURIComponent(escape(atob(str.replace(/\n/g,''))));
+  }
+
+  function esc(str){
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function setStatus(type, msg){
+    const el = document.getElementById('saveStatus');
+    el.className = 'save-status ' + type;
+    el.textContent = msg;
+  }
+
+  function showToast(msg, type='success'){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className   = 'toast '+type;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
