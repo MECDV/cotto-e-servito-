@@ -8,8 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Cotto & Servito — Gastronomia artigianale a Ceprano (FR). Piatti pronti, consegna a domicilio e ritiro in negozio.">
 <title>Cotto & Servito — L'Oasi della Buona Tavola</title>
-<!-- EmailJS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- EmailJS SDK (locale) -->
+<script src="emailjs.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
@@ -2069,12 +2069,15 @@
      4. Vai su Account → copia il Public Key
      5. Sostituisci i tre valori qui sotto
   */
-  const EMAILJS_PUBLIC_KEY  = 'IL_TUO_PUBLIC_KEY';   // ← sostituisci
-  const EMAILJS_SERVICE_ID  = 'IL_TUO_SERVICE_ID';   // ← sostituisci
-  const EMAILJS_TEMPLATE_ID = 'IL_TUO_TEMPLATE_ID';  // ← sostituisci
+  const EMAILJS_PUBLIC_KEY  = 'LPWG1GOMEs-11_JNk';
+  const EMAILJS_SERVICE_ID  = 'service_rhw871l';
+  const EMAILJS_TEMPLATE_ID = 'template_jmbwqyb';
 
   if (typeof emailjs !== 'undefined') {
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    console.log('✅ EmailJS inizializzato correttamente');
+  } else {
+    console.error('❌ EmailJS SDK non disponibile. Controlla la connessione o disabilita l\'adblocker.');
   }
 
   function buildEmailBody(ordN, nome, tel, email, total){
@@ -2099,7 +2102,7 @@
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.className = 'toast' + (isError?' error':'') + ' show';
-    setTimeout(()=>t.classList.remove('show'), 4000);
+    setTimeout(()=>t.classList.remove('show'), 7000);
   }
 
   async function sendOrderEmail(ordN){
@@ -2110,17 +2113,14 @@
     const nomeCompleto = (nome + ' ' + cognome).trim();
     const total = cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2).replace('.',',');
 
-    // Se l'SDK EmailJS non e' caricato o le chiavi non sono configurate,
-    // l'ordine viene comunque confermato a schermo (nessuna email inviata).
-    const notConfigured = (typeof emailjs === 'undefined') || EMAILJS_PUBLIC_KEY === 'IL_TUO_PUBLIC_KEY';
-    if (notConfigured) {
-      console.warn('⚠️ EmailJS non configurato: nessuna email inviata.');
-      showToast('⚠️ Ordine confermato — configura EmailJS per le notifiche', true);
+    if (typeof emailjs === 'undefined') {
+      console.error('❌ EmailJS SDK non caricato — disabilita adblocker e ricarica la pagina');
+      showToast('⚠️ Ordine confermato (SDK non caricato — disabilita adblocker)', true);
       return;
     }
 
     const templateParams = {
-      to_email:      'cottoeservito@email.it', // ← metti la tua email
+      to_email:      'oasidellabuonatavola@gmail.com',
       order_number:  ordN,
       client_name:   nomeCompleto,
       client_phone:  tel,
@@ -2132,25 +2132,24 @@
     };
 
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-      console.log('✅ Email ordine inviata');
-      showToast('✅ Notifica ordine inviata via email');
+      const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      console.log('✅ Email ordine inviata:', result);
+      showToast('✅ Ordine inviato! Controlla la tua email.');
     } catch(err) {
-      console.warn('⚠️ Email non inviata (configura EmailJS):', err);
-      showToast('⚠️ Ordine confermato — configura EmailJS per le notifiche', true);
+      console.error('❌ Errore EmailJS:', err);
+      const errMsg = (err && (err.text || err.message)) ? (err.text || err.message) : JSON.stringify(err);
+      showToast('⚠️ Errore invio: ' + errMsg, true);
     }
   }
 
   /* ══ ISCRIZIONE (riusa la stessa configurazione EmailJS dell'ordine) ══ */
   async function sendSignupEmail(nome, email, tel){
-    const notConfigured = (typeof emailjs === 'undefined') || EMAILJS_PUBLIC_KEY === 'IL_TUO_PUBLIC_KEY';
-    if (notConfigured) {
-      console.warn('⚠️ EmailJS non configurato: iscrizione confermata a schermo, nessuna email inviata.');
-      showToast('⚠️ Iscrizione registrata — configura EmailJS per le notifiche', true);
+    if (typeof emailjs === 'undefined') {
+      console.error('❌ EmailJS SDK non caricato');
       return;
     }
     const templateParams = {
-      to_email:      'cottoeservito@email.it', // ← metti la tua email
+      to_email:      'oasidellabuonatavola@gmail.com',
       order_number:  'ISCRIZIONE',
       client_name:   nome,
       client_phone:  tel || '—',
@@ -2164,8 +2163,7 @@
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
       console.log('✅ Email iscrizione inviata');
     } catch(err) {
-      console.warn('⚠️ Email iscrizione non inviata:', err);
-      showToast('⚠️ Iscrizione registrata — configura EmailJS per le notifiche', true);
+      console.error('❌ Errore iscrizione EmailJS:', err);
     }
   }
 
