@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
@@ -473,8 +473,13 @@
           <input type="range" id="edZoom" min="1" max="100" value="50" oninput="edZoomVal(parseInt(this.value))">
           <span class="ed-zoom-val" id="edZoomLabel">1×</span>
         </div>
+        <div class="ed-zoom-row">
+          <span>↻ Ruota</span>
+          <input type="range" id="edRot" min="-180" max="180" value="0" oninput="edRotateVal(parseInt(this.value))">
+          <span class="ed-zoom-val" id="edRotLabel">0°</span>
+        </div>
         <div class="ed-btn-row">
-          <button type="button" class="ed-btn" onclick="edRotate90()">↻ Ruota 90°</button>
+          <button type="button" class="ed-btn" onclick="edRotate90()">↻ +90°</button>
           <button type="button" class="ed-btn" onclick="edFlipH()">↔ Specchia oriz.</button>
           <button type="button" class="ed-btn" onclick="edFlipV()">↕ Specchia vert.</button>
           <button type="button" class="ed-btn" onclick="edResetAll()">⟳ Reset</button>
@@ -907,6 +912,8 @@
     img.onload = () => {
       ED.img = img;
       ED.rot = 0; ED.flipH = false; ED.flipV = false;
+      const _sl = document.getElementById('edRot'); if(_sl) _sl.value = 0;
+      document.getElementById('edRotLabel').textContent = '0°';
       edFit();
       document.getElementById('edZoom').value = 50;
       edUpdateZoomLabel(50);
@@ -917,12 +924,15 @@
     img.src = src;
   }
 
+  function edRotatedDims(){
+    const a = ED.rot * Math.PI / 180;
+    const c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a));
+    return { rw: ED.img.width*c + ED.img.height*s, rh: ED.img.width*s + ED.img.height*c };
+  }
   function edFit(){
-    const {cvs,img,rot} = ED;
-    const swap = rot===90||rot===270;
-    const iw = swap ? img.height : img.width;
-    const ih = swap ? img.width  : img.height;
-    ED.scale = Math.max(cvs.width/iw, cvs.height/ih);
+    const {cvs} = ED;
+    const {rw,rh} = edRotatedDims();
+    ED.scale = Math.max(cvs.width/rw, cvs.height/rh);
     ED.ox = cvs.width/2;
     ED.oy = cvs.height/2;
   }
@@ -940,11 +950,9 @@
 
   function edZoomVal(val){
     if(!ED.img) return;
-    const {cvs,img,rot} = ED;
-    const swap = rot===90||rot===270;
-    const iw = swap?img.height:img.width;
-    const ih = swap?img.width:img.height;
-    const base     = Math.max(cvs.width/iw, cvs.height/ih);
+    const {cvs} = ED;
+    const {rw,rh} = edRotatedDims();
+    const base     = Math.max(cvs.width/rw, cvs.height/rh);
     const newScale = base * (0.25 + (val/100)*2.75);
     const cx=cvs.width/2, cy=cvs.height/2;
     const ratio = newScale/ED.scale;
@@ -960,8 +968,17 @@
     if(lbl) lbl.textContent = (0.25 + (val/100)*2.75).toFixed(1)+'×';
   }
 
+  function edRotateVal(val){
+    ED.rot = val;
+    document.getElementById('edRotLabel').textContent = val + '°';
+    edDraw();
+  }
   function edRotate90(){
-    ED.rot = (ED.rot+90)%360;
+    let r = ED.rot + 90;
+    if(r > 180) r -= 360;
+    ED.rot = r;
+    const sl = document.getElementById('edRot'); if(sl) sl.value = r;
+    document.getElementById('edRotLabel').textContent = r + '°';
     edFit();
     document.getElementById('edZoom').value = 50;
     edUpdateZoomLabel(50);
@@ -973,6 +990,8 @@
 
   function edResetAll(){
     ED.rot=0; ED.flipH=false; ED.flipV=false;
+    const sl = document.getElementById('edRot'); if(sl) sl.value = 0;
+    document.getElementById('edRotLabel').textContent = '0°';
     edFit();
     document.getElementById('edZoom').value=50;
     edUpdateZoomLabel(50);
