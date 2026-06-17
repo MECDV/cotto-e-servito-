@@ -280,9 +280,9 @@
     </div>
     <button class="btn-login" onclick="doLogin()">Accedi →</button>
     <p class="login-help">
-      Non hai ancora il token?<br>
-      Vai su <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>
-      seleziona scope <code>repo</code> → genera → incolla qui.
+      Come generare il token su GitHub:<br>
+      <strong>Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token (classic)</strong><br>
+      Seleziona scope <code>repo</code> → clicca <em>Generate token</em> → copia e incolla qui.
     </p>
     <div class="login-error" id="loginError"></div>
   </div>
@@ -438,13 +438,41 @@
   async function doLogin(){
     const t = document.getElementById('tokenInput').value.trim();
     if(!t){ showLoginErr('Inserisci il token.'); return; }
-    setToken(t);
-    showLoginErr('Connessione in corso...');
+
+    const btn = document.querySelector('.btn-login');
+    btn.disabled = true;
+    showLoginErr('Verifica token...');
+
     try{
+      // Step 1 — verifica che il token sia valido testando l'accesso al repo
+      const testRes = await fetch('https://api.github.com/repos/' + REPO, {
+        headers: { Authorization: 'token ' + t }
+      });
+      if(testRes.status === 401){
+        showLoginErr('❌ Token non riconosciuto da GitHub. Copia il token direttamente dalla pagina GitHub senza spazi.');
+        btn.disabled = false; return;
+      }
+      if(testRes.status === 403){
+        showLoginErr('❌ Token senza permessi sufficienti. Assicurati di aver selezionato il scope "repo" quando hai creato il token.');
+        btn.disabled = false; return;
+      }
+      if(testRes.status === 404){
+        showLoginErr('❌ Repository non trovato. Controlla il nome del repository nelle impostazioni.');
+        btn.disabled = false; return;
+      }
+      if(!testRes.ok){
+        showLoginErr('❌ Errore GitHub: ' + testRes.status + '. Riprova tra un momento.');
+        btn.disabled = false; return;
+      }
+
+      // Step 2 — token OK, carica i prodotti
+      setToken(t);
+      showLoginErr('Token verificato, caricamento prodotti...');
       await loadData();
     }catch(err){
       clrToken();
-      showLoginErr('Token non valido o errore di rete. Riprova.');
+      showLoginErr('❌ Errore di rete. Controlla la connessione internet e riprova.');
+      btn.disabled = false;
     }
   }
 
@@ -463,13 +491,20 @@
   /* ══ LOAD DATA FROM GITHUB ══ */
   async function loadData(){
     const res = await ghGet('products.json');
-    if(res.status === 401) throw new Error('Unauthorized');
-    if(!res.ok) throw new Error('File non trovato');
-    const data = await res.json();
-    prodSha  = data.sha;
-    products = JSON.parse(fromBase64(data.content));
-    // Assicura struttura
+    if(res.status === 401){ clrToken(); throw new Error('Token scaduto'); }
+    if(res.status === 404){
+      // products.json non ancora presente, partiamo con struttura vuota
+      products = { categories: CATS.map(id=>({id,label:CAT_LABELS[id]})), products: {primi:[],secondi:[],fritti:[],dolci:[]} };
+      prodSha  = null;
+    } else if(res.ok){
+      const data = await res.json();
+      prodSha  = data.sha;
+      products = JSON.parse(fromBase64(data.content));
+    } else {
+      throw new Error('Errore caricamento prodotti: ' + res.status);
+    }
     CATS.forEach(c => { if(!products.products[c]) products.products[c] = []; });
+    document.querySelector('.btn-login').disabled = false;
     showAdmin();
   }
 
