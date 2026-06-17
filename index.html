@@ -428,6 +428,21 @@
   .product-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s var(--ease-out); }
   .product-card:hover .product-img img { transform: scale(1.07); }
   .product-img::after { display: none; }
+
+  /* ── PRODUCT MEDIA CAROUSEL ── */
+  .media-slides{display:flex;width:100%;height:100%;transition:transform 0.35s ease;will-change:transform;}
+  .media-slide{min-width:100%;height:100%;flex-shrink:0;}
+  .media-slide img,.media-slide video{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s var(--ease-out);}
+  .media-slide iframe{width:100%;height:100%;border:none;}
+  .product-card:hover .media-slide img{transform:scale(1.07);}
+  .media-dots{position:absolute;bottom:0.5rem;left:50%;transform:translateX(-50%);display:flex;gap:0.35rem;z-index:2;}
+  .media-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.45);cursor:pointer;transition:background 0.2s;border:none;padding:0;pointer-events:all;}
+  .media-dot.active{background:#fff;}
+  .media-arr{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:15px;color:var(--espresso);display:flex;align-items:center;justify-content:center;z-index:2;opacity:0;transition:opacity 0.2s;padding:0;line-height:1;pointer-events:all;}
+  .product-img:hover .media-arr{opacity:1;}
+  .media-arr.prev{left:0.35rem;}
+  .media-arr.next{right:0.35rem;}
+
   .product-body { padding: 1.5rem; }
   .product-name {
     font-family: var(--font-display);
@@ -1943,6 +1958,45 @@
   document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
 
   /* ── Prodotti dinamici da products.json ── */
+  /* ── Carousel helpers ── */
+  function _isEmbed(u){ return /youtube\.com|youtu\.be|vimeo\.com/.test(u||''); }
+  function _embedUrl(u){
+    const yt=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
+    if(yt) return 'https://www.youtube.com/embed/'+yt[1]+'?autoplay=1&mute=1&loop=1&playlist='+yt[1];
+    const vm=u.match(/vimeo\.com\/(\d+)/);
+    if(vm) return 'https://player.vimeo.com/video/'+vm[1]+'?autoplay=1&muted=1&loop=1';
+    return u;
+  }
+  function _slideHtml(m,alt){
+    const src=m.src||'';
+    if(m.type!=='video') return `<div class="media-slide"><img src="${src}" alt="${alt}" loading="lazy"></div>`;
+    if(_isEmbed(src)) return `<div class="media-slide"><iframe src="${_embedUrl(src)}" frameborder="0" allow="autoplay;fullscreen" allowfullscreen></iframe></div>`;
+    return `<div class="media-slide"><video src="${src}" autoplay muted loop playsinline></video></div>`;
+  }
+  function prodNav(btn,dir){
+    const car=btn.closest('.product-img');
+    if(!car||!car.dataset.tot) return;
+    const tot=parseInt(car.dataset.tot);
+    const cur=(parseInt(car.dataset.cur||0)+dir+tot)%tot;
+    prodSetSlide(car,cur);
+  }
+  function prodDot(dot,idx){ prodSetSlide(dot.closest('.product-img'),idx); }
+  function prodSetSlide(car,n){
+    if(!car) return;
+    car.dataset.cur=n;
+    car.querySelector('.media-slides').style.transform=`translateX(-${n*100}%)`;
+    car.querySelectorAll('.media-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+  }
+  let _carTX=0;
+  document.addEventListener('touchstart',e=>{const c=e.target.closest('.product-img[data-tot]');if(c)_carTX=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const c=e.target.closest('.product-img[data-tot]');
+    if(!c||!_carTX) return;
+    const dx=e.changedTouches[0].clientX-_carTX;
+    if(Math.abs(dx)>40){const tot=parseInt(c.dataset.tot);const cur=(parseInt(c.dataset.cur||0)+(dx<0?1:-1)+tot)%tot;prodSetSlide(c,cur);}
+    _carTX=0;
+  });
+
   async function loadProducts(){
     try{
       const res = await fetch('./products.json?t='+Date.now(), {cache:'no-cache'});
@@ -1953,12 +2007,31 @@
         if(!grid) return;
         const list = (data.products||{})[cat]||[];
         grid.innerHTML = list.map((p,i)=>{
+          const media    = p.media&&p.media.length ? p.media : (p.img ? [{type:'image',src:p.img}] : []);
           const priceStr = '€'+Number(p.price).toFixed(2).replace('.',',');
-          const nameEsc = (p.name||'').replace(/`/g,"'");
-          const imgEsc  = (p.img||'').replace(/`/g,"'");
-          const wEsc    = (p.weight||'').replace(/`/g,"'");
+          const nameEsc  = (p.name||'').replace(/`/g,"'");
+          const firstImg = media.find(m=>m.type==='image');
+          const imgEsc   = (firstImg?.src||p.img||'').replace(/`/g,"'");
+          const wEsc     = (p.weight||'').replace(/`/g,"'");
+
+          let mediaHtml;
+          if(!media.length){
+            mediaHtml = `<div class="product-img"></div>`;
+          } else if(media.length===1){
+            mediaHtml = `<div class="product-img"><div class="media-slides">${_slideHtml(media[0],p.name||'')}</div></div>`;
+          } else {
+            const slides = media.map(m=>_slideHtml(m,p.name||'')).join('');
+            const dots   = media.map((_,di)=>`<button class="media-dot${di===0?' active':''}" onclick="prodDot(this,${di})"></button>`).join('');
+            mediaHtml = `<div class="product-img" data-cur="0" data-tot="${media.length}">
+              <div class="media-slides">${slides}</div>
+              <button class="media-arr prev" onclick="prodNav(this,-1)" aria-label="Precedente">&#8249;</button>
+              <button class="media-arr next" onclick="prodNav(this,1)" aria-label="Successivo">&#8250;</button>
+              <div class="media-dots">${dots}</div>
+            </div>`;
+          }
+
           return `<div class="product-card reveal" style="transition-delay:${(i%4)*0.08}s">
-            <div class="product-img"><img src="${p.img||''}" alt="${p.name||''}" loading="lazy"></div>
+            ${mediaHtml}
             <div class="product-body">
               <h3 class="product-name">${p.name||''}</h3>
               ${p.description?`<p class="product-desc">${p.description}</p>`:''}

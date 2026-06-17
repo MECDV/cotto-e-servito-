@@ -71,12 +71,9 @@
     .pac-img .no-img { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-soft); gap:0.4rem; }
     .pac-img .no-img span { font-size:2rem; }
     .pac-img .no-img p { font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; }
-
-    /* Overlay foto prodotto */
     .pac-img-overlay { position:absolute; inset:0; background:rgba(26,15,6,0.5); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.25s; cursor:pointer; }
     .product-admin-card:hover .pac-img-overlay { opacity:1; }
     .pac-img-overlay span { background:var(--white); color:var(--espresso); font-size:0.78rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:0.5rem 1rem; border-radius:20px; }
-
     .pac-body { padding:1rem 1.2rem 0.5rem; }
     .pac-name { font-family:var(--font-d); font-size:1.1rem; font-weight:600; color:var(--espresso); margin-bottom:0.3rem; line-height:1.3; }
     .pac-desc { font-size:0.78rem; color:var(--text-soft); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:0.5rem; }
@@ -149,7 +146,7 @@
     .price-input span { position:absolute; left:0.9rem; top:50%; transform:translateY(-50%); color:var(--text-soft); font-size:0.9rem; }
     .price-input input { padding-left:1.8rem; }
 
-    /* ── IMAGE / VIDEO PICKER ── */
+    /* ── GALLERY IMAGE/VIDEO PICKER ── */
     .media-section { margin-bottom:1.5rem; }
     .media-type-row { display:flex; gap:0.75rem; margin-bottom:1rem; }
     .media-type-btn { flex:1; padding:0.6rem; border:1.5px solid var(--border); border-radius:8px; background:none; font-family:var(--font-b); font-size:0.82rem; font-weight:500; cursor:pointer; color:var(--text-soft); transition:all 0.2s; }
@@ -168,6 +165,41 @@
     .url-row input { flex:1; padding:0.6rem 0.8rem; font-size:0.82rem; border:1.5px solid var(--border); border-radius:8px; font-family:var(--font-b); background:var(--cream); color:var(--text); outline:none; transition:border-color 0.2s; }
     .url-row input:focus { border-color:var(--gold); }
     .video-tip { font-size:0.75rem; color:var(--text-soft); margin-top:0.5rem; line-height:1.6; background:var(--gold-pale); padding:0.6rem 0.8rem; border-radius:6px; }
+
+    /* ── PRODUCT MULTI-MEDIA MANAGER ── */
+    .pm-section { margin-bottom:1.5rem; }
+    .pm-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-soft); font-weight:500; display:block; margin-bottom:0.75rem; }
+    .pm-list { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem; min-height:2.5rem; }
+    .pm-item { position:relative; width:calc(25% - 0.4rem); aspect-ratio:4/3; border-radius:8px; overflow:hidden; background:var(--gold-pale); border:1.5px solid var(--border); flex-shrink:0; }
+    .pm-item img,.pm-item video { width:100%;height:100%;object-fit:cover;display:block; }
+    .pm-item .pm-overlay { position:absolute;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;gap:0.35rem;opacity:0;transition:opacity 0.2s; }
+    .pm-item:hover .pm-overlay { opacity:1; }
+    .pm-btn { width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,255,255,0.92);cursor:pointer;font-size:0.82rem;display:flex;align-items:center;justify-content:center; }
+    .pm-btn:hover { background:#fff; }
+    .pm-main-badge { position:absolute;top:0.3rem;left:0.3rem;background:var(--gold);color:#fff;font-size:0.55rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.45rem;border-radius:10px; }
+    .pm-vid-ph { width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1a1009;font-size:1.8rem; }
+    .pm-empty { font-size:0.8rem;color:var(--text-soft);padding:0.75rem 0;opacity:0.7; }
+    .pm-add-row { display:flex;gap:0.5rem; }
+    .pm-add-row .btn-upload-label { flex:1;margin:0;font-size:0.8rem;padding:0.65rem; }
+    .pm-vid-btn { flex:1;padding:0.65rem;border:1.5px dashed var(--border);border-radius:8px;background:var(--cream);font-family:var(--font-b);font-size:0.8rem;font-weight:500;cursor:pointer;color:var(--text-soft);transition:all 0.2s; }
+    .pm-vid-btn:hover { border-color:var(--gold);color:var(--bark);background:var(--gold-pale); }
+    .pm-vid-panel { margin-top:0.75rem;padding:1rem;background:var(--cream);border-radius:8px;border:1px solid var(--border); }
+    .pm-vid-panel .btn-upload-label { margin-bottom:0.6rem;font-size:0.82rem; }
+    .pm-vid-actions { display:flex;gap:0.5rem;margin-top:0.75rem; }
+    .pm-vid-actions .btn-cancel,.pm-vid-actions .btn-save { flex:1;padding:0.55rem;font-size:0.82rem; }
+
+    /* ── IMAGE EDITOR ── */
+    .ed-canvas-wrap { border-radius:10px;overflow:hidden;background:#111;user-select:none; }
+    #edCanvas { display:block;width:100%;cursor:grab;touch-action:none; }
+    #edCanvas:active { cursor:grabbing; }
+    .ed-controls { margin-top:0.85rem;display:flex;flex-direction:column;gap:0.65rem; }
+    .ed-zoom-row { display:flex;align-items:center;gap:0.75rem;font-size:0.82rem;color:var(--text-soft); }
+    .ed-zoom-row input[type=range] { flex:1;accent-color:var(--gold); }
+    .ed-zoom-row .ed-zoom-val { min-width:2.5rem;text-align:right;font-size:0.78rem;color:var(--text-soft); }
+    .ed-btn-row { display:flex;gap:0.45rem;flex-wrap:wrap; }
+    .ed-btn { flex:1;min-width:80px;padding:0.55rem 0.4rem;border:1.5px solid var(--border);border-radius:8px;background:var(--cream);font-family:var(--font-b);font-size:0.77rem;font-weight:500;cursor:pointer;color:var(--bark);transition:all 0.2s;text-align:center; }
+    .ed-btn:hover { border-color:var(--gold);background:var(--gold-pale); }
+    .ed-tip { font-size:0.72rem;color:var(--text-soft);margin-top:0.65rem;line-height:1.55;background:var(--gold-pale);padding:0.5rem 0.75rem;border-radius:6px; }
 
     .save-status { padding:0.75rem 2rem; font-size:0.82rem; text-align:center; min-height:2.5rem; }
     .save-status.loading { color:var(--text-soft); }
@@ -201,6 +233,7 @@
       .form-group.full { grid-column:1; }
       .modal-body { padding:1rem 1.2rem; }
       .modal-footer { padding:0.8rem 1.2rem 1rem; }
+      .pm-item { width:calc(33.3% - 0.35rem); }
     }
   </style>
 </head>
@@ -278,20 +311,35 @@
       <button type="button" class="modal-close" onclick="closeEdit()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="media-section" id="prodImgSection">
-        <div class="image-preview" id="imgPreview">
-          <div class="img-placeholder" id="imgPlaceholder"><span>📷</span><p>Nessuna foto</p></div>
-          <img id="previewImg" src="" alt="" class="hidden">
+
+      <!-- Multi-media manager -->
+      <div class="pm-section">
+        <span class="pm-label">📸 Foto e video del prodotto</span>
+        <div class="pm-list" id="pmList"></div>
+        <div class="pm-add-row">
+          <label class="btn-upload-label">
+            <input type="file" id="pmImgPicker" accept="image/*" onchange="pmAddImg(this)">
+            📸 Aggiungi foto
+          </label>
+          <button type="button" class="pm-vid-btn" onclick="pmToggleVidPanel()">🎥 Aggiungi video</button>
         </div>
-        <label class="btn-upload-label">
-          <input type="file" id="fileInput" accept="image/*" onchange="handleProdFile(this)">
-          📸 Carica foto dal dispositivo
-        </label>
-        <div class="url-row">
-          <span>oppure URL:</span>
-          <input type="text" id="imgUrl" placeholder="https://..." oninput="previewProdUrl(this.value)">
+        <div id="pmVidPanel" class="pm-vid-panel hidden">
+          <label class="btn-upload-label">
+            <input type="file" id="pmVidPicker" accept="video/*" onchange="pmAddVidFile(this)">
+            📁 Carica video (MP4/MOV)
+          </label>
+          <div class="url-row">
+            <span>oppure URL:</span>
+            <input type="text" id="pmVidUrl" placeholder="youtu.be/... o vimeo.com/...">
+          </div>
+          <p class="video-tip" style="margin-top:0.5rem">🎥 File MP4/MOV dal dispositivo oppure link YouTube o Vimeo.</p>
+          <div class="pm-vid-actions">
+            <button type="button" class="btn-cancel" onclick="pmCancelVid()">Annulla</button>
+            <button type="button" class="btn-save" onclick="pmConfirmVid()">Aggiungi →</button>
+          </div>
         </div>
       </div>
+
       <div class="form-grid">
         <div class="form-group full">
           <label>Nome prodotto <span class="req">*</span></label>
@@ -338,7 +386,6 @@
     </div>
     <div class="modal-body">
 
-      <!-- Tipo: Foto o Video -->
       <div class="form-group full form-mb">
         <label>Tipo di contenuto</label>
         <div class="media-type-row">
@@ -347,7 +394,6 @@
         </div>
       </div>
 
-      <!-- Preview -->
       <div class="image-preview" id="galleryPreview">
         <div class="img-placeholder" id="galleryPlaceholder"><span id="galPlaceholderIcon">📷</span><p>Nessun contenuto</p></div>
         <img id="galleryPreviewImg" src="" alt="" class="hidden">
@@ -355,7 +401,6 @@
         <iframe id="galleryPreviewFrame" src="" frameborder="0" class="hidden gal-frame"></iframe>
       </div>
 
-      <!-- Upload foto -->
       <div id="imgUploadSection">
         <label class="btn-upload-label">
           <input type="file" id="galleryFileInput" accept="image/*,video/*" onchange="handleGalleryFile(this)">
@@ -368,7 +413,7 @@
         <p class="video-tip hidden" id="videoTip">
           🎥 Per i <strong>video</strong> puoi:<br>
           • Caricare un file MP4/MOV dal dispositivo (max ~50MB)<br>
-          • Incollare un link <strong>YouTube</strong> o <strong>Vimeo</strong> (formato embed: youtu.be/... oppure vimeo.com/...)
+          • Incollare un link <strong>YouTube</strong> o <strong>Vimeo</strong>
         </p>
       </div>
 
@@ -410,6 +455,40 @@
   </div>
 </div>
 
+<!-- ════ IMAGE EDITOR MODAL ════ -->
+<div class="modal" id="editorModal">
+  <div class="modal-bg" onclick="edClose()"></div>
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-header">
+      <h2>Modifica foto</h2>
+      <button type="button" class="modal-close" onclick="edClose()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="ed-canvas-wrap">
+        <canvas id="edCanvas" width="480" height="360"></canvas>
+      </div>
+      <div class="ed-controls">
+        <div class="ed-zoom-row">
+          <span>🔍 Zoom</span>
+          <input type="range" id="edZoom" min="1" max="100" value="50" oninput="edZoomVal(parseInt(this.value))">
+          <span class="ed-zoom-val" id="edZoomLabel">1×</span>
+        </div>
+        <div class="ed-btn-row">
+          <button type="button" class="ed-btn" onclick="edRotate90()">↻ Ruota 90°</button>
+          <button type="button" class="ed-btn" onclick="edFlipH()">↔ Specchia oriz.</button>
+          <button type="button" class="ed-btn" onclick="edFlipV()">↕ Specchia vert.</button>
+          <button type="button" class="ed-btn" onclick="edResetAll()">⟳ Reset</button>
+        </div>
+      </div>
+      <p class="ed-tip">💡 Trascina per spostare · Rotella del mouse (o pinch) per zoom · La foto viene ritagliata al rettangolo visibile.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" onclick="edClose()">Annulla</button>
+      <button type="button" class="btn-save" onclick="edApply()">✅ Usa questa foto</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -419,16 +498,16 @@
   const CATS       = ['primi','secondi','fritti','dolci'];
   const CAT_LABELS = {primi:'Primi Piatti',secondi:'Secondi Piatti',fritti:'Fritti',dolci:'Dolci'};
 
-  let products      = null;  let prodSha     = null;
-  let gallery       = null;  let gallerySha  = null;
-  let editTarget    = null;  // {cat, idx} o null per nuovo prodotto
-  let editGalleryTarget = null; // index o null per nuovo elemento galleria
-  let deleteTarget  = null;  // {type:'prod'|'gal', cat?, idx}
-  let pendingProdFile   = null;
+  let products          = null;  let prodSha         = null;
+  let gallery           = null;  let gallerySha      = null;
+  let editTarget        = null;
+  let editGalleryTarget = null;
+  let deleteTarget      = null;
+  let pmItems           = [];    // [{type, src, preview, _up:{dataUrl?,file?}|null}]
   let pendingGalleryFile = null;
   let galleryMediaType  = 'image';
-  let currentCat    = 'primi';
-  let currentSection = 'prodotti';
+  let currentCat        = 'primi';
+  let currentSection    = 'prodotti';
 
   /* ── TOKEN ── */
   const getToken = () => localStorage.getItem('cotto_token');
@@ -518,26 +597,38 @@
       grid.innerHTML = `<div class="empty-state"><span>🍽️</span><p>Nessun prodotto. Clicca <strong>+ Aggiungi</strong>.</p></div>`;
       return;
     }
-    grid.innerHTML = list.map((p,i) => `
-      <div class="product-admin-card">
-        <div class="pac-img" onclick="openEdit('${cat}',${i})" style="cursor:pointer">
-          ${p.img
-            ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`
-            : `<div class="no-img"><span>📷</span><p>Nessuna foto</p></div>`}
-          <div class="pac-img-overlay"><span>✏️ Cambia foto</span></div>
-        </div>
-        <div class="pac-body">
-          <div class="pac-name">${esc(p.name)}</div>
-          ${p.description?`<div class="pac-desc">${esc(p.description)}</div>`:''}
-          ${p.weight?`<div class="pac-weight">${esc(p.weight)}</div>`:''}
-        </div>
-        <div class="pac-footer">
-          <div class="pac-price">€${Number(p.price).toFixed(2).replace('.',',')}</div>
-          <button class="btn-edit" onclick="openEdit('${cat}',${i})">✏️ Modifica</button>
-          <button class="btn-del" onclick="openDelete('prod','${cat}',${i})">🗑️</button>
-        </div>
-      </div>
-    `).join('');
+    grid.innerHTML = list.map((p,i) => {
+      const media = p.media&&p.media.length ? p.media : (p.img ? [{type:'image',src:p.img}] : []);
+      const first = media[0];
+      const cnt   = media.length;
+      let thumbHtml;
+      if(!first){
+        thumbHtml = `<div class="no-img"><span>📷</span><p>Nessuna foto</p></div>`;
+      } else if(first.type==='video' && isEmbedUrl(first.src||'')){
+        thumbHtml = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#111"><span style="font-size:2.5rem">▶️</span></div>`;
+      } else if(first.type==='video'){
+        thumbHtml = `<video src="${esc(first.src)}" muted autoplay loop playsinline style="width:100%;height:100%;object-fit:cover"></video>`;
+      } else {
+        thumbHtml = `<img src="${esc(first.src||p.img||'')}" alt="${esc(p.name)}" onerror="this.style.display='none'">`;
+      }
+      return `
+        <div class="product-admin-card">
+          <div class="pac-img" onclick="openEdit('${cat}',${i})" style="cursor:pointer">
+            ${thumbHtml}
+            <div class="pac-img-overlay"><span>✏️ Media${cnt>1?' ('+cnt+')':''}</span></div>
+          </div>
+          <div class="pac-body">
+            <div class="pac-name">${esc(p.name)}</div>
+            ${p.description?`<div class="pac-desc">${esc(p.description)}</div>`:''}
+            ${p.weight?`<div class="pac-weight">${esc(p.weight)}</div>`:''}
+          </div>
+          <div class="pac-footer">
+            <div class="pac-price">€${Number(p.price).toFixed(2).replace('.',',')}</div>
+            <button class="btn-edit" onclick="openEdit('${cat}',${i})">✏️ Modifica</button>
+            <button class="btn-del" onclick="openDelete('prod','${cat}',${i})">🗑️</button>
+          </div>
+        </div>`;
+    }).join('');
   }
 
   function renderGallery(){
@@ -590,16 +681,14 @@
 
   /* ══════════════════ PRODUCT MODAL ══════════════════ */
   function openAdd(){
-    editTarget=null; pendingProdFile=null;
+    editTarget = null;
     document.getElementById('modalTitle').textContent = 'Nuovo prodotto';
-    document.getElementById('editName').value    = '';
-    document.getElementById('editCategory').value= currentCat;
-    document.getElementById('editPrice').value   = '';
-    document.getElementById('editDesc').value    = '';
-    document.getElementById('editWeight').value  = '';
-    document.getElementById('imgUrl').value      = '';
-    document.getElementById('fileInput').value   = '';
-    setProdPreview('');
+    document.getElementById('editName').value     = '';
+    document.getElementById('editCategory').value = currentCat;
+    document.getElementById('editPrice').value    = '';
+    document.getElementById('editDesc').value     = '';
+    document.getElementById('editWeight').value   = '';
+    pmInit([]);
     resetSaveStatus('saveStatus','btnSave');
     document.getElementById('editModal').classList.add('open');
   }
@@ -607,65 +696,53 @@
   function openEdit(cat, idx){
     const p = products.products[cat][idx];
     if(!p) return;
-    editTarget={cat,idx}; pendingProdFile=null;
+    editTarget = {cat, idx};
     document.getElementById('modalTitle').textContent    = 'Modifica prodotto';
     document.getElementById('editName').value            = p.name||'';
     document.getElementById('editCategory').value        = cat;
     document.getElementById('editPrice').value           = p.price||'';
     document.getElementById('editDesc').value            = p.description||'';
     document.getElementById('editWeight').value          = p.weight||'';
-    document.getElementById('imgUrl').value              = p.img||'';
-    document.getElementById('fileInput').value           = '';
-    setProdPreview(p.img||'');
+    const media = p.media&&p.media.length ? p.media : (p.img ? [{type:'image',src:p.img}] : []);
+    pmInit(media);
     resetSaveStatus('saveStatus','btnSave');
     document.getElementById('editModal').classList.add('open');
-    // Scrolla alla sezione immagine se arriva dal clic sulla foto
-    setTimeout(()=> document.getElementById('prodImgSection').scrollIntoView({behavior:'smooth',block:'nearest'}), 150);
   }
 
   function closeEdit(){ document.getElementById('editModal').classList.remove('open'); }
 
-  function handleProdFile(input){
-    const file = input.files[0]; if(!file) return;
-    pendingProdFile = file;
-    document.getElementById('imgUrl').value = '';
-    const r = new FileReader();
-    r.onload = e => setProdPreview(e.target.result);
-    r.readAsDataURL(file);
-  }
-
-  function previewProdUrl(url){ pendingProdFile=null; setProdPreview(url); }
-
-  function setProdPreview(src){
-    const img=document.getElementById('previewImg'), ph=document.getElementById('imgPlaceholder');
-    if(src){ img.src=src; img.classList.remove('hidden'); ph.classList.add('hidden'); }
-    else { img.classList.add('hidden'); ph.classList.remove('hidden'); }
-  }
-
   async function saveProduct(){
-    const name  = document.getElementById('editName').value.trim();
-    const cat   = document.getElementById('editCategory').value;
-    const price = parseFloat(document.getElementById('editPrice').value);
-    const desc  = document.getElementById('editDesc').value.trim();
-    const weight= document.getElementById('editWeight').value.trim();
-    const imgUrl= document.getElementById('imgUrl').value.trim();
+    const name   = document.getElementById('editName').value.trim();
+    const cat    = document.getElementById('editCategory').value;
+    const price  = parseFloat(document.getElementById('editPrice').value);
+    const desc   = document.getElementById('editDesc').value.trim();
+    const weight = document.getElementById('editWeight').value.trim();
     if(!name){ alert('Inserisci il nome del prodotto.'); return; }
-    if(isNaN(price)||price<=0){ alert('Inserisci un prezzo valido.'); return; }
+    if(isNaN(price)||price<=0){ alert('Inserisci un prezzo valido (es. 5.30).'); return; }
 
     const btn = document.getElementById('btnSave');
     btn.disabled = true;
     setStatus('saveStatus','loading','Salvataggio...');
     try{
-      let finalImg = imgUrl;
-      if(pendingProdFile){
-        setStatus('saveStatus','loading','Caricamento foto...');
-        finalImg = await uploadFile(pendingProdFile,'images/');
+      const finalMedia = [];
+      for(let i=0; i<pmItems.length; i++){
+        const item = pmItems[i];
+        if(pmItems.length > 1) setStatus('saveStatus','loading',`Caricamento media ${i+1}/${pmItems.length}...`);
+        const url = await uploadFromSource(item);
+        finalMedia.push({type:item.type, src:url});
       }
-      const prod = {id:genId(name),name,description:desc,weight,price:Math.round(price*100)/100,img:finalImg};
+      const firstImg = finalMedia.find(m=>m.type==='image');
+      const prod = {
+        id:   genId(name),
+        name, description:desc, weight,
+        price: Math.round(price*100)/100,
+        img:  firstImg ? firstImg.src : '',
+        ...(finalMedia.length ? {media: finalMedia} : {})
+      };
       if(editTarget){
-        const oldCat=editTarget.cat;
+        const oldCat = editTarget.cat;
         if(oldCat!==cat){ products.products[oldCat].splice(editTarget.idx,1); products.products[cat].push(prod); }
-        else { products.products[oldCat][editTarget.idx]=prod; }
+        else             { products.products[oldCat][editTarget.idx] = prod; }
       } else {
         products.products[cat].push(prod);
       }
@@ -675,10 +752,288 @@
       renderAll();
       setTimeout(closeEdit, 2200);
     }catch(err){
-      setStatus('saveStatus','error','❌ '+( err.message||'Errore sconosciuto'));
-      btn.disabled=false;
+      setStatus('saveStatus','error','❌ '+(err.message||'Errore sconosciuto'));
+      btn.disabled = false;
     }
   }
+
+  /* ══════════════════ MULTI-MEDIA MANAGER (pm*) ══════════════════ */
+  function pmInit(mediaArr){
+    pmItems = (mediaArr||[]).map(m => ({
+      type:    m.type||'image',
+      src:     m.src||'',
+      preview: m.src||'',
+      _up:     null
+    }));
+    pmRender();
+    document.getElementById('pmVidPanel').classList.add('hidden');
+    document.getElementById('pmVidUrl').value = '';
+    if(document.getElementById('pmVidPicker')) document.getElementById('pmVidPicker').value='';
+  }
+
+  function pmRender(){
+    const list = document.getElementById('pmList');
+    if(!pmItems.length){
+      list.innerHTML = `<span class="pm-empty">Nessun media. Aggiungi foto o video tramite i pulsanti sotto.</span>`;
+      return;
+    }
+    list.innerHTML = pmItems.map((item, i) => {
+      const preview = item.preview||item.src||'';
+      let thumb;
+      if(item.type==='video'){
+        if(isEmbedUrl(item.src)) thumb = `<div class="pm-vid-ph">▶️</div>`;
+        else if(preview)         thumb = `<video src="${esc(preview)}" muted style="width:100%;height:100%;object-fit:cover"></video>`;
+        else                     thumb = `<div class="pm-vid-ph">🎥</div>`;
+      } else {
+        thumb = preview ? `<img src="${esc(preview)}" alt="">` : `<div class="pm-vid-ph">📷</div>`;
+      }
+      return `
+        <div class="pm-item">
+          ${thumb}
+          ${i===0?'<span class="pm-main-badge">★ Principale</span>':''}
+          <div class="pm-overlay">
+            ${item.type==='image'?`<button class="pm-btn" onclick="pmEditImg(${i})" title="Modifica in editor">✏️</button>`:''}
+            <button class="pm-btn" onclick="pmRemove(${i})" title="Rimuovi">🗑️</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function pmAddImg(input){
+    const file = input.files[0]; if(!file) return;
+    input.value = '';
+    const r = new FileReader();
+    r.onload = e => {
+      edOpen(e.target.result, editedUrl => {
+        pmItems.push({ type:'image', src:'', preview:editedUrl, _up:{dataUrl:editedUrl} });
+        pmRender();
+      });
+    };
+    r.readAsDataURL(file);
+  }
+
+  function pmEditImg(idx){
+    const item = pmItems[idx]; if(!item) return;
+    const src = item.preview||item.src||''; if(!src) return;
+    edOpen(src, editedUrl => {
+      pmItems[idx].preview = editedUrl;
+      pmItems[idx].src     = '';
+      pmItems[idx]._up     = {dataUrl: editedUrl};
+      pmRender();
+    });
+  }
+
+  function pmRemove(idx){ pmItems.splice(idx,1); pmRender(); }
+
+  function pmToggleVidPanel(){
+    const panel = document.getElementById('pmVidPanel');
+    panel.classList.toggle('hidden');
+    if(!panel.classList.contains('hidden')) document.getElementById('pmVidUrl').focus();
+  }
+
+  function pmAddVidFile(input){
+    const file = input.files[0]; if(!file) return;
+    input.value = '';
+    const r = new FileReader();
+    r.onload = e => {
+      pmItems.push({ type:'video', src:'', preview:e.target.result, _up:{file} });
+      pmRender();
+      document.getElementById('pmVidPanel').classList.add('hidden');
+    };
+    r.readAsDataURL(file);
+  }
+
+  function pmConfirmVid(){
+    const url = document.getElementById('pmVidUrl').value.trim();
+    if(!url){ alert('Inserisci un URL video (YouTube, Vimeo) oppure carica un file.'); return; }
+    const finalSrc = isEmbedUrl(url) ? toEmbedUrl(url) : url;
+    pmItems.push({ type:'video', src:finalSrc, preview:finalSrc, _up:null });
+    pmRender();
+    document.getElementById('pmVidPanel').classList.add('hidden');
+    document.getElementById('pmVidUrl').value='';
+  }
+
+  function pmCancelVid(){
+    document.getElementById('pmVidPanel').classList.add('hidden');
+    document.getElementById('pmVidUrl').value='';
+  }
+
+  async function uploadFromSource(item){
+    if(!item._up) return item.src;
+    const token  = getToken();
+    const folder = item.type==='video' ? 'videos/' : 'images/';
+    if(item._up.dataUrl){
+      const base64   = item._up.dataUrl.split(',')[1];
+      const filename = Date.now()+'_'+Math.random().toString(36).slice(2,6)+'.jpg';
+      const res = await fetch(API+folder+filename, {
+        method:'PUT',
+        headers:{Authorization:'token '+token,'Content-Type':'application/json'},
+        body: JSON.stringify({message:'Carica: '+filename, content:base64, branch:'main'})
+      });
+      if(res.ok) return PAGES_BASE+folder+filename;
+      const d = await res.json().catch(()=>({})); throw new Error(d.message||'Upload immagine fallito');
+    }
+    if(item._up.file) return uploadFile(item._up.file, folder);
+    return item.src;
+  }
+
+  /* ══════════════════ IMAGE EDITOR (ed*) ══════════════════ */
+  const ED = {
+    img:null, cvs:null, ctx:null,
+    ox:240, oy:180, scale:1,
+    flipH:false, flipV:false, rot:0,
+    drag:false, lx:0, ly:0,
+    onApply:null, _bound:false,
+    _pinchDist:0
+  };
+
+  function edOpen(src, onApply){
+    ED.onApply = onApply;
+    const cvs = document.getElementById('edCanvas');
+    ED.cvs = cvs; ED.ctx = cvs.getContext('2d');
+    if(!ED._bound){
+      ED._bound = true;
+      cvs.addEventListener('mousedown',  edMD);
+      cvs.addEventListener('mousemove',  edMM);
+      cvs.addEventListener('mouseup',    edMU);
+      cvs.addEventListener('mouseleave', edMU);
+      cvs.addEventListener('wheel', edWheel, {passive:false});
+      cvs.addEventListener('touchstart', edTS, {passive:false});
+      cvs.addEventListener('touchmove',  edTM, {passive:false});
+      cvs.addEventListener('touchend',   edMU);
+    }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      ED.img = img;
+      ED.rot = 0; ED.flipH = false; ED.flipV = false;
+      edFit();
+      document.getElementById('edZoom').value = 50;
+      edUpdateZoomLabel(50);
+      edDraw();
+      document.getElementById('editorModal').classList.add('open');
+    };
+    img.onerror = () => { if(ED.onApply) ED.onApply(src); };
+    img.src = src;
+  }
+
+  function edFit(){
+    const {cvs,img,rot} = ED;
+    const swap = rot===90||rot===270;
+    const iw = swap ? img.height : img.width;
+    const ih = swap ? img.width  : img.height;
+    ED.scale = Math.max(cvs.width/iw, cvs.height/ih);
+    ED.ox = cvs.width/2;
+    ED.oy = cvs.height/2;
+  }
+
+  function edDraw(){
+    const {cvs,ctx,img,ox,oy,scale,flipH,flipV,rot} = ED;
+    ctx.clearRect(0,0,cvs.width,cvs.height);
+    ctx.save();
+    ctx.translate(ox, oy);
+    if(rot) ctx.rotate(rot*Math.PI/180);
+    ctx.scale(flipH?-1:1, flipV?-1:1);
+    ctx.drawImage(img, -img.width*scale/2, -img.height*scale/2, img.width*scale, img.height*scale);
+    ctx.restore();
+  }
+
+  function edZoomVal(val){
+    if(!ED.img) return;
+    const {cvs,img,rot} = ED;
+    const swap = rot===90||rot===270;
+    const iw = swap?img.height:img.width;
+    const ih = swap?img.width:img.height;
+    const base     = Math.max(cvs.width/iw, cvs.height/ih);
+    const newScale = base * (0.25 + (val/100)*2.75);
+    const cx=cvs.width/2, cy=cvs.height/2;
+    const ratio = newScale/ED.scale;
+    ED.ox = cx+(ED.ox-cx)*ratio;
+    ED.oy = cy+(ED.oy-cy)*ratio;
+    ED.scale = newScale;
+    edUpdateZoomLabel(val);
+    edDraw();
+  }
+
+  function edUpdateZoomLabel(val){
+    const lbl = document.getElementById('edZoomLabel');
+    if(lbl) lbl.textContent = (0.25 + (val/100)*2.75).toFixed(1)+'×';
+  }
+
+  function edRotate90(){
+    ED.rot = (ED.rot+90)%360;
+    edFit();
+    document.getElementById('edZoom').value = 50;
+    edUpdateZoomLabel(50);
+    edDraw();
+  }
+
+  function edFlipH(){ ED.flipH=!ED.flipH; edDraw(); }
+  function edFlipV(){ ED.flipV=!ED.flipV; edDraw(); }
+
+  function edResetAll(){
+    ED.rot=0; ED.flipH=false; ED.flipV=false;
+    edFit();
+    document.getElementById('edZoom').value=50;
+    edUpdateZoomLabel(50);
+    edDraw();
+  }
+
+  function edMD(e){ ED.drag=true; const p=edPos(e); ED.lx=p.x; ED.ly=p.y; }
+  function edMM(e){
+    if(!ED.drag) return;
+    const p=edPos(e); ED.ox+=p.x-ED.lx; ED.oy+=p.y-ED.ly; ED.lx=p.x; ED.ly=p.y; edDraw();
+  }
+  function edMU(){ ED.drag=false; ED._pinchDist=0; }
+
+  function edTS(e){
+    e.preventDefault();
+    if(e.touches.length===2){
+      ED.drag=false;
+      ED._pinchDist = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+    } else {
+      edMD(e.touches[0]);
+    }
+  }
+
+  function edTM(e){
+    e.preventDefault();
+    if(e.touches.length===2){
+      const dist = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      if(ED._pinchDist){
+        const z = document.getElementById('edZoom');
+        const delta = (dist-ED._pinchDist)*0.4;
+        const val = Math.max(1,Math.min(100,parseInt(z.value)+delta));
+        z.value = val; edZoomVal(val);
+      }
+      ED._pinchDist = dist;
+    } else {
+      edMM(e.touches[0]);
+    }
+  }
+
+  function edPos(e){
+    const r = ED.cvs.getBoundingClientRect();
+    return { x:(e.clientX-r.left)*(ED.cvs.width/r.width), y:(e.clientY-r.top)*(ED.cvs.height/r.height) };
+  }
+
+  function edWheel(e){
+    e.preventDefault();
+    const z = document.getElementById('edZoom');
+    const val = Math.max(1,Math.min(100,parseInt(z.value)+(e.deltaY<0?4:-4)));
+    z.value = val; edZoomVal(val);
+  }
+
+  function edApply(){
+    const out = document.createElement('canvas');
+    out.width = ED.cvs.width; out.height = ED.cvs.height;
+    out.getContext('2d').drawImage(ED.cvs,0,0);
+    const dataUrl = out.toDataURL('image/jpeg', 0.92);
+    if(ED.onApply) ED.onApply(dataUrl);
+    document.getElementById('editorModal').classList.remove('open');
+  }
+
+  function edClose(){ document.getElementById('editorModal').classList.remove('open'); }
 
   /* ══════════════════ GALLERY MODAL ══════════════════ */
   function openAddGallery(){
@@ -727,8 +1082,6 @@
       fi.accept='image/*';
       document.getElementById('galPlaceholderIcon').textContent='📷';
     }
-    // Aggiorna il filtro file
-    document.getElementById('imgUploadSection').querySelector('label').firstElementChild.accept = type==='video' ? 'video/*' : 'image/*';
     setGalleryPreview(document.getElementById('galleryUrl').value, type);
   }
 
@@ -741,10 +1094,7 @@
     r.readAsDataURL(file);
   }
 
-  function previewGalleryUrl(url){
-    pendingGalleryFile=null;
-    setGalleryPreview(url, galleryMediaType);
-  }
+  function previewGalleryUrl(url){ pendingGalleryFile=null; setGalleryPreview(url, galleryMediaType); }
 
   function setGalleryPreview(src, type){
     const img   = document.getElementById('galleryPreviewImg');
@@ -768,8 +1118,7 @@
     const src   = document.getElementById('galleryUrl').value.trim();
     const title = document.getElementById('galleryTitle').value.trim();
     const size  = document.getElementById('gallerySize').value;
-
-    const btn = document.getElementById('btnGallerySave');
+    const btn   = document.getElementById('btnGallerySave');
     btn.disabled=true;
     setStatus('gallerySaveStatus','loading','Salvataggio...');
     try{
@@ -778,27 +1127,17 @@
         setStatus('gallerySaveStatus','loading','Caricamento file su GitHub...');
         const folder = galleryMediaType==='video' ? 'videos/' : 'images/';
         finalSrc = await uploadFile(pendingGalleryFile, folder);
-      } else if(!finalSrc && !pendingGalleryFile){
+      } else if(!finalSrc){
         setStatus('gallerySaveStatus','error','❌ Aggiungi una foto, un video o un URL.');
         btn.disabled=false; return;
       }
-
       const storeSrc = galleryMediaType==='video' && isEmbedUrl(finalSrc) ? toEmbedUrl(finalSrc) : finalSrc;
-
-      const item = {
-        id:   'g'+Date.now(),
-        type: galleryMediaType,
-        src:  storeSrc,
-        title,
-        size
-      };
-
+      const item = { id:'g'+Date.now(), type:galleryMediaType, src:storeSrc, title, size };
       if(editGalleryTarget !== null){
-        gallery.items[editGalleryTarget] = {...gallery.items[editGalleryTarget], ...item, id: gallery.items[editGalleryTarget].id};
+        gallery.items[editGalleryTarget] = {...gallery.items[editGalleryTarget], ...item, id:gallery.items[editGalleryTarget].id};
       } else {
         gallery.items.push(item);
       }
-
       setStatus('gallerySaveStatus','loading','Pubblicazione su GitHub...');
       await commitFile('gallery.json', gallery, gallerySha, `Aggiorna galleria: ${title||'elemento'}`);
       setStatus('gallerySaveStatus','success','✅ Pubblicato! Il sito si aggiornerà entro 1-2 minuti.');
@@ -871,7 +1210,7 @@
         try{
           const base64   = e.target.result.split(',')[1];
           const ext      = (file.name.split('.').pop()||'bin').toLowerCase();
-          const filename = Date.now()+'.'+ext;
+          const filename = Date.now()+'_'+Math.random().toString(36).slice(2,6)+'.'+ext;
           const res = await fetch(API+folder+filename, {
             method:'PUT',
             headers:{Authorization:'token '+token,'Content-Type':'application/json'},
@@ -892,13 +1231,11 @@
   }
 
   function toEmbedUrl(url){
-    // YouTube: youtu.be/ID o youtube.com/watch?v=ID → embed
     const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
     if(ytMatch) return 'https://www.youtube.com/embed/'+ytMatch[1]+'?autoplay=1&mute=1&loop=1&playlist='+ytMatch[1];
-    // Vimeo: vimeo.com/ID → embed
     const vmMatch = url.match(/vimeo\.com\/(\d+)/);
     if(vmMatch) return 'https://player.vimeo.com/video/'+vmMatch[1]+'?autoplay=1&muted=1&loop=1';
-    return url; // già embed o altro
+    return url;
   }
 
   function genId(name){
@@ -915,12 +1252,10 @@
   function setStatus(elId, type, msg){
     const el=document.getElementById(elId); el.className='save-status '+type; el.textContent=msg;
   }
-
   function resetSaveStatus(elId, btnId){
     document.getElementById(elId).className='save-status'; document.getElementById(elId).textContent='';
     document.getElementById(btnId).disabled=false;
   }
-
   function showToast(msg, type='success'){
     const t=document.getElementById('toast'); t.textContent=msg; t.className='toast '+type;
     t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
