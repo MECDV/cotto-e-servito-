@@ -3,356 +3,295 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestione Prodotti — Cotto &amp; Servito</title>
+  <title>Gestione — Cotto &amp; Servito</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --cream:    #FAF7F2;
-      --espresso: #1C0F06;
-      --bark:     #4A2C12;
-      --gold:     #B8965A;
-      --gold-pale:#F0E6D3;
-      --red:      #C0272D;
-      --text:     #2A1A0E;
-      --text-soft:#7A5C42;
-      --white:    #FFFEFB;
-      --border:   rgba(184,150,90,0.22);
-      --shadow:   0 4px 24px rgba(26,15,6,0.10);
-      --font-d:   'Cormorant Garamond', serif;
-      --font-b:   'Outfit', sans-serif;
-      --ease:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --cream:#FAF7F2; --espresso:#1C0F06; --bark:#4A2C12;
+      --gold:#B8965A; --gold-pale:#F0E6D3; --red:#C0272D;
+      --text:#2A1A0E; --text-soft:#7A5C42; --white:#FFFEFB;
+      --border:rgba(184,150,90,0.22); --shadow:0 4px 24px rgba(26,15,6,0.10);
+      --font-d:'Cormorant Garamond',serif; --font-b:'Outfit',sans-serif;
+      --ease:cubic-bezier(0.25,0.46,0.45,0.94);
     }
+    body { font-family:var(--font-b); background:var(--cream); color:var(--text); min-height:100vh; }
 
-    body { font-family: var(--font-b); background: var(--cream); color: var(--text); min-height: 100vh; }
-
-    /* ── LOGIN SCREEN ── */
-    #loginScreen {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, var(--espresso) 0%, var(--bark) 100%);
-      padding: 1.5rem;
-    }
-    .login-card {
-      background: var(--white); border-radius: 16px; padding: 3rem 2.5rem;
-      width: 100%; max-width: 440px; box-shadow: 0 24px 80px rgba(0,0,0,0.35);
-      text-align: center;
-    }
-    .login-logo {
-      font-family: var(--font-d); font-size: 2rem; letter-spacing: 0.05em;
-      color: var(--espresso); margin-bottom: 0.4rem;
-    }
-    .login-logo em { color: var(--gold); font-style: italic; }
-    .login-subtitle { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 2rem; }
-    .login-title { font-size: 1.2rem; font-weight: 500; color: var(--espresso); margin-bottom: 0.5rem; }
-    .login-desc { font-size: 0.85rem; color: var(--text-soft); margin-bottom: 2rem; line-height: 1.6; }
-    .login-field { text-align: left; margin-bottom: 1.2rem; }
-    .login-field label { display: block; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 0.5rem; font-weight: 500; }
-    .login-field input {
-      width: 100%; padding: 0.9rem 1rem; border: 1.5px solid var(--border);
-      border-radius: 8px; font-family: var(--font-b); font-size: 0.9rem;
-      background: var(--cream); color: var(--text); outline: none; transition: border-color 0.2s;
-    }
-    .login-field input:focus { border-color: var(--gold); }
-    .btn-login {
-      width: 100%; padding: 1rem; background: var(--espresso); color: var(--white);
-      border: none; border-radius: 8px; font-family: var(--font-b); font-size: 0.9rem;
-      font-weight: 500; cursor: pointer; letter-spacing: 0.08em; transition: background 0.2s;
-      margin-bottom: 1.5rem;
-    }
-    .btn-login:hover { background: var(--bark); }
-    .login-help { font-size: 0.78rem; color: var(--text-soft); line-height: 1.8; }
-    .login-help a { color: var(--gold); text-decoration: none; }
-    .login-help code { background: var(--gold-pale); padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.85em; }
-    .login-error { color: var(--red); font-size: 0.82rem; margin-top: 1rem; min-height: 1.2rem; }
+    /* ── LOGIN ── */
+    #loginScreen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--espresso) 0%,var(--bark) 100%); padding:1.5rem; }
+    .login-card { background:var(--white); border-radius:16px; padding:3rem 2.5rem; width:100%; max-width:440px; box-shadow:0 24px 80px rgba(0,0,0,0.35); text-align:center; }
+    .login-logo { font-family:var(--font-d); font-size:2rem; letter-spacing:0.05em; color:var(--espresso); margin-bottom:0.4rem; }
+    .login-logo em { color:var(--gold); font-style:italic; }
+    .login-subtitle { font-size:0.78rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-soft); margin-bottom:2rem; }
+    .login-title { font-size:1.2rem; font-weight:500; color:var(--espresso); margin-bottom:0.5rem; }
+    .login-desc { font-size:0.85rem; color:var(--text-soft); margin-bottom:2rem; line-height:1.6; }
+    .login-field { text-align:left; margin-bottom:1.2rem; }
+    .login-field label { display:block; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-soft); margin-bottom:0.5rem; font-weight:500; }
+    .login-field input { width:100%; padding:0.9rem 1rem; border:1.5px solid var(--border); border-radius:8px; font-family:var(--font-b); font-size:0.9rem; background:var(--cream); color:var(--text); outline:none; transition:border-color 0.2s; }
+    .login-field input:focus { border-color:var(--gold); }
+    .btn-login { width:100%; padding:1rem; background:var(--espresso); color:var(--white); border:none; border-radius:8px; font-family:var(--font-b); font-size:0.9rem; font-weight:500; cursor:pointer; letter-spacing:0.08em; transition:background 0.2s; margin-bottom:1.5rem; }
+    .btn-login:hover { background:var(--bark); }
+    .btn-login:disabled { background:#999; cursor:not-allowed; }
+    .login-help { font-size:0.78rem; color:var(--text-soft); line-height:1.9; }
+    .login-help code { background:var(--gold-pale); padding:0.1em 0.4em; border-radius:3px; font-size:0.85em; }
+    .login-error { color:var(--red); font-size:0.82rem; margin-top:1rem; min-height:1.2rem; line-height:1.5; }
 
     /* ── HEADER ── */
-    .admin-header {
-      background: var(--espresso); color: var(--white); padding: 0 2rem;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px; position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
-    }
-    .header-logo { font-family: var(--font-d); font-size: 1.4rem; letter-spacing: 0.05em; }
-    .header-logo em { color: var(--gold); }
-    .header-logo span { font-family: var(--font-b); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-left: 0.8rem; }
-    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
-    .btn-view { color: var(--gold); font-size: 0.78rem; letter-spacing: 0.1em; text-decoration: none; padding: 0.5rem 1rem; border: 1px solid rgba(184,150,90,0.35); border-radius: 6px; transition: all 0.2s; }
-    .btn-view:hover { background: rgba(184,150,90,0.12); }
-    .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); padding: 0.5rem 1rem; border-radius: 6px; font-family: var(--font-b); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
-    .btn-logout:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
+    .admin-header { background:var(--espresso); color:var(--white); padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:64px; position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.3); }
+    .header-logo { font-family:var(--font-d); font-size:1.4rem; letter-spacing:0.05em; }
+    .header-logo em { color:var(--gold); }
+    .header-logo span { font-family:var(--font-b); font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-left:0.8rem; }
+    .header-actions { display:flex; gap:0.75rem; align-items:center; }
+    .btn-view { color:var(--gold); font-size:0.78rem; letter-spacing:0.1em; text-decoration:none; padding:0.5rem 1rem; border:1px solid rgba(184,150,90,0.35); border-radius:6px; transition:all 0.2s; }
+    .btn-view:hover { background:rgba(184,150,90,0.12); }
+    .btn-logout { background:none; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); padding:0.5rem 1rem; border-radius:6px; font-family:var(--font-b); font-size:0.78rem; cursor:pointer; transition:all 0.2s; }
+    .btn-logout:hover { border-color:rgba(255,255,255,0.5); color:var(--white); }
 
-    /* ── TABS + TOOLBAR ── */
-    .admin-toolbar {
-      background: var(--white); border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 2rem; gap: 1rem; flex-wrap: wrap;
-    }
-    .admin-tabs { display: flex; gap: 0; }
-    .tab-btn {
-      padding: 1.1rem 1.5rem; border: none; background: none; font-family: var(--font-b);
-      font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; cursor: pointer;
-      color: var(--text-soft); border-bottom: 2px solid transparent; transition: all 0.2s;
-      text-transform: uppercase;
-    }
-    .tab-btn:hover { color: var(--text); }
-    .tab-btn.active { color: var(--espresso); border-bottom-color: var(--gold); }
-    .btn-add {
-      background: var(--red); color: var(--white); border: none; padding: 0.6rem 1.3rem;
-      border-radius: 7px; font-family: var(--font-b); font-size: 0.82rem; font-weight: 500;
-      cursor: pointer; letter-spacing: 0.06em; transition: background 0.2s; white-space: nowrap;
-    }
-    .btn-add:hover { background: #a01f24; }
+    /* ── TOOLBAR + TABS ── */
+    .admin-toolbar { background:var(--white); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; gap:1rem; flex-wrap:wrap; }
+    .admin-tabs { display:flex; gap:0; }
+    .tab-btn { padding:1.1rem 1.4rem; border:none; background:none; font-family:var(--font-b); font-size:0.82rem; font-weight:500; letter-spacing:0.08em; cursor:pointer; color:var(--text-soft); border-bottom:2px solid transparent; transition:all 0.2s; text-transform:uppercase; }
+    .tab-btn:hover { color:var(--text); }
+    .tab-btn.active { color:var(--espresso); border-bottom-color:var(--gold); }
+    .btn-add { background:var(--red); color:var(--white); border:none; padding:0.6rem 1.3rem; border-radius:7px; font-family:var(--font-b); font-size:0.82rem; font-weight:500; cursor:pointer; letter-spacing:0.06em; transition:background 0.2s; white-space:nowrap; }
+    .btn-add:hover { background:#a01f24; }
 
-    /* ── PRODUCTS GRID ── */
-    .admin-content { padding: 2rem; max-width: 1400px; margin: 0 auto; }
-    .cat-panel { display: none; }
-    .cat-panel.active { display: block; }
-    .products-admin-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;
-    }
-    .product-admin-card {
-      background: var(--white); border-radius: 12px; overflow: hidden;
-      border: 1px solid var(--border); box-shadow: var(--shadow); transition: box-shadow 0.2s;
-    }
-    .product-admin-card:hover { box-shadow: 0 8px 40px rgba(26,15,6,0.14); }
-    .pac-img {
-      width: 100%; aspect-ratio: 4/3; background: var(--gold-pale); overflow: hidden;
-    }
-    .pac-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .pac-img .no-img {
-      width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; color: var(--text-soft); gap: 0.4rem;
-    }
-    .pac-img .no-img span { font-size: 2rem; }
-    .pac-img .no-img p { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
-    .pac-body { padding: 1rem 1.2rem 0.5rem; }
-    .pac-name { font-family: var(--font-d); font-size: 1.1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.3rem; line-height: 1.3; }
-    .pac-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 0.5rem; }
-    .pac-weight { font-size: 0.72rem; color: var(--text-soft); opacity: 0.7; }
-    .pac-price { font-family: var(--font-d); font-size: 1.4rem; color: var(--red); font-weight: 600; }
-    .pac-footer { padding: 0.8rem 1.2rem; display: flex; gap: 0.6rem; border-top: 1px solid var(--border); }
-    .btn-edit {
-      flex: 1; padding: 0.55rem; background: var(--gold-pale); border: 1px solid rgba(184,150,90,0.4);
-      border-radius: 6px; font-family: var(--font-b); font-size: 0.78rem; font-weight: 500;
-      color: var(--bark); cursor: pointer; transition: background 0.2s;
-    }
-    .btn-edit:hover { background: rgba(184,150,90,0.25); }
-    .btn-delete-card {
-      padding: 0.55rem 0.9rem; background: none; border: 1px solid rgba(192,39,45,0.25);
-      border-radius: 6px; color: var(--red); cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
-    }
-    .btn-delete-card:hover { background: rgba(192,39,45,0.08); }
+    /* ── PRODUCT GRID ── */
+    .admin-content { padding:2rem; max-width:1400px; margin:0 auto; }
+    .cat-panel { display:none; }
+    .cat-panel.active { display:block; }
+    .products-admin-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.5rem; }
+
+    /* Product card */
+    .product-admin-card { background:var(--white); border-radius:12px; overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow); transition:box-shadow 0.2s; }
+    .product-admin-card:hover { box-shadow:0 8px 40px rgba(26,15,6,0.14); }
+    .pac-img { width:100%; aspect-ratio:4/3; background:var(--gold-pale); overflow:hidden; position:relative; }
+    .pac-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.3s; }
+    .product-admin-card:hover .pac-img img { transform:scale(1.04); }
+    .pac-img .no-img { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-soft); gap:0.4rem; }
+    .pac-img .no-img span { font-size:2rem; }
+    .pac-img .no-img p { font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; }
+
+    /* Overlay foto prodotto */
+    .pac-img-overlay { position:absolute; inset:0; background:rgba(26,15,6,0.5); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.25s; cursor:pointer; }
+    .product-admin-card:hover .pac-img-overlay { opacity:1; }
+    .pac-img-overlay span { background:var(--white); color:var(--espresso); font-size:0.78rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:0.5rem 1rem; border-radius:20px; }
+
+    .pac-body { padding:1rem 1.2rem 0.5rem; }
+    .pac-name { font-family:var(--font-d); font-size:1.1rem; font-weight:600; color:var(--espresso); margin-bottom:0.3rem; line-height:1.3; }
+    .pac-desc { font-size:0.78rem; color:var(--text-soft); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:0.5rem; }
+    .pac-weight { font-size:0.72rem; color:var(--text-soft); opacity:0.7; }
+    .pac-footer { padding:0.8rem 1.2rem; display:flex; align-items:center; gap:0.6rem; border-top:1px solid var(--border); }
+    .pac-price { font-family:var(--font-d); font-size:1.4rem; color:var(--red); font-weight:600; flex:1; }
+    .btn-edit { padding:0.55rem 1rem; background:var(--gold-pale); border:1px solid rgba(184,150,90,0.4); border-radius:6px; font-family:var(--font-b); font-size:0.78rem; font-weight:500; color:var(--bark); cursor:pointer; transition:background 0.2s; }
+    .btn-edit:hover { background:rgba(184,150,90,0.25); }
+    .btn-del { padding:0.55rem 0.75rem; background:none; border:1px solid rgba(192,39,45,0.25); border-radius:6px; color:var(--red); cursor:pointer; font-size:0.9rem; transition:all 0.2s; }
+    .btn-del:hover { background:rgba(192,39,45,0.08); }
+
+    /* ── GALLERY GRID ── */
+    .gallery-admin-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.2rem; }
+    .gallery-admin-card { background:var(--white); border-radius:10px; overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow); }
+    .gac-media { width:100%; aspect-ratio:1; background:var(--gold-pale); overflow:hidden; position:relative; }
+    .gac-media img { width:100%; height:100%; object-fit:cover; }
+    .gac-media video { width:100%; height:100%; object-fit:cover; }
+    .gac-media iframe { width:100%; height:100%; border:none; }
+    .gac-media .no-media { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-soft); gap:0.5rem; }
+    .gac-media .no-media span { font-size:2.5rem; }
+    .gac-media .no-media p { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; }
+    .gac-badge { position:absolute; top:0.5rem; left:0.5rem; background:var(--espresso); color:var(--white); font-size:0.65rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:20px; }
+    .gac-badge.video { background:var(--red); }
+    .gac-size { position:absolute; top:0.5rem; right:0.5rem; background:rgba(0,0,0,0.5); color:#fff; font-size:0.6rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:0.2rem 0.5rem; border-radius:10px; }
+    .gac-footer { padding:0.75rem 1rem; display:flex; align-items:center; gap:0.5rem; }
+    .gac-title { flex:1; font-size:0.85rem; font-weight:500; color:var(--espresso); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .gac-add-card { background:var(--cream); border:2px dashed var(--border); border-radius:10px; aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; cursor:pointer; transition:all 0.2s; color:var(--text-soft); }
+    .gac-add-card:hover { border-color:var(--gold); color:var(--bark); background:var(--gold-pale); }
+    .gac-add-card span { font-size:2rem; }
+    .gac-add-card p { font-size:0.8rem; font-weight:500; letter-spacing:0.08em; }
+
+    /* ── Static layout helpers ── */
+    .cat-tabs-inner { margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:0; }
+    .form-mb       { margin-bottom:1rem; }
+    .form-grid-mt  { margin-top:1rem; }
+    .modal-body-pad { padding:2rem; }
+    .del-confirm-text { margin-top:0.75rem; color:var(--text-soft); font-size:0.88rem; line-height:1.6; }
+    .hidden { display:none !important; }
+    .gal-frame { width:100%; height:100%; border:none; }
 
     /* ── MODAL BASE ── */
-    .modal { display: none; position: fixed; inset: 0; z-index: 1000; }
-    .modal.open { display: flex; align-items: center; justify-content: center; padding: 1rem; }
-    .modal-bg { position: absolute; inset: 0; background: rgba(26,15,6,0.6); backdrop-filter: blur(4px); }
-    .modal-box {
-      position: relative; background: var(--white); border-radius: 16px; width: 100%;
-      max-width: 620px; max-height: 92vh; overflow-y: auto; box-shadow: 0 32px 100px rgba(0,0,0,0.35);
-    }
-    .modal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.5rem 2rem 1rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 1;
-    }
-    .modal-header h2 { font-family: var(--font-d); font-size: 1.5rem; font-weight: 600; color: var(--espresso); }
-    .modal-close {
-      width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--cream);
-      font-size: 1.2rem; color: var(--text-soft); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;
-    }
-    .modal-close:hover { background: var(--gold-pale); color: var(--espresso); }
-    .modal-body { padding: 1.5rem 2rem; }
-    .modal-footer {
-      padding: 1rem 2rem 1.5rem; display: flex; gap: 0.75rem; justify-content: flex-end;
-      border-top: 1px solid var(--border);
-    }
-    .btn-cancel {
-      padding: 0.75rem 1.5rem; background: none; border: 1.5px solid var(--border);
-      border-radius: 8px; font-family: var(--font-b); font-size: 0.85rem; color: var(--text-soft);
-      cursor: pointer; transition: all 0.2s;
-    }
-    .btn-cancel:hover { border-color: var(--text-soft); color: var(--text); }
-    .btn-save {
-      padding: 0.75rem 1.8rem; background: var(--espresso); color: var(--white);
-      border: none; border-radius: 8px; font-family: var(--font-b); font-size: 0.85rem;
-      font-weight: 500; cursor: pointer; transition: background 0.2s; letter-spacing: 0.05em;
-    }
-    .btn-save:hover { background: var(--bark); }
-    .btn-save:disabled { background: #ccc; cursor: not-allowed; }
+    .modal { display:none; position:fixed; inset:0; z-index:1000; }
+    .modal.open { display:flex; align-items:center; justify-content:center; padding:1rem; }
+    .modal-bg { position:absolute; inset:0; background:rgba(26,15,6,0.6); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+    .modal-box { position:relative; background:var(--white); border-radius:16px; width:100%; max-width:620px; max-height:92vh; overflow-y:auto; box-shadow:0 32px 100px rgba(0,0,0,0.35); }
+    .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.5rem 2rem 1rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--white); z-index:1; }
+    .modal-header h2 { font-family:var(--font-d); font-size:1.5rem; font-weight:600; color:var(--espresso); }
+    .modal-close { width:32px; height:32px; border-radius:50%; border:none; background:var(--cream); font-size:1.1rem; color:var(--text-soft); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
+    .modal-close:hover { background:var(--gold-pale); color:var(--espresso); }
+    .modal-body { padding:1.5rem 2rem; }
+    .modal-footer { padding:1rem 2rem 1.5rem; display:flex; gap:0.75rem; justify-content:flex-end; border-top:1px solid var(--border); }
+    .btn-cancel { padding:0.75rem 1.5rem; background:none; border:1.5px solid var(--border); border-radius:8px; font-family:var(--font-b); font-size:0.85rem; color:var(--text-soft); cursor:pointer; transition:all 0.2s; }
+    .btn-cancel:hover { border-color:var(--text-soft); color:var(--text); }
+    .btn-save { padding:0.75rem 1.8rem; background:var(--espresso); color:var(--white); border:none; border-radius:8px; font-family:var(--font-b); font-size:0.85rem; font-weight:500; cursor:pointer; transition:background 0.2s; letter-spacing:0.05em; }
+    .btn-save:hover { background:var(--bark); }
+    .btn-save:disabled { background:#ccc; cursor:not-allowed; }
+    .btn-del-confirm { padding:0.75rem 1.8rem; background:var(--red); color:var(--white); border:none; border-radius:8px; font-family:var(--font-b); font-size:0.85rem; cursor:pointer; }
+    .btn-del-confirm:hover { background:#a01f24; }
 
-    /* ── EDIT FORM ── */
-    .image-section { margin-bottom: 1.5rem; }
-    .image-preview {
-      width: 100%; aspect-ratio: 4/3; border-radius: 10px; overflow: hidden;
-      background: var(--gold-pale); margin-bottom: 1rem; position: relative;
-    }
-    .image-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .image-preview .img-placeholder {
-      width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; color: var(--text-soft); gap: 0.5rem;
-    }
-    .image-preview .img-placeholder span { font-size: 3rem; }
-    .image-preview .img-placeholder p { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; }
-    .image-actions { display: flex; flex-direction: column; gap: 0.75rem; }
-    .btn-upload-label {
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      padding: 0.75rem; border: 1.5px dashed var(--gold); border-radius: 8px;
-      color: var(--bark); font-size: 0.85rem; font-weight: 500; cursor: pointer;
-      transition: background 0.2s; background: var(--gold-pale);
-    }
-    .btn-upload-label:hover { background: rgba(184,150,90,0.2); }
-    .btn-upload-label input { display: none; }
-    .url-section { display: flex; align-items: center; gap: 0.5rem; }
-    .url-divider { font-size: 0.75rem; color: var(--text-soft); white-space: nowrap; opacity: 0.6; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-    .form-group.full { grid-column: 1/-1; }
-    .form-group label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); font-weight: 500; }
-    .form-group label .req { color: var(--red); }
-    .form-group input, .form-group select, .form-group textarea {
-      padding: 0.75rem 0.9rem; border: 1.5px solid var(--border); border-radius: 8px;
-      font-family: var(--font-b); font-size: 0.9rem; background: var(--cream); color: var(--text);
-      outline: none; transition: border-color 0.2s; width: 100%;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); background: var(--white); }
-    .form-group textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
-    .price-input { position: relative; }
-    .price-input span { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-soft); font-size: 0.9rem; }
-    .price-input input { padding-left: 1.8rem; }
-    .save-status { padding: 1rem 2rem; font-size: 0.82rem; min-height: 3rem; text-align: center; }
-    .save-status.loading { color: var(--text-soft); }
-    .save-status.success { color: #2d7a3a; background: #e8f5e9; border-radius: 0 0 12px 12px; }
-    .save-status.error   { color: var(--red);  background: #fdecea; border-radius: 0 0 12px 12px; }
+    /* ── FORM ── */
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-group { display:flex; flex-direction:column; gap:0.4rem; }
+    .form-group.full { grid-column:1/-1; }
+    .form-group label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-soft); font-weight:500; }
+    .form-group label .req { color:var(--red); }
+    .form-group input, .form-group select, .form-group textarea { padding:0.75rem 0.9rem; border:1.5px solid var(--border); border-radius:8px; font-family:var(--font-b); font-size:0.9rem; background:var(--cream); color:var(--text); outline:none; transition:border-color 0.2s; width:100%; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--gold); background:var(--white); }
+    .form-group textarea { resize:vertical; min-height:80px; line-height:1.5; }
+    .price-input { position:relative; }
+    .price-input span { position:absolute; left:0.9rem; top:50%; transform:translateY(-50%); color:var(--text-soft); font-size:0.9rem; }
+    .price-input input { padding-left:1.8rem; }
 
-    /* ── DELETE MODAL ── */
-    .modal-box.small { max-width: 400px; padding: 2rem; }
-    .modal-box.small h3 { font-family: var(--font-d); font-size: 1.3rem; color: var(--espresso); margin-bottom: 0.75rem; }
-    .modal-box.small p { color: var(--text-soft); font-size: 0.88rem; line-height: 1.6; }
-    .btn-delete-confirm { padding: 0.75rem 1.8rem; background: var(--red); color: var(--white); border: none; border-radius: 8px; font-family: var(--font-b); font-size: 0.85rem; cursor: pointer; }
-    .btn-delete-confirm:hover { background: #a01f24; }
+    /* ── IMAGE / VIDEO PICKER ── */
+    .media-section { margin-bottom:1.5rem; }
+    .media-type-row { display:flex; gap:0.75rem; margin-bottom:1rem; }
+    .media-type-btn { flex:1; padding:0.6rem; border:1.5px solid var(--border); border-radius:8px; background:none; font-family:var(--font-b); font-size:0.82rem; font-weight:500; cursor:pointer; color:var(--text-soft); transition:all 0.2s; }
+    .media-type-btn.active { border-color:var(--gold); background:var(--gold-pale); color:var(--bark); }
+    .image-preview { width:100%; aspect-ratio:4/3; border-radius:10px; overflow:hidden; background:var(--gold-pale); margin-bottom:1rem; position:relative; }
+    .image-preview img, .image-preview video { width:100%; height:100%; object-fit:cover; display:block; }
+    .image-preview iframe { width:100%; height:100%; border:none; }
+    .img-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-soft); gap:0.5rem; }
+    .img-placeholder span { font-size:3rem; }
+    .img-placeholder p { font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; }
+    .btn-upload-label { display:flex; align-items:center; justify-content:center; gap:0.5rem; padding:0.75rem; border:1.5px dashed var(--gold); border-radius:8px; color:var(--bark); font-size:0.85rem; font-weight:500; cursor:pointer; transition:background 0.2s; background:var(--gold-pale); margin-bottom:0.75rem; }
+    .btn-upload-label:hover { background:rgba(184,150,90,0.2); }
+    .btn-upload-label input { display:none; }
+    .url-row { display:flex; align-items:center; gap:0.5rem; }
+    .url-row span { font-size:0.75rem; color:var(--text-soft); white-space:nowrap; opacity:0.7; }
+    .url-row input { flex:1; padding:0.6rem 0.8rem; font-size:0.82rem; border:1.5px solid var(--border); border-radius:8px; font-family:var(--font-b); background:var(--cream); color:var(--text); outline:none; transition:border-color 0.2s; }
+    .url-row input:focus { border-color:var(--gold); }
+    .video-tip { font-size:0.75rem; color:var(--text-soft); margin-top:0.5rem; line-height:1.6; background:var(--gold-pale); padding:0.6rem 0.8rem; border-radius:6px; }
+
+    .save-status { padding:0.75rem 2rem; font-size:0.82rem; text-align:center; min-height:2.5rem; }
+    .save-status.loading { color:var(--text-soft); }
+    .save-status.success { color:#2d7a3a; background:#e8f5e9; border-radius:0 0 12px 12px; }
+    .save-status.error { color:var(--red); background:#fdecea; border-radius:0 0 12px 12px; }
+
+    /* ── SMALL CONFIRM MODAL ── */
+    .modal-box.small { max-width:400px; }
+    .modal-box.small .modal-body h3 { font-family:var(--font-d); font-size:1.3rem; color:var(--espresso); margin-bottom:0.75rem; }
+    .modal-box.small .modal-body p { color:var(--text-soft); font-size:0.88rem; line-height:1.6; }
 
     /* ── TOAST ── */
-    .toast {
-      position: fixed; bottom: 2rem; right: 2rem; background: var(--espresso); color: var(--white);
-      padding: 1rem 1.5rem; border-radius: 10px; font-size: 0.85rem; z-index: 2000;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3); transform: translateY(120%);
-      transition: transform 0.3s var(--ease); max-width: 380px;
-    }
-    .toast.show { transform: translateY(0); }
-    .toast.success { border-left: 4px solid #4caf50; }
-    .toast.error   { border-left: 4px solid var(--red); }
+    .toast { position:fixed; bottom:2rem; right:2rem; background:var(--espresso); color:var(--white); padding:1rem 1.5rem; border-radius:10px; font-size:0.85rem; z-index:2000; box-shadow:0 8px 30px rgba(0,0,0,0.3); transform:translateY(120%); transition:transform 0.3s var(--ease); max-width:380px; }
+    .toast.show { transform:translateY(0); }
+    .toast.success { border-left:4px solid #4caf50; }
+    .toast.error { border-left:4px solid var(--red); }
 
     /* ── EMPTY STATE ── */
-    .empty-state {
-      grid-column: 1/-1; text-align: center; padding: 4rem 2rem;
-      color: var(--text-soft);
-    }
-    .empty-state span { font-size: 3rem; display: block; margin-bottom: 1rem; }
-    .empty-state p { font-size: 0.9rem; }
+    .empty-state { grid-column:1/-1; text-align:center; padding:4rem 2rem; color:var(--text-soft); }
+    .empty-state span { font-size:3rem; display:block; margin-bottom:1rem; }
+    .empty-state p { font-size:0.9rem; }
 
     /* ── RESPONSIVE ── */
-    @media(max-width: 600px){
-      .admin-header { padding: 0 1rem; }
-      .header-logo span { display: none; }
-      .admin-toolbar { padding: 0 1rem; }
-      .tab-btn { padding: 0.9rem 0.9rem; font-size: 0.72rem; letter-spacing: 0.04em; }
-      .admin-content { padding: 1rem; }
-      .form-grid { grid-template-columns: 1fr; }
-      .form-group.full { grid-column: 1; }
-      .modal-body { padding: 1rem 1.2rem; }
-      .modal-footer { padding: 0.8rem 1.2rem 1rem; }
+    @media(max-width:600px){
+      .admin-header { padding:0 1rem; }
+      .header-logo span { display:none; }
+      .admin-toolbar { padding:0 0.5rem; }
+      .tab-btn { padding:0.9rem 0.75rem; font-size:0.72rem; }
+      .admin-content { padding:1rem; }
+      .form-grid { grid-template-columns:1fr; }
+      .form-group.full { grid-column:1; }
+      .modal-body { padding:1rem 1.2rem; }
+      .modal-footer { padding:0.8rem 1.2rem 1rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ════════════════ LOGIN ════════════════ -->
+<!-- ════ LOGIN ════ -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">Cotto <em>&</em> Servito</div>
     <p class="login-subtitle">Pannello di Gestione</p>
-    <h2 class="login-title">Accedi per modificare i prodotti</h2>
-    <p class="login-desc">Inserisci il tuo <strong>GitHub Personal Access Token</strong> per connetterti al sito.</p>
+    <h2 class="login-title">Accedi per modificare il sito</h2>
+    <p class="login-desc">Inserisci il tuo <strong>GitHub Personal Access Token</strong> per connetterti.</p>
     <div class="login-field">
       <label>GitHub Token</label>
       <input type="password" id="tokenInput" placeholder="ghp_..." autocomplete="off">
     </div>
-    <button class="btn-login" onclick="doLogin()">Accedi →</button>
+    <button type="button" class="btn-login" id="btnLogin" onclick="doLogin()">Accedi →</button>
     <p class="login-help">
-      Come generare il token su GitHub:<br>
-      <strong>Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token (classic)</strong><br>
-      Seleziona scope <code>repo</code> → clicca <em>Generate token</em> → copia e incolla qui.
+      Come generare il token:<br>
+      GitHub → <strong>Settings → Developer settings →<br>Personal access tokens → Tokens (classic) →<br>Generate new token (classic)</strong><br>
+      Seleziona scope <code>repo</code> → Generate → Copia e incolla qui.
     </p>
     <div class="login-error" id="loginError"></div>
   </div>
 </div>
 
-<!-- ════════════════ ADMIN PANEL ════════════════ -->
-<div id="adminPanel" style="display:none">
+<!-- ════ ADMIN PANEL ════ -->
+<div id="adminPanel" class="hidden">
   <header class="admin-header">
     <div class="header-logo">Cotto <em>&</em> Servito <span>Admin</span></div>
     <div class="header-actions">
-      <a class="btn-view" href="https://mecdv.github.io/cotto-e-servito-/" target="_blank">Vedi sito →</a>
-      <button class="btn-logout" onclick="doLogout()">Esci</button>
+      <a class="btn-view" href="https://mecdv.github.io/cotto-e-servito-/" target="_blank" rel="noopener noreferrer">Vedi sito →</a>
+      <button type="button" class="btn-logout" onclick="doLogout()">Esci</button>
     </div>
   </header>
 
   <div class="admin-toolbar">
     <div class="admin-tabs">
-      <button class="tab-btn active" onclick="showCat('primi',this)">Primi</button>
-      <button class="tab-btn" onclick="showCat('secondi',this)">Secondi</button>
-      <button class="tab-btn" onclick="showCat('fritti',this)">Fritti</button>
-      <button class="tab-btn" onclick="showCat('dolci',this)">Dolci</button>
+      <button type="button" class="tab-btn active" onclick="showSection('prodotti',this)">Prodotti</button>
+      <button type="button" class="tab-btn" onclick="showSection('galleria',this)">Galleria</button>
     </div>
-    <button class="btn-add" onclick="openAdd()">+ Nuovo prodotto</button>
+    <button type="button" class="btn-add" id="btnAddMain" onclick="onAddClick()">+ Aggiungi</button>
   </div>
 
   <div class="admin-content">
-    <div class="cat-panel active" id="cat-primi">
-      <div class="products-admin-grid" id="grid-admin-primi"></div>
+
+    <!-- PRODOTTI -->
+    <div class="cat-panel active" id="section-prodotti">
+      <div class="admin-tabs cat-tabs-inner">
+        <button type="button" class="tab-btn active" onclick="showCat('primi',this)">Primi</button>
+        <button type="button" class="tab-btn" onclick="showCat('secondi',this)">Secondi</button>
+        <button type="button" class="tab-btn" onclick="showCat('fritti',this)">Fritti</button>
+        <button type="button" class="tab-btn" onclick="showCat('dolci',this)">Dolci</button>
+      </div>
+      <div class="cat-panel active" id="cat-primi"><div class="products-admin-grid" id="grid-admin-primi"></div></div>
+      <div class="cat-panel" id="cat-secondi"><div class="products-admin-grid" id="grid-admin-secondi"></div></div>
+      <div class="cat-panel" id="cat-fritti"><div class="products-admin-grid" id="grid-admin-fritti"></div></div>
+      <div class="cat-panel" id="cat-dolci"><div class="products-admin-grid" id="grid-admin-dolci"></div></div>
     </div>
-    <div class="cat-panel" id="cat-secondi">
-      <div class="products-admin-grid" id="grid-admin-secondi"></div>
+
+    <!-- GALLERIA -->
+    <div class="cat-panel" id="section-galleria">
+      <div class="gallery-admin-grid" id="grid-admin-gallery"></div>
     </div>
-    <div class="cat-panel" id="cat-fritti">
-      <div class="products-admin-grid" id="grid-admin-fritti"></div>
-    </div>
-    <div class="cat-panel" id="cat-dolci">
-      <div class="products-admin-grid" id="grid-admin-dolci"></div>
-    </div>
+
   </div>
 </div>
 
-<!-- ════════════════ EDIT / ADD MODAL ════════════════ -->
+<!-- ════ PRODUCT MODAL ════ -->
 <div class="modal" id="editModal">
   <div class="modal-bg" onclick="closeEdit()"></div>
   <div class="modal-box">
     <div class="modal-header">
       <h2 id="modalTitle">Modifica prodotto</h2>
-      <button class="modal-close" onclick="closeEdit()">✕</button>
+      <button type="button" class="modal-close" onclick="closeEdit()">✕</button>
     </div>
     <div class="modal-body">
-
-      <!-- Immagine -->
-      <div class="image-section">
+      <div class="media-section" id="prodImgSection">
         <div class="image-preview" id="imgPreview">
           <div class="img-placeholder" id="imgPlaceholder"><span>📷</span><p>Nessuna foto</p></div>
-          <img id="previewImg" src="" alt="" style="display:none">
+          <img id="previewImg" src="" alt="" class="hidden">
         </div>
-        <div class="image-actions">
-          <label class="btn-upload-label">
-            <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this)">
-            📸 Carica foto dal dispositivo
-          </label>
-          <div class="url-section">
-            <span class="url-divider">oppure URL:</span>
-            <input type="text" id="imgUrl" placeholder="https://..." oninput="previewUrl(this.value)" style="flex:1;padding:0.6rem 0.8rem;font-size:0.82rem">
-          </div>
+        <label class="btn-upload-label">
+          <input type="file" id="fileInput" accept="image/*" onchange="handleProdFile(this)">
+          📸 Carica foto dal dispositivo
+        </label>
+        <div class="url-row">
+          <span>oppure URL:</span>
+          <input type="text" id="imgUrl" placeholder="https://..." oninput="previewProdUrl(this.value)">
         </div>
       </div>
-
-      <!-- Campi -->
       <div class="form-grid">
         <div class="form-group full">
           <label>Nome prodotto <span class="req">*</span></label>
@@ -369,10 +308,7 @@
         </div>
         <div class="form-group">
           <label>Prezzo finale <span class="req">*</span></label>
-          <div class="price-input">
-            <span>€</span>
-            <input type="number" id="editPrice" step="0.01" min="0" placeholder="5.30">
-          </div>
+          <div class="price-input"><span>€</span><input type="number" id="editPrice" step="0.01" min="0" placeholder="5.30"></div>
         </div>
         <div class="form-group full">
           <label>Descrizione</label>
@@ -385,180 +321,276 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeEdit()">Annulla</button>
-      <button class="btn-save" id="btnSave" onclick="saveProduct()">Salva e pubblica</button>
+      <button type="button" class="btn-cancel" onclick="closeEdit()">Annulla</button>
+      <button type="button" class="btn-save" id="btnSave" onclick="saveProduct()">Salva e pubblica</button>
     </div>
     <div class="save-status" id="saveStatus"></div>
   </div>
 </div>
 
-<!-- ════════════════ DELETE CONFIRM ════════════════ -->
+<!-- ════ GALLERY MODAL ════ -->
+<div class="modal" id="galleryModal">
+  <div class="modal-bg" onclick="closeGallery()"></div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="galleryModalTitle">Aggiungi alla galleria</h2>
+      <button type="button" class="modal-close" onclick="closeGallery()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Tipo: Foto o Video -->
+      <div class="form-group full form-mb">
+        <label>Tipo di contenuto</label>
+        <div class="media-type-row">
+          <button type="button" class="media-type-btn active" id="typeBtnImg" onclick="setGalleryType('image',this)">📷 Foto</button>
+          <button type="button" class="media-type-btn" id="typeBtnVid" onclick="setGalleryType('video',this)">🎥 Video</button>
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <div class="image-preview" id="galleryPreview">
+        <div class="img-placeholder" id="galleryPlaceholder"><span id="galPlaceholderIcon">📷</span><p>Nessun contenuto</p></div>
+        <img id="galleryPreviewImg" src="" alt="" class="hidden">
+        <video id="galleryPreviewVid" src="" autoplay muted loop playsinline class="hidden"></video>
+        <iframe id="galleryPreviewFrame" src="" frameborder="0" class="hidden gal-frame"></iframe>
+      </div>
+
+      <!-- Upload foto -->
+      <div id="imgUploadSection">
+        <label class="btn-upload-label">
+          <input type="file" id="galleryFileInput" accept="image/*,video/*" onchange="handleGalleryFile(this)">
+          📁 Carica file dal dispositivo
+        </label>
+        <div class="url-row">
+          <span>oppure URL:</span>
+          <input type="text" id="galleryUrl" placeholder="https://..." oninput="previewGalleryUrl(this.value)">
+        </div>
+        <p class="video-tip hidden" id="videoTip">
+          🎥 Per i <strong>video</strong> puoi:<br>
+          • Caricare un file MP4/MOV dal dispositivo (max ~50MB)<br>
+          • Incollare un link <strong>YouTube</strong> o <strong>Vimeo</strong> (formato embed: youtu.be/... oppure vimeo.com/...)
+        </p>
+      </div>
+
+      <div class="form-grid form-grid-mt">
+        <div class="form-group full">
+          <label>Titolo</label>
+          <input type="text" id="galleryTitle" placeholder="Es. Lasagna, Il nostro locale...">
+        </div>
+        <div class="form-group full">
+          <label>Formato nella galleria</label>
+          <select id="gallerySize">
+            <option value="">Normale (quadrato)</option>
+            <option value="tall">Alto — portrait, occupa 2 righe</option>
+            <option value="wide">Largo — landscape, occupa 2 colonne</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" onclick="closeGallery()">Annulla</button>
+      <button type="button" class="btn-save" id="btnGallerySave" onclick="saveGalleryItem()">Salva e pubblica</button>
+    </div>
+    <div class="save-status" id="gallerySaveStatus"></div>
+  </div>
+</div>
+
+<!-- ════ DELETE CONFIRM ════ -->
 <div class="modal" id="deleteModal">
   <div class="modal-bg" onclick="closeDelete()"></div>
   <div class="modal-box small">
-    <h3>Elimina prodotto</h3>
-    <p style="margin-top:0.75rem">Sei sicuro di voler eliminare <strong id="deleteName"></strong>?<br>Questa operazione è irreversibile.</p>
-    <div class="modal-footer" style="padding:1.5rem 0 0">
-      <button class="btn-cancel" onclick="closeDelete()">Annulla</button>
-      <button class="btn-delete-confirm" onclick="confirmDelete()">Elimina</button>
+    <div class="modal-body modal-body-pad">
+      <h3>Elimina elemento</h3>
+      <p class="del-confirm-text">Sei sicuro di voler eliminare <strong id="deleteName"></strong>?<br>Questa operazione è irreversibile.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" onclick="closeDelete()">Annulla</button>
+      <button type="button" class="btn-del-confirm" onclick="confirmDelete()">Elimina</button>
     </div>
   </div>
 </div>
 
-<!-- ════════════════ TOAST ════════════════ -->
 <div class="toast" id="toast"></div>
 
 <script>
-  const REPO    = 'MECDV/cotto-e-servito-';
-  const API     = 'https://api.github.com/repos/' + REPO + '/contents/';
-  const CATS    = ['primi','secondi','fritti','dolci'];
+  const REPO       = 'MECDV/cotto-e-servito-';
+  const API        = 'https://api.github.com/repos/' + REPO + '/contents/';
+  const PAGES_BASE = 'https://mecdv.github.io/cotto-e-servito-/';
+  const CATS       = ['primi','secondi','fritti','dolci'];
   const CAT_LABELS = {primi:'Primi Piatti',secondi:'Secondi Piatti',fritti:'Fritti',dolci:'Dolci'};
 
-  let products    = null;   // oggetto con tutti i prodotti
-  let prodSha     = null;   // SHA del file products.json su GitHub
-  let editTarget  = null;   // {cat, idx} o null per nuovo prodotto
-  let deleteTarget= null;
-  let pendingFile = null;   // file selezionato per upload
-  let currentCat  = 'primi';
+  let products      = null;  let prodSha     = null;
+  let gallery       = null;  let gallerySha  = null;
+  let editTarget    = null;  // {cat, idx} o null per nuovo prodotto
+  let editGalleryTarget = null; // index o null per nuovo elemento galleria
+  let deleteTarget  = null;  // {type:'prod'|'gal', cat?, idx}
+  let pendingProdFile   = null;
+  let pendingGalleryFile = null;
+  let galleryMediaType  = 'image';
+  let currentCat    = 'primi';
+  let currentSection = 'prodotti';
 
-  /* ══ TOKEN ══ */
+  /* ── TOKEN ── */
   const getToken = () => localStorage.getItem('cotto_token');
-  const setToken = t => localStorage.setItem('cotto_token', t);
+  const setToken = t  => localStorage.setItem('cotto_token', t);
   const clrToken = () => localStorage.removeItem('cotto_token');
 
-  /* ══ STARTUP ══ */
-  window.onload = () => {
-    const t = getToken();
-    if(t) loadData();
-  };
-
-  /* ══ LOGIN ══ */
+  window.onload = () => { if(getToken()) loadAll(); };
   document.getElementById('tokenInput').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
+  /* ── LOGIN ── */
   async function doLogin(){
     const t = document.getElementById('tokenInput').value.trim();
     if(!t){ showLoginErr('Inserisci il token.'); return; }
-
-    const btn = document.querySelector('.btn-login');
+    const btn = document.getElementById('btnLogin');
     btn.disabled = true;
     showLoginErr('Verifica token...');
-
     try{
-      // Step 1 — verifica che il token sia valido testando l'accesso al repo
-      const testRes = await fetch('https://api.github.com/repos/' + REPO, {
-        headers: { Authorization: 'token ' + t }
-      });
-      if(testRes.status === 401){
-        showLoginErr('❌ Token non riconosciuto da GitHub. Copia il token direttamente dalla pagina GitHub senza spazi.');
-        btn.disabled = false; return;
-      }
-      if(testRes.status === 403){
-        showLoginErr('❌ Token senza permessi sufficienti. Assicurati di aver selezionato il scope "repo" quando hai creato il token.');
-        btn.disabled = false; return;
-      }
-      if(testRes.status === 404){
-        showLoginErr('❌ Repository non trovato. Controlla il nome del repository nelle impostazioni.');
-        btn.disabled = false; return;
-      }
-      if(!testRes.ok){
-        showLoginErr('❌ Errore GitHub: ' + testRes.status + '. Riprova tra un momento.');
-        btn.disabled = false; return;
-      }
-
-      // Step 2 — token OK, carica i prodotti
+      const testRes = await fetch('https://api.github.com/repos/'+REPO, { headers:{Authorization:'token '+t} });
+      if(testRes.status===401){ showLoginErr('❌ Token non riconosciuto. Copia il token direttamente da GitHub senza spazi.'); btn.disabled=false; return; }
+      if(testRes.status===403){ showLoginErr('❌ Permessi insufficienti. Seleziona scope "repo" quando generi il token.'); btn.disabled=false; return; }
+      if(!testRes.ok){ showLoginErr('❌ Errore GitHub '+testRes.status+'. Riprova.'); btn.disabled=false; return; }
       setToken(t);
-      showLoginErr('Token verificato, caricamento prodotti...');
-      await loadData();
+      showLoginErr('Token verificato, caricamento...');
+      await loadAll();
     }catch(err){
       clrToken();
-      showLoginErr('❌ Errore di rete. Controlla la connessione internet e riprova.');
+      showLoginErr('❌ Errore di rete. Controlla la connessione internet.');
       btn.disabled = false;
     }
   }
 
   function doLogout(){
     clrToken();
-    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('adminPanel').classList.add('hidden');
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('tokenInput').value = '';
+    document.getElementById('btnLogin').disabled = false;
     showLoginErr('');
   }
 
-  function showLoginErr(msg){
-    document.getElementById('loginError').textContent = msg;
-  }
+  function showLoginErr(msg){ document.getElementById('loginError').textContent = msg; }
 
-  /* ══ LOAD DATA FROM GITHUB ══ */
-  async function loadData(){
-    const res = await ghGet('products.json');
-    if(res.status === 401){ clrToken(); throw new Error('Token scaduto'); }
-    if(res.status === 404){
-      // products.json non ancora presente, partiamo con struttura vuota
-      products = { categories: CATS.map(id=>({id,label:CAT_LABELS[id]})), products: {primi:[],secondi:[],fritti:[],dolci:[]} };
-      prodSha  = null;
-    } else if(res.ok){
-      const data = await res.json();
-      prodSha  = data.sha;
-      products = JSON.parse(fromBase64(data.content));
-    } else {
-      throw new Error('Errore caricamento prodotti: ' + res.status);
-    }
-    CATS.forEach(c => { if(!products.products[c]) products.products[c] = []; });
-    document.querySelector('.btn-login').disabled = false;
-    showAdmin();
-  }
-
-  function showAdmin(){
+  /* ── LOAD EVERYTHING ── */
+  async function loadAll(){
+    await Promise.all([loadProducts(), loadGalleryData()]);
     document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminPanel').style.display  = 'block';
+    document.getElementById('adminPanel').classList.remove('hidden');
+    document.getElementById('btnLogin').disabled = false;
     renderAll();
   }
 
-  /* ══ RENDER ══ */
-  function renderAll(){
-    CATS.forEach(cat => renderCat(cat));
+  async function loadProducts(){
+    const res = await ghGet('products.json');
+    if(res.status===401){ clrToken(); throw new Error('Token scaduto'); }
+    if(res.status===404){
+      products = {categories:CATS.map(id=>({id,label:CAT_LABELS[id]})),products:{primi:[],secondi:[],fritti:[],dolci:[]}};
+      prodSha  = null;
+    } else if(res.ok){
+      const d = await res.json();
+      prodSha  = d.sha;
+      products = JSON.parse(fromBase64(d.content));
+    }
+    CATS.forEach(c => { if(!products.products[c]) products.products[c]=[]; });
   }
+
+  async function loadGalleryData(){
+    const res = await ghGet('gallery.json');
+    if(res.status===401){ clrToken(); throw new Error('Token scaduto'); }
+    if(res.status===404){
+      gallery    = {items:[]};
+      gallerySha = null;
+    } else if(res.ok){
+      const d = await res.json();
+      gallerySha = d.sha;
+      gallery    = JSON.parse(fromBase64(d.content));
+    }
+    if(!gallery.items) gallery.items=[];
+  }
+
+  /* ── RENDER ── */
+  function renderAll(){ CATS.forEach(renderCat); renderGallery(); }
 
   function renderCat(cat){
     const grid = document.getElementById('grid-admin-'+cat);
-    const list = products.products[cat] || [];
+    const list = products.products[cat]||[];
     if(!list.length){
-      grid.innerHTML = `<div class="empty-state"><span>🍽️</span><p>Nessun prodotto in questa categoria.<br>Clicca <strong>+ Nuovo prodotto</strong> per aggiungerne uno.</p></div>`;
+      grid.innerHTML = `<div class="empty-state"><span>🍽️</span><p>Nessun prodotto. Clicca <strong>+ Aggiungi</strong>.</p></div>`;
       return;
     }
     grid.innerHTML = list.map((p,i) => `
       <div class="product-admin-card">
-        <div class="pac-img">
+        <div class="pac-img" onclick="openEdit('${cat}',${i})" style="cursor:pointer">
           ${p.img
-            ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" onerror="this.parentNode.innerHTML='<div class=\\'no-img\\'><span>🖼️</span><p>Immagine non trovata</p></div>'">`
+            ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`
             : `<div class="no-img"><span>📷</span><p>Nessuna foto</p></div>`}
+          <div class="pac-img-overlay"><span>✏️ Cambia foto</span></div>
         </div>
         <div class="pac-body">
           <div class="pac-name">${esc(p.name)}</div>
-          ${p.description ? `<div class="pac-desc">${esc(p.description)}</div>` : ''}
-          ${p.weight      ? `<div class="pac-weight">${esc(p.weight)}</div>` : ''}
+          ${p.description?`<div class="pac-desc">${esc(p.description)}</div>`:''}
+          ${p.weight?`<div class="pac-weight">${esc(p.weight)}</div>`:''}
         </div>
         <div class="pac-footer">
           <div class="pac-price">€${Number(p.price).toFixed(2).replace('.',',')}</div>
           <button class="btn-edit" onclick="openEdit('${cat}',${i})">✏️ Modifica</button>
-          <button class="btn-delete-card" onclick="openDelete('${cat}',${i})">🗑️</button>
+          <button class="btn-del" onclick="openDelete('prod','${cat}',${i})">🗑️</button>
         </div>
       </div>
     `).join('');
   }
 
-  /* ══ CATEGORIA TABS ══ */
+  function renderGallery(){
+    const grid = document.getElementById('grid-admin-gallery');
+    const items = gallery.items||[];
+    let html = items.map((item,i) => {
+      const isVideo = item.type==='video';
+      const isEmbed = isVideo && isEmbedUrl(item.src||'');
+      let media = '';
+      if(isVideo && !isEmbed) media = `<video src="${esc(item.src)}" muted loop autoplay playsinline style="width:100%;height:100%;object-fit:cover"></video>`;
+      else if(isVideo && isEmbed) media = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#111"><span style="font-size:3rem">▶️</span></div>`;
+      else media = `<img src="${esc(item.src||'')}" alt="${esc(item.title||'')}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`;
+      return `
+        <div class="gallery-admin-card">
+          <div class="gac-media">
+            ${media}
+            <span class="gac-badge${isVideo?' video':''}">${isVideo?'Video':'Foto'}</span>
+            ${item.size?`<span class="gac-size">${item.size==='tall'?'Alto':'Largo'}</span>`:''}
+          </div>
+          <div class="gac-footer">
+            <span class="gac-title">${esc(item.title||'Senza titolo')}</span>
+            <button class="btn-edit" onclick="openEditGallery(${i})">✏️</button>
+            <button class="btn-del" onclick="openDelete('gal',null,${i})">🗑️</button>
+          </div>
+        </div>`;
+    }).join('');
+    html += `<div class="gac-add-card" onclick="openAddGallery()"><span>+</span><p>Aggiungi</p></div>`;
+    grid.innerHTML = html;
+  }
+
+  /* ── SEZIONE / CAT TABS ── */
+  function showSection(sec, btn){
+    currentSection = sec;
+    document.querySelectorAll('#adminPanel > .admin-content > .cat-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.admin-toolbar .tab-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('section-'+sec).classList.add('active');
+    btn.classList.add('active');
+    document.getElementById('btnAddMain').textContent = sec==='galleria' ? '+ Aggiungi a galleria' : '+ Aggiungi prodotto';
+  }
+
   function showCat(cat, btn){
     currentCat = cat;
-    document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#section-prodotti .cat-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('#section-prodotti .tab-btn').forEach(b=>b.classList.remove('active'));
     document.getElementById('cat-'+cat).classList.add('active');
     btn.classList.add('active');
   }
 
-  /* ══ EDIT / ADD ══ */
+  function onAddClick(){ currentSection==='galleria' ? openAddGallery() : openAdd(); }
+
+  /* ══════════════════ PRODUCT MODAL ══════════════════ */
   function openAdd(){
-    editTarget = null; pendingFile = null;
+    editTarget=null; pendingProdFile=null;
     document.getElementById('modalTitle').textContent = 'Nuovo prodotto';
     document.getElementById('editName').value    = '';
     document.getElementById('editCategory').value= currentCat;
@@ -567,17 +599,15 @@
     document.getElementById('editWeight').value  = '';
     document.getElementById('imgUrl').value      = '';
     document.getElementById('fileInput').value   = '';
-    setImgPreview('');
-    document.getElementById('saveStatus').textContent = '';
-    document.getElementById('saveStatus').className   = 'save-status';
-    document.getElementById('btnSave').disabled = false;
+    setProdPreview('');
+    resetSaveStatus('saveStatus','btnSave');
     document.getElementById('editModal').classList.add('open');
   }
 
   function openEdit(cat, idx){
     const p = products.products[cat][idx];
     if(!p) return;
-    editTarget = {cat, idx}; pendingFile = null;
+    editTarget={cat,idx}; pendingProdFile=null;
     document.getElementById('modalTitle').textContent    = 'Modifica prodotto';
     document.getElementById('editName').value            = p.name||'';
     document.getElementById('editCategory').value        = cat;
@@ -586,44 +616,32 @@
     document.getElementById('editWeight').value          = p.weight||'';
     document.getElementById('imgUrl').value              = p.img||'';
     document.getElementById('fileInput').value           = '';
-    setImgPreview(p.img||'');
-    document.getElementById('saveStatus').textContent    = '';
-    document.getElementById('saveStatus').className      = 'save-status';
-    document.getElementById('btnSave').disabled          = false;
+    setProdPreview(p.img||'');
+    resetSaveStatus('saveStatus','btnSave');
     document.getElementById('editModal').classList.add('open');
+    // Scrolla alla sezione immagine se arriva dal clic sulla foto
+    setTimeout(()=> document.getElementById('prodImgSection').scrollIntoView({behavior:'smooth',block:'nearest'}), 150);
   }
 
-  function closeEdit(){
-    document.getElementById('editModal').classList.remove('open');
-  }
+  function closeEdit(){ document.getElementById('editModal').classList.remove('open'); }
 
-  /* ══ IMAGE HANDLING ══ */
-  function handleFile(input){
-    const file = input.files[0];
-    if(!file) return;
-    pendingFile = file;
+  function handleProdFile(input){
+    const file = input.files[0]; if(!file) return;
+    pendingProdFile = file;
     document.getElementById('imgUrl').value = '';
-    const reader = new FileReader();
-    reader.onload = e => setImgPreview(e.target.result);
-    reader.readAsDataURL(file);
+    const r = new FileReader();
+    r.onload = e => setProdPreview(e.target.result);
+    r.readAsDataURL(file);
   }
 
-  function previewUrl(url){
-    pendingFile = null;
-    setImgPreview(url);
+  function previewProdUrl(url){ pendingProdFile=null; setProdPreview(url); }
+
+  function setProdPreview(src){
+    const img=document.getElementById('previewImg'), ph=document.getElementById('imgPlaceholder');
+    if(src){ img.src=src; img.classList.remove('hidden'); ph.classList.add('hidden'); }
+    else { img.classList.add('hidden'); ph.classList.remove('hidden'); }
   }
 
-  function setImgPreview(src){
-    const img  = document.getElementById('previewImg');
-    const ph   = document.getElementById('imgPlaceholder');
-    if(src){
-      img.src = src; img.style.display = 'block'; ph.style.display = 'none';
-    }else{
-      img.style.display = 'none'; ph.style.display = 'flex';
-    }
-  }
-
-  /* ══ SAVE PRODUCT ══ */
   async function saveProduct(){
     const name  = document.getElementById('editName').value.trim();
     const cat   = document.getElementById('editCategory').value;
@@ -631,63 +649,173 @@
     const desc  = document.getElementById('editDesc').value.trim();
     const weight= document.getElementById('editWeight').value.trim();
     const imgUrl= document.getElementById('imgUrl').value.trim();
-
     if(!name){ alert('Inserisci il nome del prodotto.'); return; }
     if(isNaN(price)||price<=0){ alert('Inserisci un prezzo valido.'); return; }
 
     const btn = document.getElementById('btnSave');
     btn.disabled = true;
-    setStatus('loading', 'Salvataggio in corso...');
-
+    setStatus('saveStatus','loading','Salvataggio...');
     try{
       let finalImg = imgUrl;
-
-      // Carica immagine se selezionata
-      if(pendingFile){
-        setStatus('loading', 'Caricamento foto su GitHub...');
-        finalImg = await uploadImage(pendingFile);
+      if(pendingProdFile){
+        setStatus('saveStatus','loading','Caricamento foto...');
+        finalImg = await uploadFile(pendingProdFile,'images/');
       }
-
-      const prod = {
-        id:          genId(name),
-        name,
-        description: desc,
-        weight,
-        price:       Math.round(price*100)/100,
-        img:         finalImg
-      };
-
-      // Rimuovi dal vecchio cat se cambiato
+      const prod = {id:genId(name),name,description:desc,weight,price:Math.round(price*100)/100,img:finalImg};
       if(editTarget){
-        const oldCat = editTarget.cat;
-        if(oldCat !== cat){
-          products.products[oldCat].splice(editTarget.idx, 1);
-        } else {
-          products.products[oldCat][editTarget.idx] = prod;
-        }
-        if(oldCat !== cat){
-          products.products[cat].push(prod);
-        }
+        const oldCat=editTarget.cat;
+        if(oldCat!==cat){ products.products[oldCat].splice(editTarget.idx,1); products.products[cat].push(prod); }
+        else { products.products[oldCat][editTarget.idx]=prod; }
       } else {
         products.products[cat].push(prod);
       }
-
-      setStatus('loading', 'Pubblicazione su GitHub...');
-      await commitProducts(`Aggiorna prodotto: ${name}`);
-
-      setStatus('success', `✅ Pubblicato! Il sito si aggiornerà entro 1-2 minuti.`);
+      setStatus('saveStatus','loading','Pubblicazione su GitHub...');
+      await commitFile('products.json', products, prodSha, `Aggiorna prodotto: ${name}`);
+      setStatus('saveStatus','success','✅ Pubblicato! Il sito si aggiornerà entro 1-2 minuti.');
       renderAll();
       setTimeout(closeEdit, 2200);
     }catch(err){
-      setStatus('error', '❌ Errore: ' + (err.message||'Controlla la connessione.'));
-      btn.disabled = false;
+      setStatus('saveStatus','error','❌ '+( err.message||'Errore sconosciuto'));
+      btn.disabled=false;
     }
   }
 
-  /* ══ DELETE ══ */
-  function openDelete(cat, idx){
-    deleteTarget = {cat, idx};
-    const name = (products.products[cat][idx]||{}).name||'questo prodotto';
+  /* ══════════════════ GALLERY MODAL ══════════════════ */
+  function openAddGallery(){
+    editGalleryTarget=null; pendingGalleryFile=null; galleryMediaType='image';
+    document.getElementById('galleryModalTitle').textContent = 'Aggiungi alla galleria';
+    document.getElementById('galleryTitle').value = '';
+    document.getElementById('gallerySize').value  = '';
+    document.getElementById('galleryUrl').value   = '';
+    document.getElementById('galleryFileInput').value='';
+    setGalleryType('image', document.getElementById('typeBtnImg'));
+    setGalleryPreview('','image');
+    resetSaveStatus('gallerySaveStatus','btnGallerySave');
+    document.getElementById('galleryModal').classList.add('open');
+  }
+
+  function openEditGallery(idx){
+    const item = gallery.items[idx]; if(!item) return;
+    editGalleryTarget=idx; pendingGalleryFile=null;
+    galleryMediaType = item.type||'image';
+    document.getElementById('galleryModalTitle').textContent = 'Modifica elemento galleria';
+    document.getElementById('galleryTitle').value = item.title||'';
+    document.getElementById('gallerySize').value  = item.size||'';
+    document.getElementById('galleryUrl').value   = item.src||'';
+    document.getElementById('galleryFileInput').value='';
+    const typeBtn = galleryMediaType==='video' ? document.getElementById('typeBtnVid') : document.getElementById('typeBtnImg');
+    setGalleryType(galleryMediaType, typeBtn);
+    setGalleryPreview(item.src||'', galleryMediaType);
+    resetSaveStatus('gallerySaveStatus','btnGallerySave');
+    document.getElementById('galleryModal').classList.add('open');
+  }
+
+  function closeGallery(){ document.getElementById('galleryModal').classList.remove('open'); }
+
+  function setGalleryType(type, btn){
+    galleryMediaType = type;
+    document.querySelectorAll('.media-type-btn').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    const tip = document.getElementById('videoTip');
+    const fi  = document.getElementById('galleryFileInput');
+    if(type==='video'){
+      tip.classList.remove('hidden');
+      fi.accept='video/*';
+      document.getElementById('galPlaceholderIcon').textContent='🎥';
+    } else {
+      tip.classList.add('hidden');
+      fi.accept='image/*';
+      document.getElementById('galPlaceholderIcon').textContent='📷';
+    }
+    // Aggiorna il filtro file
+    document.getElementById('imgUploadSection').querySelector('label').firstElementChild.accept = type==='video' ? 'video/*' : 'image/*';
+    setGalleryPreview(document.getElementById('galleryUrl').value, type);
+  }
+
+  function handleGalleryFile(input){
+    const file = input.files[0]; if(!file) return;
+    pendingGalleryFile = file;
+    document.getElementById('galleryUrl').value='';
+    const r = new FileReader();
+    r.onload = e => setGalleryPreview(e.target.result, galleryMediaType);
+    r.readAsDataURL(file);
+  }
+
+  function previewGalleryUrl(url){
+    pendingGalleryFile=null;
+    setGalleryPreview(url, galleryMediaType);
+  }
+
+  function setGalleryPreview(src, type){
+    const img   = document.getElementById('galleryPreviewImg');
+    const vid   = document.getElementById('galleryPreviewVid');
+    const frame = document.getElementById('galleryPreviewFrame');
+    const ph    = document.getElementById('galleryPlaceholder');
+    [img,vid,frame].forEach(el=>el.classList.add('hidden')); ph.classList.remove('hidden');
+    if(!src) return;
+    if(type==='video'){
+      if(isEmbedUrl(src)){
+        frame.src=toEmbedUrl(src); frame.classList.remove('hidden'); ph.classList.add('hidden');
+      } else {
+        vid.src=src; vid.classList.remove('hidden'); ph.classList.add('hidden');
+      }
+    } else {
+      img.src=src; img.classList.remove('hidden'); ph.classList.add('hidden');
+    }
+  }
+
+  async function saveGalleryItem(){
+    const src   = document.getElementById('galleryUrl').value.trim();
+    const title = document.getElementById('galleryTitle').value.trim();
+    const size  = document.getElementById('gallerySize').value;
+
+    const btn = document.getElementById('btnGallerySave');
+    btn.disabled=true;
+    setStatus('gallerySaveStatus','loading','Salvataggio...');
+    try{
+      let finalSrc = src;
+      if(pendingGalleryFile){
+        setStatus('gallerySaveStatus','loading','Caricamento file su GitHub...');
+        const folder = galleryMediaType==='video' ? 'videos/' : 'images/';
+        finalSrc = await uploadFile(pendingGalleryFile, folder);
+      } else if(!finalSrc && !pendingGalleryFile){
+        setStatus('gallerySaveStatus','error','❌ Aggiungi una foto, un video o un URL.');
+        btn.disabled=false; return;
+      }
+
+      const storeSrc = galleryMediaType==='video' && isEmbedUrl(finalSrc) ? toEmbedUrl(finalSrc) : finalSrc;
+
+      const item = {
+        id:   'g'+Date.now(),
+        type: galleryMediaType,
+        src:  storeSrc,
+        title,
+        size
+      };
+
+      if(editGalleryTarget !== null){
+        gallery.items[editGalleryTarget] = {...gallery.items[editGalleryTarget], ...item, id: gallery.items[editGalleryTarget].id};
+      } else {
+        gallery.items.push(item);
+      }
+
+      setStatus('gallerySaveStatus','loading','Pubblicazione su GitHub...');
+      await commitFile('gallery.json', gallery, gallerySha, `Aggiorna galleria: ${title||'elemento'}`);
+      setStatus('gallerySaveStatus','success','✅ Pubblicato! Il sito si aggiornerà entro 1-2 minuti.');
+      renderGallery();
+      setTimeout(closeGallery, 2200);
+    }catch(err){
+      setStatus('gallerySaveStatus','error','❌ '+(err.message||'Errore'));
+      btn.disabled=false;
+    }
+  }
+
+  /* ══════════════════ DELETE ══════════════════ */
+  function openDelete(type, cat, idx){
+    let name;
+    if(type==='prod') name = (products.products[cat][idx]||{}).name||'questo prodotto';
+    else              name = (gallery.items[idx]||{}).title||'questo elemento';
+    deleteTarget={type,cat,idx};
     document.getElementById('deleteName').textContent = name;
     document.getElementById('deleteModal').classList.add('open');
   }
@@ -695,66 +823,62 @@
 
   async function confirmDelete(){
     if(!deleteTarget) return;
-    const {cat, idx} = deleteTarget;
-    const name = (products.products[cat][idx]||{}).name||'prodotto';
+    const {type,cat,idx} = deleteTarget;
     try{
-      products.products[cat].splice(idx, 1);
-      await commitProducts(`Elimina prodotto: ${name}`);
-      renderAll();
+      if(type==='prod'){
+        const name = (products.products[cat][idx]||{}).name||'prodotto';
+        products.products[cat].splice(idx,1);
+        await commitFile('products.json', products, prodSha, `Elimina prodotto: ${name}`);
+        renderAll();
+      } else {
+        const title = (gallery.items[idx]||{}).title||'elemento';
+        gallery.items.splice(idx,1);
+        await commitFile('gallery.json', gallery, gallerySha, `Elimina da galleria: ${title}`);
+        renderGallery();
+      }
       closeDelete();
-      showToast('Prodotto eliminato e sito aggiornato.', 'success');
-    }catch(err){
-      showToast('Errore durante l\'eliminazione: ' + (err.message||''), 'error');
-    }
-    deleteTarget = null;
+      showToast('Eliminato e sito aggiornato.','success');
+    }catch(err){ showToast('Errore: '+(err.message||''), 'error'); }
+    deleteTarget=null;
   }
 
-  /* ══ GITHUB API ══ */
+  /* ══════════════════ GITHUB API ══════════════════ */
   function ghGet(path){
-    return fetch(API+path+'?t='+Date.now(), {
-      headers: { Authorization: 'token '+getToken() }
-    });
+    return fetch(API+path+'?t='+Date.now(), { headers:{Authorization:'token '+getToken()} });
   }
 
-  async function commitProducts(message){
+  async function commitFile(filename, data, currentSha, message){
     const token   = getToken();
-    const content = toBase64(JSON.stringify(products, null, 2));
-    const body    = { message, content, branch: 'main' };
-    if(prodSha) body.sha = prodSha;
-
-    const res = await fetch(API+'products.json', {
-      method: 'PUT',
-      headers: { Authorization: 'token '+token, 'Content-Type': 'application/json' },
+    const content = toBase64(JSON.stringify(data, null, 2));
+    const body    = {message, content, branch:'main'};
+    if(currentSha) body.sha = currentSha;
+    const res = await fetch(API+filename, {
+      method:'PUT',
+      headers:{Authorization:'token '+token,'Content-Type':'application/json'},
       body: JSON.stringify(body)
     });
-    if(!res.ok){
-      const d = await res.json().catch(()=>({}));
-      throw new Error(d.message||'Commit fallito ('+res.status+')');
-    }
-    const data = await res.json();
-    prodSha = data.content.sha;
+    if(!res.ok){ const d=await res.json().catch(()=>({})); throw new Error(d.message||'Commit fallito ('+res.status+')'); }
+    const d = await res.json();
+    if(filename==='products.json') prodSha   = d.content.sha;
+    if(filename==='gallery.json')  gallerySha= d.content.sha;
   }
 
-  async function uploadImage(file){
+  async function uploadFile(file, folder){
     const token = getToken();
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve,reject) => {
       const reader = new FileReader();
       reader.onload = async e => {
         try{
           const base64   = e.target.result.split(',')[1];
-          const ext      = (file.name.split('.').pop()||'jpg').toLowerCase();
+          const ext      = (file.name.split('.').pop()||'bin').toLowerCase();
           const filename = Date.now()+'.'+ext;
-          const res = await fetch(API+'images/'+filename, {
-            method: 'PUT',
-            headers: { Authorization: 'token '+token, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message:'Carica immagine: '+filename, content: base64, branch:'main' })
+          const res = await fetch(API+folder+filename, {
+            method:'PUT',
+            headers:{Authorization:'token '+token,'Content-Type':'application/json'},
+            body: JSON.stringify({message:'Carica: '+filename, content:base64, branch:'main'})
           });
-          if(res.ok){
-            resolve('https://mecdv.github.io/cotto-e-servito-/images/'+filename);
-          } else {
-            const d = await res.json().catch(()=>({}));
-            reject(new Error(d.message||'Upload immagine fallito'));
-          }
+          if(res.ok){ resolve(PAGES_BASE+folder+filename); }
+          else { const d=await res.json().catch(()=>({})); reject(new Error(d.message||'Upload fallito')); }
         }catch(err){ reject(err); }
       };
       reader.onerror = reject;
@@ -762,7 +886,21 @@
     });
   }
 
-  /* ══ UTILS ══ */
+  /* ══════════════════ UTILS ══════════════════ */
+  function isEmbedUrl(url){
+    return url.includes('youtube.com')||url.includes('youtu.be')||url.includes('vimeo.com');
+  }
+
+  function toEmbedUrl(url){
+    // YouTube: youtu.be/ID o youtube.com/watch?v=ID → embed
+    const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
+    if(ytMatch) return 'https://www.youtube.com/embed/'+ytMatch[1]+'?autoplay=1&mute=1&loop=1&playlist='+ytMatch[1];
+    // Vimeo: vimeo.com/ID → embed
+    const vmMatch = url.match(/vimeo\.com\/(\d+)/);
+    if(vmMatch) return 'https://player.vimeo.com/video/'+vmMatch[1]+'?autoplay=1&muted=1&loop=1';
+    return url; // già embed o altro
+  }
+
   function genId(name){
     return name.toLowerCase()
       .replace(/[àáâ]/g,'a').replace(/[èéê]/g,'e').replace(/[ìíî]/g,'i')
@@ -770,30 +908,22 @@
       .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   }
 
-  function toBase64(str){
-    return btoa(unescape(encodeURIComponent(str)));
+  function toBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
+  function fromBase64(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g,'')))); }
+  function esc(str){ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function setStatus(elId, type, msg){
+    const el=document.getElementById(elId); el.className='save-status '+type; el.textContent=msg;
   }
 
-  function fromBase64(str){
-    return decodeURIComponent(escape(atob(str.replace(/\n/g,''))));
-  }
-
-  function esc(str){
-    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function setStatus(type, msg){
-    const el = document.getElementById('saveStatus');
-    el.className = 'save-status ' + type;
-    el.textContent = msg;
+  function resetSaveStatus(elId, btnId){
+    document.getElementById(elId).className='save-status'; document.getElementById(elId).textContent='';
+    document.getElementById(btnId).disabled=false;
   }
 
   function showToast(msg, type='success'){
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className   = 'toast '+type;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
+    const t=document.getElementById('toast'); t.textContent=msg; t.className='toast '+type;
+    t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3500);
   }
 </script>
 </body>

@@ -451,6 +451,7 @@
     background: var(--bark); aspect-ratio: 1;
     overflow: hidden; position: relative; cursor: none;
   }
+  .gallery-item video { width:100%; height:100%; object-fit:cover; display:block; }
   .gallery-item img {
     width: 100%; height: 100%; object-fit: cover; display: block;
     transition: transform 0.7s var(--ease-out), filter 0.4s;
@@ -1378,42 +1379,7 @@
     <span class="section-label reveal" style="color: var(--beige-light);">Galleria</span>
     <h2 class="section-title reveal">I nostri <em>piatti</em></h2>
 
-    <div class="gallery-grid">
-      <div class="gallery-item tall">
-        <img src="https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=600&h=800&fit=crop&q=80" alt="Lasagna artigianale">
-        <div class="gallery-overlay"><span>Lasagna</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop&q=80" alt="Cucina artigianale">
-        <div class="gallery-overlay"><span>Cucina</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=400&fit=crop&q=80" alt="Risotto">
-        <div class="gallery-overlay"><span>Risotto</span></div>
-      </div>
-      <div class="gallery-item tall">
-        <img src="https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=600&h=800&fit=crop&q=80" alt="Parmigiana">
-        <div class="gallery-overlay"><span>Parmigiana</span></div>
-      </div>
-      <div class="gallery-item wide">
-        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=400&fit=crop&q=80" alt="Insalate fresche">
-        <div class="gallery-overlay"><span>Insalate fresche</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=400&fit=crop&q=80" alt="Fritti">
-        <div class="gallery-overlay"><span>Fritti</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=400&fit=crop&q=80" alt="Dolci">
-        <div class="gallery-overlay"><span>Dolci</span></div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop&q=80" alt="Hamburger">
-        <div class="gallery-overlay"><span>Hamburger</span></div>
-      </div>
-    </div>
-
-    <p class="gallery-upload-note">📷 Sostituisci con le fotografie reali dei tuoi piatti per un effetto ancora più autentico</p>
+    <div class="gallery-grid" id="gallery-grid"></div>
   </div>
 </section>
 
@@ -2009,6 +1975,35 @@
     }
   }
   loadProducts();
+
+  async function loadGallery(){
+    try{
+      const res = await fetch('./gallery.json?t='+Date.now(), {cache:'no-cache'});
+      if(!res.ok) return;
+      const data = await res.json();
+      const grid = document.getElementById('gallery-grid');
+      if(!grid) return;
+      grid.innerHTML = (data.items||[]).map(item=>{
+        const cls = 'gallery-item'+(item.size?' '+item.size:'');
+        let media = '';
+        if(item.type==='video'){
+          const src = item.src||'';
+          const isYT = src.includes('youtube.com')||src.includes('youtu.be');
+          const isVimeo = src.includes('vimeo.com');
+          if(isYT||isVimeo){
+            media = `<iframe src="${src}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="width:100%;height:100%;object-fit:cover"></iframe>`;
+          } else {
+            media = `<video src="${src}" autoplay muted loop playsinline></video>`;
+          }
+        } else {
+          media = `<img src="${item.src||''}" alt="${item.title||''}" loading="lazy">`;
+        }
+        return `<div class="${cls} reveal">${media}<div class="gallery-overlay"><span>${item.title||''}</span></div></div>`;
+      }).join('');
+      grid.querySelectorAll('.gallery-item').forEach(el=>revealObs.observe(el));
+    }catch(err){ console.error('Errore galleria:',err); }
+  }
+  loadGallery();
   document.querySelectorAll('.tech-card').forEach((el,i)=>{
     el.classList.add('reveal'); el.style.transitionDelay=i*0.12+'s'; revealObs.observe(el);
   });
