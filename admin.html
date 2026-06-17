@@ -711,8 +711,8 @@
 
   /* ══ GITHUB API ══ */
   function ghGet(path){
-    return fetch(API+path, {
-      headers: { Authorization: 'token '+getToken(), 'Cache-Control': 'no-cache' }
+    return fetch(API+path+'?t='+Date.now(), {
+      headers: { Authorization: 'token '+getToken() }
     });
   }
 
