@@ -943,6 +943,36 @@
   .cart-checkout-btn:hover { background: #a0202a; }
   .cart-note { font-size: 0.7rem; color: var(--text-soft); opacity: 0.5; text-align: center; margin-top: 0.75rem; }
 
+  /* ── Required asterisk ── */
+  .req { color: var(--red-it); }
+
+  /* ── Inline field errors ── */
+  .form-group input.error,
+  .form-group select.error,
+  .form-group textarea.error {
+    border-color: var(--red-it);
+    background: rgba(192,39,45,0.04);
+    animation: fieldShake 0.3s var(--ease-out);
+  }
+  @keyframes fieldShake {
+    0%,100% { transform: translateX(0); }
+    25%      { transform: translateX(-5px); }
+    75%      { transform: translateX(5px); }
+  }
+  .field-error-msg {
+    font-size: 0.68rem; color: var(--red-it);
+    margin-top: 0.3rem; letter-spacing: 0.02em;
+    animation: fadeUp 0.2s var(--ease-out);
+  }
+
+  /* ── Step indicators cliccabili ── */
+  .checkout-step { cursor: pointer; user-select: none; }
+  .checkout-step:not(.active):not([data-locked]):hover {
+    color: var(--text-soft);
+    border-bottom-color: rgba(184,150,90,0.35);
+  }
+  .checkout-step[data-locked] { cursor: default; }
+
   /* ── Checkbox consenso email ── */
   .consent-row {
     display: flex; align-items: flex-start; gap: 0.8rem;
@@ -1920,10 +1950,10 @@
 
     <!-- STEPS -->
     <div class="checkout-steps">
-      <div class="checkout-step active" id="step-ind-1">1 · Consegna</div>
-      <div class="checkout-step" id="step-ind-2">2 · Dati</div>
-      <div class="checkout-step" id="step-ind-3">3 · Pagamento</div>
-      <div class="checkout-step" id="step-ind-4">4 · Conferma</div>
+      <div class="checkout-step active" id="step-ind-1" onclick="navigateStep(1)">1 · Consegna</div>
+      <div class="checkout-step" id="step-ind-2" onclick="navigateStep(2)">2 · Dati</div>
+      <div class="checkout-step" id="step-ind-3" onclick="navigateStep(3)">3 · Pagamento</div>
+      <div class="checkout-step" id="step-ind-4" data-locked onclick="navigateStep(4)">4 · Conferma</div>
     </div>
 
     <!-- STEP 1: Delivery -->
@@ -1993,22 +2023,26 @@
       <h3>I tuoi <em>dati</em></h3>
       <div class="form-row">
         <div class="form-group">
-          <label>Nome *</label>
+          <label>Nome <span class="req">*</span></label>
           <input type="text" id="f-nome" placeholder="Mario">
+          <div class="field-error-msg" id="err-nome"></div>
         </div>
         <div class="form-group">
-          <label>Cognome *</label>
+          <label>Cognome <span class="req">*</span></label>
           <input type="text" id="f-cognome" placeholder="Rossi">
+          <div class="field-error-msg" id="err-cognome"></div>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Telefono *</label>
+          <label>Telefono <span class="req">*</span></label>
           <input type="tel" id="f-tel" placeholder="+39 333 000 0000">
+          <div class="field-error-msg" id="err-tel"></div>
         </div>
         <div class="form-group">
           <label id="email-label">Email</label>
           <input type="email" id="f-email" placeholder="mario@email.it">
+          <div class="field-error-msg" id="err-email"></div>
         </div>
       </div>
 
@@ -2483,24 +2517,45 @@
   checkoutBg.addEventListener('click', closeCheckout);
 
   function closeCheckout(){ checkoutModal.classList.remove('open'); }
-  function closeAll(){ closeCheckout(); cart=[]; updateCart(); }
+  function closeAll(){
+    closeCheckout();
+    cart=[]; updateCart();
+    maxVisitedStep=1; orderConfirmed=false;
+    document.getElementById('step-ind-4').setAttribute('data-locked','');
+    clearAllErrors();
+    document.getElementById('f-consent-email').checked=false;
+    document.getElementById('consent-row').classList.remove('checked');
+    document.getElementById('email-label').textContent='Email';
+  }
 
   function goStep(n){
     // Validate step 2 required fields before going to step 3
     if(n===3){
-        const nome=document.getElementById('f-nome').value.trim();
-        const tel=document.getElementById('f-tel').value.trim();
-        if(!nome||!tel){ alert('Inserisci almeno nome e telefono per continuare.'); return; }
+        clearAllErrors();
+        let hasError = false;
+        const nome = document.getElementById('f-nome').value.trim();
+        const cognome = document.getElementById('f-cognome').value.trim();
+        const tel  = document.getElementById('f-tel').value.trim();
+        if(!nome){ showFieldError('f-nome','Il nome è obbligatorio'); hasError=true; }
+        if(!cognome){ showFieldError('f-cognome','Il cognome è obbligatorio'); hasError=true; }
+        if(!tel){ showFieldError('f-tel','Il numero di telefono è obbligatorio'); hasError=true; }
         if(deliveryMode==='consegna'){
           const ind=document.getElementById('f-indirizzo').value.trim();
-          if(!ind){ alert('Inserisci l\'indirizzo di consegna.'); return; }
+          if(!ind){ showFieldError('f-indirizzo','L\'indirizzo di consegna è obbligatorio'); hasError=true; }
         }
         const consent=document.getElementById('f-consent-email');
-        if(!consent.checked){ alert('Devi accettare di ricevere la conferma via email per completare l\'ordine.'); return; }
-        const emailVal=document.getElementById('f-email').value.trim();
-        if(!emailVal||!emailVal.includes('@')){ alert('Inserisci un\'email valida per ricevere la conferma dell\'ordine.'); return; }
+        if(!consent.checked){
+          document.getElementById('consent-row').style.outline='2px solid var(--red-it)';
+          hasError=true;
+        }
+        if(consent.checked){
+          const emailVal=document.getElementById('f-email').value.trim();
+          if(!emailVal||!emailVal.includes('@')){ showFieldError('f-email','Inserisci un\'email valida'); hasError=true; }
+        }
+        if(hasError) return;
     }
     currentStep = n;
+    if(n > maxVisitedStep) maxVisitedStep = n;
     document.querySelectorAll('.checkout-panel').forEach((p,i)=>{
       p.classList.toggle('active', i+1===n);
     });
@@ -2510,7 +2565,11 @@
       else if(i+1<n) s.classList.add('done');
     });
     if(n===3) renderCheckoutSummary();
-    if(n===4) renderConfirmation();
+    if(n===4 && !orderConfirmed){
+      orderConfirmed = true;
+      document.getElementById('step-ind-4').removeAttribute('data-locked');
+      renderConfirmation();
+    }
   }
 
   function renderCheckoutSummary(){
@@ -2554,14 +2613,50 @@
     document.getElementById('whatsappOrderBtn').href = 'https://wa.me/393922340754?text=' + encodeURIComponent(waText);
   }
 
+  /* Navigazione step (click sugli header) */
+  let maxVisitedStep = 1;
+  let orderConfirmed = false;
+
+  function navigateStep(n){
+    if(n === currentStep) return;
+    if(n > maxVisitedStep) return;          // non si può saltare avanti
+    if(n === 4 && !orderConfirmed) return;  // step 4 solo dopo conferma
+    goStep(n);
+  }
+
+  /* Errori inline */
+  function showFieldError(id, msg){
+    const el = document.getElementById(id);
+    if(el){ el.classList.add('error'); el.addEventListener('input', ()=>clearFieldError(id), {once:true}); }
+    const err = document.getElementById('err-'+id.replace('f-',''));
+    if(err) err.textContent = msg;
+  }
+  function clearFieldError(id){
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('error');
+    const err = document.getElementById('err-'+id.replace('f-',''));
+    if(err) err.textContent = '';
+  }
+  function clearAllErrors(){
+    ['f-nome','f-cognome','f-tel','f-email','f-indirizzo'].forEach(clearFieldError);
+    const cr = document.getElementById('consent-row');
+    if(cr) cr.style.outline = '';
+  }
+
   /* Consenso email */
   function toggleConsent(){
-    const cb = document.getElementById('f-consent-email');
+    const cb  = document.getElementById('f-consent-email');
     const row = document.getElementById('consent-row');
     const lbl = document.getElementById('email-label');
     cb.checked = !cb.checked;
     row.classList.toggle('checked', cb.checked);
-    lbl.textContent = cb.checked ? 'Email *' : 'Email';
+    row.style.outline = '';
+    if(cb.checked){
+      lbl.innerHTML = 'Email <span class="req">*</span>';
+      clearFieldError('f-email');
+    } else {
+      lbl.textContent = 'Email';
+    }
   }
 
   /* Delivery selection */
