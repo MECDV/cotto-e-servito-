@@ -2142,6 +2142,53 @@
     }
   }
 
+  async function sendConfirmationEmail(ordN){
+    const nome    = document.getElementById('f-nome').value.trim();
+    const cognome = document.getElementById('f-cognome').value.trim();
+    const tel     = document.getElementById('f-tel').value.trim();
+    const email   = document.getElementById('f-email').value.trim();
+    if (!email || !email.includes('@')) return;
+
+    const nomeCompleto = (nome + ' ' + cognome).trim();
+    const total = cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2).replace('.',',');
+    const righe = cart.map(i=>`• ${i.name} × ${i.qty}  →  €${(i.price*i.qty).toFixed(2)}`).join('\n');
+    const consegnaTxt = deliveryMode==='ritiro'
+      ? `Ritiro in negozio — Via Ori Martin n.4, Ceprano (FR)\nFascia oraria: ${selectedTime}\nData: ${document.getElementById('pickup-date').value||'da concordare'}`
+      : `Consegna a domicilio\nIndirizzo: ${document.getElementById('f-indirizzo')?.value} ${document.getElementById('f-citta')?.value}\nData: ${document.getElementById('delivery-date')?.value||'da concordare'} · Fascia: ${document.getElementById('delivery-time')?.value}`;
+    const pagamentoTxt = paymentMode==='contanti' ? 'Contanti alla consegna/ritiro' : 'Bonifico bancario anticipato';
+
+    const body =
+      `Gentile ${nomeCompleto},\n\n` +
+      `grazie per il tuo ordine! Abbiamo ricevuto la tua richiesta e ti contatteremo presto per confermare i dettagli.\n\n` +
+      `═══════════════════════════\n` +
+      `N° ORDINE: ${ordN}\n` +
+      `═══════════════════════════\n\n` +
+      `PRODOTTI ORDINATI\n${righe}\n\nTOTALE: €${total}\n\n` +
+      `CONSEGNA\n${consegnaTxt}\n\n` +
+      `PAGAMENTO\n${pagamentoTxt}\n\n` +
+      `Per qualsiasi informazione contattaci:\n` +
+      `📞 Marco: 392 234 0754\n` +
+      `📞 Maurizio: 388 955 2404\n\n` +
+      `Cotto & Servito — L'Oasi della Buona Tavola\nVia Ori Martin n.4, 03024 Ceprano (FR)`;
+
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email:      email,
+        order_number:  ordN,
+        client_name:   nomeCompleto,
+        client_phone:  tel,
+        client_email:  email,
+        delivery_mode: deliveryMode==='ritiro' ? 'Ritiro in negozio' : 'Consegna a domicilio',
+        payment_mode:  pagamentoTxt,
+        total:         '€'+total,
+        order_body:    body,
+      });
+      console.log('✅ Email conferma inviata al cliente');
+    } catch(err) {
+      console.error('❌ Errore email conferma cliente:', err);
+    }
+  }
+
   /* ══ ISCRIZIONE (riusa la stessa configurazione EmailJS dell'ordine) ══ */
   async function sendSignupEmail(nome, email, tel){
     if (typeof emailjs === 'undefined') {
@@ -2449,8 +2496,9 @@
     }
     document.getElementById('success-msg').textContent = msg;
 
-    // 📧 Invia email di notifica
+    // 📧 Invia email al negozio + conferma al cliente
     sendOrderEmail(ordN);
+    sendConfirmationEmail(ordN);
 
     // 💬 Precompila il messaggio del bottone WhatsApp con i dettagli dell'ordine
     const cognome = document.getElementById('f-cognome').value.trim();
