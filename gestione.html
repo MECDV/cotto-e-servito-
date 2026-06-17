@@ -565,7 +565,7 @@
   }
 
   async function loadProducts(){
-    const res = await ghGet('products.json');
+    const res = await ghGet('prodotti.json');
     if(res.status===401){ clrToken(); throw new Error('Token scaduto'); }
     if(res.status===404){
       products = {categories:CATS.map(id=>({id,label:CAT_LABELS[id]})),products:{primi:[],secondi:[],fritti:[],dolci:[]}};
@@ -579,7 +579,7 @@
   }
 
   async function loadGalleryData(){
-    const res = await ghGet('gallery.json');
+    const res = await ghGet('galleria.json');
     if(res.status===401){ clrToken(); throw new Error('Token scaduto'); }
     if(res.status===404){
       gallery    = {items:[]};
@@ -752,7 +752,7 @@
         products.products[cat].push(prod);
       }
       setStatus('saveStatus','loading','Pubblicazione su GitHub...');
-      await commitFile('products.json', products, prodSha, `Aggiorna prodotto: ${name}`);
+      await commitFile('prodotti.json', products, prodSha, `Aggiorna prodotto: ${name}`);
       setStatus('saveStatus','success','✅ Pubblicato! Il sito si aggiornerà entro 1-2 minuti.');
       renderAll();
       setTimeout(closeEdit, 2200);
@@ -866,7 +866,7 @@
   async function uploadFromSource(item){
     if(!item._up) return item.src;
     const token  = getToken();
-    const folder = item.type==='video' ? 'videos/' : 'images/';
+    const folder = item.type==='video' ? 'video/' : 'foto/';
     if(item._up.dataUrl){
       const base64   = item._up.dataUrl.split(',')[1];
       const filename = Date.now()+'_'+Math.random().toString(36).slice(2,6)+'.jpg';
@@ -1144,7 +1144,7 @@
       let finalSrc = src;
       if(pendingGalleryFile){
         setStatus('gallerySaveStatus','loading','Caricamento file su GitHub...');
-        const folder = galleryMediaType==='video' ? 'videos/' : 'images/';
+        const folder = galleryMediaType==='video' ? 'video/' : 'foto/';
         finalSrc = await uploadFile(pendingGalleryFile, folder);
       } else if(!finalSrc){
         setStatus('gallerySaveStatus','error','❌ Aggiungi una foto, un video o un URL.');
@@ -1158,7 +1158,7 @@
         gallery.items.push(item);
       }
       setStatus('gallerySaveStatus','loading','Pubblicazione su GitHub...');
-      await commitFile('gallery.json', gallery, gallerySha, `Aggiorna galleria: ${title||'elemento'}`);
+      await commitFile('galleria.json', gallery, gallerySha, `Aggiorna galleria: ${title||'elemento'}`);
       setStatus('gallerySaveStatus','success','✅ Pubblicato! Il sito si aggiornerà entro 1-2 minuti.');
       renderGallery();
       setTimeout(closeGallery, 2200);
@@ -1186,12 +1186,12 @@
       if(type==='prod'){
         const name = (products.products[cat][idx]||{}).name||'prodotto';
         products.products[cat].splice(idx,1);
-        await commitFile('products.json', products, prodSha, `Elimina prodotto: ${name}`);
+        await commitFile('prodotti.json', products, prodSha, `Elimina prodotto: ${name}`);
         renderAll();
       } else {
         const title = (gallery.items[idx]||{}).title||'elemento';
         gallery.items.splice(idx,1);
-        await commitFile('gallery.json', gallery, gallerySha, `Elimina da galleria: ${title}`);
+        await commitFile('galleria.json', gallery, gallerySha, `Elimina da galleria: ${title}`);
         renderGallery();
       }
       closeDelete();
@@ -1217,8 +1217,8 @@
     });
     if(!res.ok){ const d=await res.json().catch(()=>({})); throw new Error(d.message||'Commit fallito ('+res.status+')'); }
     const d = await res.json();
-    if(filename==='products.json') prodSha   = d.content.sha;
-    if(filename==='gallery.json')  gallerySha= d.content.sha;
+    if(filename==='prodotti.json') prodSha   = d.content.sha;
+    if(filename==='galleria.json')  gallerySha= d.content.sha;
   }
 
   async function uploadFile(file, folder){

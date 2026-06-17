@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -1999,8 +1999,8 @@
 
   async function loadProducts(){
     try{
-      const res = await fetch('./products.json?t='+Date.now(), {cache:'no-cache'});
-      if(!res.ok) throw new Error('products.json non trovato');
+      const res = await fetch('./prodotti.json?t='+Date.now(), {cache:'no-cache'});
+      if(!res.ok) throw new Error('prodotti.json non trovato');
       const data = await res.json();
       ['primi','secondi','fritti','dolci'].forEach(cat=>{
         const grid = document.getElementById('grid-'+cat);
@@ -2051,7 +2051,7 @@
 
   async function loadGallery(){
     try{
-      const res = await fetch('./gallery.json?t='+Date.now(), {cache:'no-cache'});
+      const res = await fetch('./galleria.json?t='+Date.now(), {cache:'no-cache'});
       if(!res.ok) return;
       const data = await res.json();
       const grid = document.getElementById('gallery-grid');

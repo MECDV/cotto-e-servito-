@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(d=\"c:\\\\Users\\\\Utente\\\\Documents\\\\GitHub\\\\cotto-e-servito-\"; Get-ChildItem -Path \"$d\\\\.claude\\\\skills\" -ErrorAction SilentlyContinue -Recurse -Filter SKILL.md)"
+    ]
+  }
+}
