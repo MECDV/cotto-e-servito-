@@ -542,7 +542,7 @@
       await loadAll();
     }catch(err){
       clrToken();
-      showLoginErr('❌ Errore di rete. Controlla la connessione internet.');
+      showLoginErr('❌ Errore: '+err.message+' — Prova in una finestra in incognito (Ctrl+Shift+N).');
       btn.disabled = false;
     }
   }
