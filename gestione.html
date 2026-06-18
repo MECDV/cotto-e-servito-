@@ -247,11 +247,13 @@
     <p class="login-subtitle">Pannello di Gestione</p>
     <h2 class="login-title">Accedi per modificare il sito</h2>
     <p class="login-desc">Inserisci il tuo <strong>GitHub Personal Access Token</strong> per connetterti.</p>
+    <form onsubmit="doLogin();return false;" autocomplete="off">
     <div class="login-field">
       <label>GitHub Token</label>
-      <input type="password" id="tokenInput" placeholder="ghp_..." autocomplete="off">
+      <input type="password" id="tokenInput" placeholder="ghp_..." autocomplete="current-password">
     </div>
-    <button type="button" class="btn-login" id="btnLogin" onclick="doLogin()">Accedi →</button>
+    <button type="submit" class="btn-login" id="btnLogin">Accedi →</button>
+    </form>
     <p class="login-help">
       Come generare il token:<br>
       GitHub → <strong>Settings → Developer settings →<br>Personal access tokens → Tokens (classic) →<br>Generate new token (classic)</strong><br>
