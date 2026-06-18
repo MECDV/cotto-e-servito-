@@ -353,6 +353,7 @@
   #storia {
     background: var(--white);
     padding: 9rem 2rem;
+    contain: layout style;
     position: relative;
   }
   #storia::before {
@@ -402,7 +403,7 @@
   .since-badge span:last-child { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; line-height: 1; }
 
   /* ── TECNOLOGIA ── */
-  #tecnologia { background: var(--espresso); padding: 9rem 2rem; color: white; }
+  #tecnologia { background: var(--espresso); padding: 9rem 2rem; color: white; contain: layout style; }
   #tecnologia .section-label { color: var(--gold-light); }
   #tecnologia .section-title { color: white; }
   #tecnologia .section-title em { color: var(--gold-light); }
@@ -465,7 +466,7 @@
   .shelf-divider { width: 1px; height: 50px; background: rgba(184,150,90,0.2); flex-shrink: 0; }
 
   /* ── MENU / PRODOTTI ── */
-  #menu { background: var(--cream); padding: 9rem 2rem; }
+  #menu { background: var(--cream); padding: 9rem 2rem; contain: layout style; }
   .menu-tabs {
     display: flex; gap: 0; margin: 3rem 0;
     border-bottom: 1px solid rgba(184,150,90,0.25);
@@ -560,7 +561,7 @@
   }
 
   /* ── CONTATTI ── */
-  #contatti { background: var(--cream-warm); padding: 9rem 2rem; }
+  #contatti { background: var(--cream-warm); padding: 9rem 2rem; contain: layout style; }
   .contatti-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 4rem; align-items: start; }
   .contatti-info h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 300; color: var(--bark); margin-bottom: 2.5rem; }
   .contact-row { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(184,150,90,0.2); }
@@ -656,11 +657,12 @@
   /* Blob luminosi hero */
   .hero-blob {
     position: absolute; border-radius: 50%;
-    filter: blur(90px); pointer-events: none; z-index: 0;
+    filter: blur(60px); pointer-events: none; z-index: 0;
+    will-change: transform;
   }
   .hero-blob-gold {
     width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(184,150,90,0.22) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(184,150,90,0.20) 0%, transparent 70%);
     top: -150px; right: -100px;
     animation: blobDrift 8s ease-in-out infinite alternate;
   }
@@ -2364,23 +2366,61 @@
   // Close on ESC
   document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMobileNav(); closeDrawer(); closeCheckout(); }});
 
-  /* ── Cursor ── */
-  const dot = document.querySelector('.cursor-dot');
-  const ring = document.querySelector('.cursor-ring');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-  function animateCursor(){
-    rx+=(mx-rx)*0.18; ry+=(my-ry)*0.18;
-    if(dot){dot.style.left=mx+'px';dot.style.top=my+'px';}
-    if(ring){ring.style.left=rx+'px';ring.style.top=ry+'px';}
-    requestAnimationFrame(animateCursor);
-  }
-  if(dot&&ring){
-    animateCursor();
-    const HOVER_SEL = 'a,button,.gallery-item,.product-card,.valore-card,.delivery-opt,.time-slot,.payment-method';
-    document.addEventListener('mouseover', e=>{ if(e.target.closest && e.target.closest(HOVER_SEL)) document.body.classList.add('cursor-hover'); });
-    document.addEventListener('mouseout',  e=>{ if(e.target.closest && e.target.closest(HOVER_SEL)) document.body.classList.remove('cursor-hover'); });
-  }
+  /* ── Master RAF loop (cursore dot/ring + glow globale + glow galleria) ── */
+  (function masterLoop(){
+    const dot  = document.querySelector('.cursor-dot');
+    const ring = document.querySelector('.cursor-ring');
+
+    /* Glow globale */
+    const glCur = document.createElement('div');
+    glCur.className = 'global-cursor';
+    document.body.appendChild(glCur);
+
+    /* Glow galleria */
+    const galSec = document.getElementById('galleria');
+    let galCur = null;
+    if(galSec){
+      galCur = document.createElement('div');
+      galCur.className = 'gallery-cursor';
+      galCur.innerHTML = '<span>GUARDA</span>';
+      galSec.appendChild(galCur);
+      galSec.addEventListener('mouseover', e=>{ if(e.target.closest('.gallery-item')) galCur.classList.add('active'); });
+      galSec.addEventListener('mouseout',  e=>{ if(e.target.closest('.gallery-item')) galCur.classList.remove('active'); });
+    }
+
+    let mx=-600,my=-600, rx=0,ry=0, gx=-600,gy=-600, galTx=0,galTy=0,galCx=0,galCy=0;
+    let galR = galSec ? galSec.getBoundingClientRect() : null;
+    if(galSec) window.addEventListener('resize',()=>{ galR=galSec.getBoundingClientRect(); },{passive:true});
+
+    document.addEventListener('mousemove',e=>{
+      mx=e.clientX; my=e.clientY;
+      if(galR){ galTx=e.clientX-galR.left; galTy=e.clientY-galR.top; }
+    });
+    document.addEventListener('mouseleave',()=>{ mx=-600; my=-600; });
+
+    /* Un unico loop a ~45fps */
+    let last=0;
+    function loop(ts){
+      if(ts-last>20){
+        last=ts;
+        if(dot)  { dot.style.left=mx+'px'; dot.style.top=my+'px'; }
+        rx+=(mx-rx)*0.18; ry+=(my-ry)*0.18;
+        if(ring) { ring.style.left=rx+'px'; ring.style.top=ry+'px'; }
+        gx+=(mx-gx)*0.10; gy+=(my-gy)*0.10;
+        glCur.style.left=gx+'px'; glCur.style.top=gy+'px';
+        if(galCur){ galCx+=(galTx-galCx)*0.15; galCy+=(galTy-galCy)*0.15; galCur.style.left=galCx+'px'; galCur.style.top=galCy+'px'; }
+      }
+      if(!document.hidden) requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    document.addEventListener('visibilitychange',()=>{ if(!document.hidden) requestAnimationFrame(loop); });
+
+    if(dot&&ring){
+      const HOVER_SEL = 'a,button,.gallery-item,.product-card,.valore-card,.delivery-opt,.time-slot,.payment-method';
+      document.addEventListener('mouseover',e=>{ if(e.target.closest&&e.target.closest(HOVER_SEL)) document.body.classList.add('cursor-hover'); });
+      document.addEventListener('mouseout', e=>{ if(e.target.closest&&e.target.closest(HOVER_SEL)) document.body.classList.remove('cursor-hover'); });
+    }
+  })();
 
   /* ── Nav scroll ── */
   const nav=document.querySelector('nav');
@@ -2404,116 +2444,49 @@
   },{threshold:0.12});
   document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.reveal-clip').forEach(el=>revealObs.observe(el));
 
-  /* ── Effetti scroll progressivi sulle sezioni ── */
-  (function scrollEffects(){
-    /* Parallax leggero su header sezioni */
-    const parallaxEls = [
-      {sel:'#storia .section-inner',    speed:0.08},
-      {sel:'#tecnologia .section-inner',speed:0.06},
-      {sel:'#galleria .section-inner',  speed:0.05},
-      {sel:'#contatti .section-inner',  speed:0.07},
+  /* ── Parallax sezioni + storia image (un unico listener, niente getBCR su scroll) ── */
+  (function scrollParallax(){
+    const defs = [
+      {sel:'#storia .section-inner',    speed:0.07},
+      {sel:'#tecnologia .section-inner',speed:0.05},
+      {sel:'#galleria .section-inner',  speed:0.04},
+      {sel:'#contatti .section-inner',  speed:0.06},
     ];
-    const pEls = parallaxEls.map(o=>({el:document.querySelector(o.sel),speed:o.speed})).filter(o=>o.el);
+    const pEls = defs.map(o=>({el:document.querySelector(o.sel),speed:o.speed,docTop:0,h:0})).filter(o=>o.el);
+    const imgEl = document.querySelector('.storia-image-placeholder img');
+    let imgDocTop=0, imgH=0;
 
-    /* Profondità navbar su scroll */
-    const nav = document.querySelector('nav');
-
-    /* Scale sezioni al centro viewport */
-    const scaleSecs = Array.from(document.querySelectorAll('#storia,#tecnologia,#menu,#galleria,#contatti'));
-
+    function calcOffsets(){
+      pEls.forEach(o=>{ o.docTop=o.el.getBoundingClientRect().top+window.scrollY; o.h=o.el.offsetHeight; });
+      if(imgEl){ const c=imgEl.closest('.storia-image-placeholder'); imgDocTop=c.getBoundingClientRect().top+window.scrollY; imgH=c.offsetHeight; }
+    }
     function onScroll(){
-      const sy = window.scrollY;
-      const vh = window.innerHeight;
-
-      /* Parallax sezioni */
-      pEls.forEach(({el,speed})=>{
-        const r = el.getBoundingClientRect();
-        const offset = (r.top + r.height/2 - vh/2) * speed;
-        el.style.transform = `translateY(${offset}px)`;
+      const sy=window.scrollY, vh=window.innerHeight;
+      pEls.forEach(({el,speed,docTop,h})=>{
+        el.style.transform=`translateY(${((docTop+h/2-sy)-vh/2)*speed}px)`;
       });
-
-      /* Sezioni: leggero scale in/out mentre entrano nel viewport */
-      scaleSecs.forEach(sec=>{
-        const r = sec.getBoundingClientRect();
-        const center = r.top + r.height/2;
-        const dist = Math.abs(center - vh/2);
-        const maxDist = vh;
-        const s = 0.97 + 0.03 * Math.max(0, 1 - dist/maxDist);
-        sec.style.transform = `scale(${s.toFixed(4)})`;
-        sec.style.transformOrigin = 'center center';
-      });
+      if(imgEl){ const pct=((imgDocTop+imgH/2-sy)-vh/2)/vh; imgEl.style.transform=`scale(1.12) translateY(${pct*22}px)`; }
     }
 
+    calcOffsets();
+    window.addEventListener('resize', calcOffsets, {passive:true});
     window.addEventListener('scroll', onScroll, {passive:true});
     onScroll();
   })();
 
-  /* ── Cursore globale ── */
-  (function globalCursor(){
-    const cur = document.createElement('div');
-    cur.className = 'global-cursor';
-    document.body.appendChild(cur);
-    let tx=-600, ty=-600, cx=-600, cy=-600;
-    document.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; });
-    document.addEventListener('mouseleave', () => { tx=-600; ty=-600; });
-    (function loop(){
-      cx += (tx-cx)*0.12; cy += (ty-cy)*0.12;
-      cur.style.left = cx+'px'; cur.style.top = cy+'px';
-      requestAnimationFrame(loop);
-    })();
-  })();
-
-  /* ── Cursore custom galleria ── */
-  (function galleryCursor(){
-    const sec = document.getElementById('galleria');
-    if(!sec) return;
-    const cur = document.createElement('div');
-    cur.className = 'gallery-cursor';
-    cur.innerHTML = '<span>GUARDA</span>';
-    sec.appendChild(cur);
-    let tx=0,ty=0,cx=0,cy=0;
-    sec.addEventListener('mousemove', e => {
-      const r = sec.getBoundingClientRect();
-      tx = e.clientX-r.left; ty = e.clientY-r.top;
-    });
-    (function loop(){
-      cx+=(tx-cx)*0.15; cy+=(ty-cy)*0.15;
-      cur.style.left=cx+'px'; cur.style.top=cy+'px';
-      requestAnimationFrame(loop);
-    })();
-    document.querySelectorAll('.gallery-item').forEach(item=>{
-      item.addEventListener('mouseenter',()=>cur.classList.add('active'));
-      item.addEventListener('mouseleave',()=>cur.classList.remove('active'));
-    });
-  })();
-
-  /* ── Particelle sottili in Storia e Tecnologia ── */
+  /* ── Particelle sottili in Storia e Tecnologia (6 per sezione) ── */
   ['storia','tecnologia'].forEach(id=>{
     const sec = document.getElementById(id);
     if(!sec) return;
     sec.style.position='relative'; sec.style.overflow='hidden';
-    for(let i=0;i<10;i++){
+    for(let i=0;i<6;i++){
       const p=document.createElement('div');
       p.className='section-particle';
-      const size=1+Math.random()*2.5;
-      p.style.cssText=`left:${Math.random()*100}%;bottom:0;width:${size}px;height:${size}px;animation-duration:${9+Math.random()*12}s;animation-delay:${-Math.random()*12}s;opacity:${0.2+Math.random()*0.3};`;
+      const size=1+Math.random()*2;
+      p.style.cssText=`left:${Math.random()*100}%;bottom:0;width:${size}px;height:${size}px;animation-duration:${10+Math.random()*12}s;animation-delay:${-Math.random()*12}s;opacity:${0.18+Math.random()*0.22};`;
       sec.appendChild(p);
     }
   });
-
-  /* ── Parallax immagine Storia su scroll ── */
-  (function storiaParallax(){
-    const img = document.querySelector('.storia-image-placeholder img');
-    if(!img) return;
-    function update(){
-      const r = img.closest('.storia-image-placeholder').getBoundingClientRect();
-      const center = r.top + r.height/2;
-      const pct = (center - window.innerHeight/2) / window.innerHeight;
-      img.style.transform = `scale(1.12) translateY(${pct*25}px)`;
-    }
-    window.addEventListener('scroll', update, {passive:true});
-    update();
-  })();
 
   /* ── Scroll progress bar ── */
   const scrollProg = document.getElementById('scroll-progress');
@@ -2522,10 +2495,10 @@
     if(scrollProg) scrollProg.style.width = Math.min(pct,100) + '%';
   }, {passive:true});
 
-  /* ── Confetti burst ── */
+  /* ── Confetti burst (40 pezzi) ── */
   (function confettiBurst(){
     const colors=['#B8965A','#1a6b2f','#B41E2E','#ffffff','#e8b44a','#ffd700'];
-    for(let i=0;i<80;i++){
+    for(let i=0;i<40;i++){
       const c=document.createElement('div');
       c.className='confetti-piece';
       const size=4+Math.random()*8;
@@ -2535,35 +2508,33 @@
     }
   })();
 
-  /* ── Particelle fluttuanti hero (più e più veloci) ── */
+  /* ── Particelle fluttuanti hero (18 pezzi) ── */
   (function createParticles(){
     const hero = document.getElementById('hero');
     if(!hero) return;
-    for(let i=0;i<32;i++){
+    for(let i=0;i<18;i++){
       const p = document.createElement('div');
       p.className = 'hero-particle';
-      const size = 2 + Math.random()*5;
-      p.style.cssText = `left:${Math.random()*100}%;bottom:0;width:${size}px;height:${size}px;animation-duration:${3+Math.random()*5}s;animation-delay:${-Math.random()*7}s;opacity:${0.4+Math.random()*0.6};`;
+      const size = 2 + Math.random()*4;
+      p.style.cssText = `left:${Math.random()*100}%;bottom:0;width:${size}px;height:${size}px;animation-duration:${4+Math.random()*6}s;animation-delay:${-Math.random()*8}s;opacity:${0.3+Math.random()*0.5};`;
       hero.appendChild(p);
     }
   })();
 
-  /* ── Scintille random più frequenti ── */
+  /* ── Scintille random (max 1, ogni 750ms) ── */
   (function createSparkles(){
     const hero = document.getElementById('hero');
     if(!hero) return;
     const symbols = ['✦','✧','★','✶','✸','✺','❋','✼'];
     setInterval(() => {
-      const count = 1 + Math.floor(Math.random()*2);
-      for(let i=0;i<count;i++){
-        const s = document.createElement('span');
-        s.className = 'hero-sparkle';
-        s.textContent = symbols[Math.floor(Math.random()*symbols.length)];
-        s.style.cssText = `left:${5+Math.random()*90}%;top:${5+Math.random()*85}%;font-size:${12+Math.random()*24}px;animation-duration:${0.8+Math.random()*0.6}s;`;
-        hero.appendChild(s);
-        setTimeout(() => s.remove(), 1400);
-      }
-    }, 350);
+      if(document.hidden) return;
+      const s = document.createElement('span');
+      s.className = 'hero-sparkle';
+      s.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+      s.style.cssText = `left:${5+Math.random()*90}%;top:${5+Math.random()*85}%;font-size:${12+Math.random()*20}px;animation-duration:${0.9+Math.random()*0.5}s;`;
+      hero.appendChild(s);
+      setTimeout(() => s.remove(), 1400);
+    }, 750);
   })();
 
   /* ── Typewriter sulla tagline ── */
