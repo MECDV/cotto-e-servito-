@@ -196,72 +196,52 @@
   }
   .hero-title em { font-style: italic; color: var(--gold-light); font-weight: 300; }
 
-  /* ── Titolo hero composizione/scomposizione ── */
-  .hero-title-compose {
-    display: grid;
-    position: relative;
-    margin: 0 auto 1rem;
+  /* ── Titolo hero — reveal linea per linea stile luxury ── */
+  .hero-title-reveal { margin: 0 auto 1.5rem; text-align: center; }
+  .title-line-mask { overflow: hidden; padding-bottom: 0.12em; }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 11vw, 8.5rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    display: block; margin: 0;
     opacity: 0;
-    animation: fadeUp 1s 0.4s var(--ease-out) forwards;
+    animation: lineReveal 1.1s cubic-bezier(0.16,1,0.3,1) 0.35s both;
   }
-  .hero-title-compose .compose-piece {
-    grid-area: 1 / 1;
-    overflow: hidden;
+  .hero-title em { font-style: italic; color: var(--gold-light); font-weight: 300; }
+  .hero-title-2 {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 11vw, 8.5rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    display: block; margin: 0;
+    opacity: 0;
+    animation: lineReveal 1.1s cubic-bezier(0.16,1,0.3,1) 0.58s both;
   }
-  .hero-title-compose .hero-title {
-    opacity: 1 !important;
-    animation: none !important;
-    margin: 0; padding: 0.4rem 0;
+  @keyframes lineReveal {
+    from { opacity:0; transform: translateY(100%) skewY(2deg); filter: blur(2px); }
+    to   { opacity:1; transform: translateY(0)    skewY(0);    filter: blur(0); }
   }
-  .hero-title-compose .hero-icon-shine {
-    grid-area: 1 / 1;
+  /* Fascio di luce sul titolo */
+  .hero-title-shine {
+    position: relative; overflow: hidden;
   }
-  /* Quadranti — parti volano da lontano e si assemblano */
-  .p-tl { clip-path: inset(0 50% 50% 0); animation: sc-tl 7s cubic-bezier(0.4,0,0.2,1) infinite; }
-  .p-tr { clip-path: inset(0 0 50% 50%); animation: sc-tr 7s cubic-bezier(0.4,0,0.2,1) infinite; }
-  .p-bl { clip-path: inset(50% 50% 0 0); animation: sc-bl 7s cubic-bezier(0.4,0,0.2,1) infinite; }
-  .p-br { clip-path: inset(50% 0 0 50%); animation: sc-br 7s cubic-bezier(0.4,0,0.2,1) infinite; }
-  @keyframes sc-tl {
-    0%,5%  { transform:translate(-120px,-90px) scale(0.4) rotate(-25deg); opacity:0; filter:blur(10px); }
-    20%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
-    60%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
-    75%    { transform:translate(-120px,-90px) scale(0.4) rotate(-25deg); opacity:0; filter:blur(10px); }
-    100%   { transform:translate(-120px,-90px) scale(0.4) rotate(-25deg); opacity:0; filter:blur(10px); }
-  }
-  @keyframes sc-tr {
-    0%,5%  { transform:translate(120px,-90px)  scale(0.4) rotate(25deg);  opacity:0; filter:blur(10px); }
-    20%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
-    60%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
-    75%    { transform:translate(120px,-90px)  scale(0.4) rotate(25deg);  opacity:0; filter:blur(10px); }
-    100%   { transform:translate(120px,-90px)  scale(0.4) rotate(25deg);  opacity:0; filter:blur(10px); }
-  }
-  @keyframes sc-bl {
-    0%,5%  { transform:translate(-120px,90px)  scale(0.4) rotate(25deg);  opacity:0; filter:blur(10px); }
-    20%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
-    60%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
-    75%    { transform:translate(-120px,90px)  scale(0.4) rotate(25deg);  opacity:0; filter:blur(10px); }
-    100%   { transform:translate(-120px,90px)  scale(0.4) rotate(25deg);  opacity:0; filter:blur(10px); }
-  }
-  @keyframes sc-br {
-    0%,5%  { transform:translate(120px,90px)   scale(0.4) rotate(-25deg); opacity:0; filter:blur(10px); }
-    20%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
-    60%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
-    75%    { transform:translate(120px,90px)   scale(0.4) rotate(-25deg); opacity:0; filter:blur(10px); }
-    100%   { transform:translate(120px,90px)   scale(0.4) rotate(-25deg); opacity:0; filter:blur(10px); }
-  }
-  /* Fascio di luce — passa solo quando il logo è assemblato */
-  .hero-icon-shine {
+  .hero-title-shine::after {
+    content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(110deg, transparent 34%, rgba(255,255,255,0.4) 50%, transparent 66%);
-    animation: iconShine 7s ease-in-out infinite;
-    pointer-events: none; z-index: 10;
+    background: linear-gradient(100deg, transparent 35%, rgba(255,255,255,0.18) 50%, transparent 65%);
+    animation: titleShine 6s 1.8s ease-in-out infinite;
+    pointer-events: none;
   }
-  @keyframes iconShine {
-    0%,22% { transform:translateX(-160%); opacity:0; }
-    30%    { opacity:1;  transform:translateX(-60%); }
-    45%    { opacity:1;  transform:translateX(60%); }
-    53%    { opacity:0;  transform:translateX(160%); }
-    100%   { transform:translateX(160%); opacity:0; }
+  @keyframes titleShine {
+    0%,100% { transform: translateX(-160%); opacity:0; }
+    15%     { opacity:1; }
+    55%     { transform: translateX(160%); opacity:1; }
+    65%     { opacity:0; }
   }
   .hero-subtitle {
     font-family: var(--font-display);
@@ -617,6 +597,115 @@
   .reveal-delay-1 { transition-delay: 0.1s; }
   .reveal-delay-2 { transition-delay: 0.22s; }
   .reveal-delay-3 { transition-delay: 0.34s; }
+
+  /* ── NUOVE ANIMAZIONI ── */
+
+  /* Tricolore bar — shimmer */
+  .tricolore-bar { position: relative; overflow: hidden; }
+  .tricolore-bar::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.55) 50%, transparent 80%);
+    animation: triShimmer 5s 1s ease-in-out infinite;
+  }
+  @keyframes triShimmer {
+    0%,100% { transform: translateX(-200%); }
+    45%,55% { transform: translateX(200%); }
+  }
+
+  /* Section title — sottolineatura che si dispiega */
+  .section-title { position: relative; }
+  .section-title::after {
+    content: ''; position: absolute;
+    bottom: -6px; left: 0;
+    height: 2px; width: 0;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), transparent);
+    transition: width 1s cubic-bezier(0.16,1,0.3,1) 0.2s;
+  }
+  .section-title.visible::after { width: 55%; }
+
+  /* Section label — slide da sinistra */
+  .section-label.reveal { transform: translateX(-18px); }
+  .section-label.reveal.visible { transform: translateX(0); }
+
+  /* Since badge — levitazione continua */
+  .since-badge { animation: badgeFloat 3.5s ease-in-out infinite; }
+  @keyframes badgeFloat {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-10px); }
+  }
+
+  /* Hero line dot — pulsa */
+  .line-dot { animation: dotPulse 2.8s ease-in-out infinite; }
+  @keyframes dotPulse {
+    0%,100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(184,150,90,0.5); }
+    50%     { transform: scale(1.5); box-shadow: 0 0 0 7px rgba(184,150,90,0); }
+  }
+
+  /* Valore card — lift on hover */
+  .valore-card {
+    transition: background 0.3s, border-color 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
+  }
+  .valore-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(26,15,6,0.08);
+  }
+
+  /* Gallery items — entrata scalata con stagger via JS */
+  .gallery-item {
+    opacity: 0; transform: scale(0.9);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  }
+  .gallery-item.gal-visible { opacity: 1; transform: scale(1); }
+
+  /* Product cards — entrata con stagger via JS */
+  .product-card {
+    opacity: 0; transform: translateY(22px);
+    transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out), box-shadow 0.35s var(--ease-out);
+  }
+  .product-card.card-visible { opacity: 1; transform: translateY(0); }
+  .product-card.card-visible:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(26,15,6,0.10); }
+
+  /* Contact icon — rotazione on hover */
+  .contact-icon {
+    transition: transform 0.5s var(--ease-out), background 0.3s;
+  }
+  .contact-row:hover .contact-icon {
+    transform: rotate(12deg) scale(1.12);
+    background: var(--gold-pale);
+  }
+
+  /* Footer logo — shimmer */
+  .footer-logo { position: relative; overflow: hidden; display: inline-block; }
+  .footer-logo::after {
+    content: ''; position: absolute;
+    top: 0; left: -80px;
+    width: 60px; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+    animation: footerShimmer 6s 2s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes footerShimmer {
+    0%     { transform: translateX(0); opacity:0; }
+    8%     { opacity:1; }
+    40%    { transform: translateX(280px); opacity:1; }
+    48%    { opacity:0; }
+    100%   { transform: translateX(280px); opacity:0; }
+  }
+
+  /* Storia — orb floating in background */
+  #storia { overflow: hidden; }
+  #storia::after {
+    content: ''; position: absolute;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(184,150,90,0.07) 0%, transparent 70%);
+    top: 15%; right: -120px;
+    animation: orbFloat 9s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes orbFloat {
+    0%,100% { transform: translateY(0) scale(1); }
+    50%     { transform: translateY(-50px) scale(1.08); }
+  }
 
   /* ── RESPONSIVE ── */
   /* ══════════════════════════════════════════════════
@@ -1316,12 +1405,9 @@
   <div class="hero-bg-pattern"></div>
   <div class="hero-content">
     <p class="hero-tagline">L'Oasi del Ristoro della Buona Tavola · Ceprano (FR)</p>
-    <div class="hero-title-compose">
-      <div class="compose-piece p-tl"><h1 class="hero-title">Cotto <em>&</em><br>Servito</h1></div>
-      <div class="compose-piece p-tr" aria-hidden="true"><h1 class="hero-title">Cotto <em>&</em><br>Servito</h1></div>
-      <div class="compose-piece p-bl" aria-hidden="true"><h1 class="hero-title">Cotto <em>&</em><br>Servito</h1></div>
-      <div class="compose-piece p-br" aria-hidden="true"><h1 class="hero-title">Cotto <em>&</em><br>Servito</h1></div>
-      <div class="hero-icon-shine" aria-hidden="true"></div>
+    <div class="hero-title-reveal hero-title-shine" role="heading" aria-level="1" aria-label="Cotto &amp; Servito">
+      <div class="title-line-mask"><span class="hero-title">Cotto <em>&</em></span></div>
+      <div class="title-line-mask"><span class="hero-title-2">Servito</span></div>
     </div>
     <p class="hero-subtitle">Cucina artigianale, già pronta per te</p>
     <div class="hero-line">
@@ -2049,6 +2135,34 @@
   },{threshold:0.12});
   document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
 
+  /* ── Gallery stagger ── */
+  const galObs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const idx=Array.from(e.target.parentElement.children).indexOf(e.target);
+        e.target.style.transitionDelay=(idx*0.07)+'s';
+        e.target.classList.add('gal-visible');
+        galObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.08});
+  document.querySelectorAll('.gallery-item').forEach(el=>galObs.observe(el));
+
+  /* ── Product card stagger (chiamato dopo loadProducts) ── */
+  function initCardStagger(){
+    const cardObs=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting&&!e.target.classList.contains('card-visible')){
+          const idx=Array.from(e.target.parentElement.children).indexOf(e.target);
+          e.target.style.transitionDelay=(idx*0.08)+'s';
+          e.target.classList.add('card-visible');
+          cardObs.unobserve(e.target);
+        }
+      });
+    },{threshold:0.1,rootMargin:'0px 0px -20px 0px'});
+    document.querySelectorAll('.product-card').forEach(el=>cardObs.observe(el));
+  }
+
   /* ── Prodotti dinamici da products.json ── */
   /* ── Carousel helpers ── */
   function _isEmbed(u){ return /youtube\.com|youtu\.be|vimeo\.com/.test(u||''); }
@@ -2135,6 +2249,7 @@
         }).join('');
         grid.querySelectorAll('.product-card').forEach(el=>revealObs.observe(el));
       });
+      setTimeout(initCardStagger, 100);
     }catch(err){
       console.error('Errore caricamento prodotti:',err);
     }
