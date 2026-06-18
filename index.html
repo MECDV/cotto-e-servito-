@@ -353,7 +353,7 @@
   #storia {
     background: var(--white);
     padding: 9rem 2rem;
-    contain: layout style;
+    content-visibility: auto; contain-intrinsic-size: auto 900px;
     position: relative;
   }
   #storia::before {
@@ -403,7 +403,7 @@
   .since-badge span:last-child { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; line-height: 1; }
 
   /* ── TECNOLOGIA ── */
-  #tecnologia { background: var(--espresso); padding: 9rem 2rem; color: white; contain: layout style; }
+  #tecnologia { background: var(--espresso); padding: 9rem 2rem; color: white; content-visibility: auto; contain-intrinsic-size: auto 800px; }
   #tecnologia .section-label { color: var(--gold-light); }
   #tecnologia .section-title { color: white; }
   #tecnologia .section-title em { color: var(--gold-light); }
@@ -466,7 +466,7 @@
   .shelf-divider { width: 1px; height: 50px; background: rgba(184,150,90,0.2); flex-shrink: 0; }
 
   /* ── MENU / PRODOTTI ── */
-  #menu { background: var(--cream); padding: 9rem 2rem; contain: layout style; }
+  #menu { background: var(--cream); padding: 9rem 2rem; content-visibility: auto; contain-intrinsic-size: auto 1200px; }
   .menu-tabs {
     display: flex; gap: 0; margin: 3rem 0;
     border-bottom: 1px solid rgba(184,150,90,0.25);
@@ -524,7 +524,7 @@
   .price-sell { font-family: var(--font-display); font-size: 1.35rem; color: var(--red-it); font-weight: 600; letter-spacing: -0.01em; }
 
   /* ── GALLERIA ── */
-  #galleria { background: var(--espresso); padding: 9rem 2rem; color: white; }
+  #galleria { background: var(--espresso); padding: 9rem 2rem; color: white; content-visibility: auto; contain-intrinsic-size: auto 1000px; }
   #galleria .section-label { color: var(--gold-light); }
   #galleria .section-title { color: white; }
   .gallery-grid {
@@ -561,7 +561,7 @@
   }
 
   /* ── CONTATTI ── */
-  #contatti { background: var(--cream-warm); padding: 9rem 2rem; contain: layout style; }
+  #contatti { background: var(--cream-warm); padding: 9rem 2rem; content-visibility: auto; contain-intrinsic-size: auto 900px; }
   .contatti-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; margin-top: 4rem; align-items: start; }
   .contatti-info h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 300; color: var(--bark); margin-bottom: 2.5rem; }
   .contact-row { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(184,150,90,0.2); }
@@ -632,6 +632,7 @@
     position: absolute; border-radius: 50%;
     background: rgba(212,170,90,0.7);
     pointer-events: none; z-index: 1;
+    will-change: transform, opacity;
     animation: particleRise linear infinite;
   }
   @keyframes particleRise {
@@ -2422,9 +2423,8 @@
     }
   })();
 
-  /* ── Nav scroll ── */
+  /* ── Nav ── */
   const nav=document.querySelector('nav');
-  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60),{passive:true});
 
   /* ── Hero ── */
   document.getElementById('hero').classList.add('in-view');
@@ -2444,8 +2444,9 @@
   },{threshold:0.12});
   document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.reveal-clip').forEach(el=>revealObs.observe(el));
 
-  /* ── Parallax sezioni + storia image (un unico listener, niente getBCR su scroll) ── */
-  (function scrollParallax(){
+  /* ── Scroll unificato con RAF throttle (nav + progress + parallax) ── */
+  (function unifiedScroll(){
+    const scrollProg = document.getElementById('scroll-progress');
     const defs = [
       {sel:'#storia .section-inner',    speed:0.07},
       {sel:'#tecnologia .section-inner',speed:0.05},
@@ -2454,24 +2455,30 @@
     ];
     const pEls = defs.map(o=>({el:document.querySelector(o.sel),speed:o.speed,docTop:0,h:0})).filter(o=>o.el);
     const imgEl = document.querySelector('.storia-image-placeholder img');
-    let imgDocTop=0, imgH=0;
+    let imgDocTop=0,imgH=0;
 
     function calcOffsets(){
       pEls.forEach(o=>{ o.docTop=o.el.getBoundingClientRect().top+window.scrollY; o.h=o.el.offsetHeight; });
       if(imgEl){ const c=imgEl.closest('.storia-image-placeholder'); imgDocTop=c.getBoundingClientRect().top+window.scrollY; imgH=c.offsetHeight; }
     }
-    function onScroll(){
+
+    let rafPending=false;
+    function tick(){
+      rafPending=false;
       const sy=window.scrollY, vh=window.innerHeight;
-      pEls.forEach(({el,speed,docTop,h})=>{
-        el.style.transform=`translateY(${((docTop+h/2-sy)-vh/2)*speed}px)`;
-      });
+      /* Nav */
+      nav.classList.toggle('scrolled',sy>60);
+      /* Progress */
+      if(scrollProg) scrollProg.style.width=Math.min(sy/(document.documentElement.scrollHeight-vh)*100,100)+'%';
+      /* Parallax */
+      pEls.forEach(({el,speed,docTop,h})=>{ el.style.transform=`translateY(${((docTop+h/2-sy)-vh/2)*speed}px)`; });
       if(imgEl){ const pct=((imgDocTop+imgH/2-sy)-vh/2)/vh; imgEl.style.transform=`scale(1.12) translateY(${pct*22}px)`; }
     }
 
     calcOffsets();
-    window.addEventListener('resize', calcOffsets, {passive:true});
-    window.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
+    window.addEventListener('resize',()=>{ calcOffsets(); if(!rafPending){rafPending=true;requestAnimationFrame(tick);} },{passive:true});
+    window.addEventListener('scroll',()=>{ if(!rafPending){rafPending=true;requestAnimationFrame(tick);} },{passive:true});
+    tick();
   })();
 
   /* ── Particelle sottili in Storia e Tecnologia (6 per sezione) ── */
@@ -2488,12 +2495,6 @@
     }
   });
 
-  /* ── Scroll progress bar ── */
-  const scrollProg = document.getElementById('scroll-progress');
-  window.addEventListener('scroll', () => {
-    const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
-    if(scrollProg) scrollProg.style.width = Math.min(pct,100) + '%';
-  }, {passive:true});
 
   /* ── Confetti burst (40 pezzi) ── */
   (function confettiBurst(){
@@ -2576,43 +2577,30 @@
     }, 2200);
   })();
 
-  /* ── Cursor spotlight hero ── */
-  (function heroSpotlight(){
+  /* ── Spotlight + parallax hero (rect cached su enter/resize) ── */
+  (function heroInteraction(){
     const hero = document.getElementById('hero');
     if(!hero) return;
-    const spot = document.createElement('div');
-    spot.className = 'hero-spotlight';
-    hero.appendChild(spot);
-    hero.addEventListener('mousemove', e => {
-      const r = hero.getBoundingClientRect();
-      spot.style.left = (e.clientX - r.left) + 'px';
-      spot.style.top  = (e.clientY - r.top)  + 'px';
+    const spot    = document.createElement('div'); spot.className='hero-spotlight'; hero.appendChild(spot);
+    const content = hero.querySelector('.hero-content');
+    const blobG   = hero.querySelector('.hero-blob-gold');
+    const blobR   = hero.querySelector('.hero-blob-red');
+    let hr = hero.getBoundingClientRect();
+    window.addEventListener('resize',()=>{ hr=hero.getBoundingClientRect(); },{passive:true});
+    hero.addEventListener('mousemove', e=>{
+      const dx=e.clientX-hr.left, dy=e.clientY-hr.top;
+      spot.style.left=dx+'px'; spot.style.top=dy+'px';
+      if(content){ const cx=dx/hr.width-0.5,cy=dy/hr.height-0.5;
+        content.style.transform=`translate(${cx*14}px,${cy*10}px)`;
+        if(blobG) blobG.style.transform=`translate(${cx*50}px,${cy*35}px) scale(1.1)`;
+        if(blobR) blobR.style.transform=`translate(${-cx*40}px,${-cy*30}px) scale(1.08)`;
+      }
     });
-    hero.addEventListener('mouseleave', () => {
-      spot.style.left = '-500px';
-      spot.style.top  = '-500px';
-    });
-  })();
-
-  /* ── Mouse parallax hero ── */
-  (function heroParallax(){
-    const hero = document.getElementById('hero');
-    const content = hero?.querySelector('.hero-content');
-    const blobG = hero?.querySelector('.hero-blob-gold');
-    const blobR = hero?.querySelector('.hero-blob-red');
-    if(!hero||!content) return;
-    hero.addEventListener('mousemove', e => {
-      const r = hero.getBoundingClientRect();
-      const cx = (e.clientX-r.left)/r.width  - 0.5;
-      const cy = (e.clientY-r.top) /r.height - 0.5;
-      content.style.transform = `translate(${cx*14}px,${cy*10}px)`;
-      if(blobG) blobG.style.transform = `translate(${cx*50}px,${cy*35}px) scale(1.1)`;
-      if(blobR) blobR.style.transform = `translate(${-cx*40}px,${-cy*30}px) scale(1.08)`;
-    });
-    hero.addEventListener('mouseleave', () => {
-      content.style.transform = '';
-      if(blobG) blobG.style.transform = '';
-      if(blobR) blobR.style.transform = '';
+    hero.addEventListener('mouseleave',()=>{
+      spot.style.left='-500px'; spot.style.top='-500px';
+      if(content) content.style.transform='';
+      if(blobG) blobG.style.transform='';
+      if(blobR) blobR.style.transform='';
     });
   })();
 
@@ -2626,37 +2614,35 @@
     }, 4500);
   })();
 
-  /* ── Card 3-D tilt ── */
+  /* ── Card 3-D tilt (getBCR solo su mouseenter) ── */
   (function cardTilt(){
-    function applyTilt(e){
-      const r = this.getBoundingClientRect();
-      const cx = (e.clientX-r.left)/r.width  - 0.5;
-      const cy = (e.clientY-r.top) /r.height - 0.5;
-      this.style.transform=`translateY(-5px) rotateX(${-cy*10}deg) rotateY(${cx*10}deg) scale(1.02)`;
-    }
-    function resetTilt(){ this.style.transform=''; }
-    document.addEventListener('mouseover', e => {
-      const card = e.target.closest('.product-card');
+    document.addEventListener('mouseover', e=>{
+      const card=e.target.closest('.product-card');
       if(card&&!card._tilt){
         card._tilt=true;
-        card.addEventListener('mousemove',applyTilt);
-        card.addEventListener('mouseleave',resetTilt);
+        let r=null;
+        card.addEventListener('mouseenter',function(){ r=this.getBoundingClientRect(); });
+        card.addEventListener('mousemove',function(e){
+          if(!r) return;
+          const cx=(e.clientX-r.left)/r.width-0.5, cy=(e.clientY-r.top)/r.height-0.5;
+          this.style.transform=`translateY(-5px) rotateX(${-cy*10}deg) rotateY(${cx*10}deg) scale(1.02)`;
+        });
+        card.addEventListener('mouseleave',function(){ this.style.transform=''; r=null; });
       }
     });
   })();
 
-  /* ── Bottoni magnetici ── */
+  /* ── Bottoni magnetici (getBCR solo su mouseenter) ── */
   (function magneticButtons(){
     document.querySelectorAll('.btn-primary,.btn-secondary').forEach(btn=>{
+      let r=null;
+      btn.addEventListener('mouseenter',function(){ r=this.getBoundingClientRect(); });
       btn.addEventListener('mousemove',function(e){
-        const r=this.getBoundingClientRect();
-        const cx=e.clientX-r.left-r.width/2;
-        const cy=e.clientY-r.top-r.height/2;
-        this.style.transform=`translate(${cx*0.18}px,${cy*0.28}px)`;
+        if(!r) return;
+        this.style.transform=`translate(${(e.clientX-r.left-r.width/2)*0.18}px,${(e.clientY-r.top-r.height/2)*0.28}px)`;
       });
       btn.addEventListener('mouseleave',function(){
-        this.style.transform='';
-        this.style.transition='transform 0.5s var(--ease-out)';
+        r=null; this.style.transform=''; this.style.transition='transform 0.5s var(--ease-out)';
       });
     });
   })();
@@ -2714,7 +2700,7 @@
   }
   function _slideHtml(m,alt){
     const src=m.src||'';
-    if(m.type!=='video') return `<div class="media-slide"><img src="${src}" alt="${alt}" loading="lazy"></div>`;
+    if(m.type!=='video') return `<div class="media-slide"><img src="${src}" alt="${alt}" loading="lazy" decoding="async"></div>`;
     if(_isEmbed(src)) return `<div class="media-slide"><iframe src="${_embedUrl(src)}" frameborder="0" allow="autoplay;fullscreen" allowfullscreen></iframe></div>`;
     return `<div class="media-slide"><video src="${src}" autoplay muted loop playsinline></video></div>`;
   }
