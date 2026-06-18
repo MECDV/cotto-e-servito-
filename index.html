@@ -1124,6 +1124,12 @@
   .payment-info {
     border: 1px solid rgba(184,150,90,0.3); padding: 1.5rem; margin-bottom: 1.5rem;
   }
+  /* Shipping calc */
+  .shipping-calc-box { background:var(--cream); border:1px solid rgba(184,150,90,0.25); border-radius:10px; padding:1rem 1.2rem; margin-top:1rem; }
+  .btn-geolocate { background:var(--espresso); color:var(--white); border:none; padding:0.65rem 1.2rem; border-radius:7px; font-family:var(--font-b); font-size:0.82rem; font-weight:500; cursor:pointer; letter-spacing:0.05em; transition:background 0.2s; }
+  .btn-geolocate:hover { background:var(--bark); }
+  .btn-geolocate:disabled { background:#999; cursor:not-allowed; }
+  .shipping-msg { margin-top:0.65rem; font-size:0.82rem; line-height:1.5; min-height:1.2rem; }
   .payment-method {
     display: flex; align-items: flex-start; gap: 1rem;
     padding: 1.2rem; border: 1px solid rgba(184,150,90,0.2); margin-bottom: 0.8rem;
@@ -1613,9 +1619,12 @@
             </select>
           </div>
         </div>
-        <p style="font-size:0.78rem;color:var(--text-soft);opacity:0.7;margin-top:0.5rem;">
-          ⚠️ La consegna è disponibile entro 15 km da Ceprano. Ti contatteremo per confermare la disponibilità.
-        </p>
+        <div class="shipping-calc-box">
+          <div style="font-size:0.75rem;color:var(--text-soft);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.6rem;font-weight:600;">🚚 Spese di consegna</div>
+          <button type="button" id="shipping-btn" class="btn-geolocate" onclick="rilevaPosizione()">📍 Rileva la mia posizione</button>
+          <div class="shipping-msg" id="shipping-msg">Clicca per calcolare le spese in base alla tua distanza dal negozio.</div>
+          <div style="margin-top:0.5rem;font-size:0.72rem;color:var(--text-soft);opacity:0.75;">Tariffe: 0–5 km €3,00 · 5–10 km €4,00 · 10–15 km €5,00 · 15–20 km €6,00 · oltre 20 km non disponibile</div>
+        </div>
       </div>
 
       <div class="checkout-nav">
@@ -1769,12 +1778,15 @@
       : `Consegna a domicilio\nIndirizzo: ${document.getElementById('f-indirizzo')?.value} ${document.getElementById('f-citta')?.value} ${document.getElementById('f-cap')?.value}\nData: ${document.getElementById('delivery-date')?.value || 'da concordare'} · Fascia: ${document.getElementById('delivery-time')?.value}`;
     const pagamentoTxt = paymentMode === 'contanti' ? 'Contanti alla consegna/ritiro' : 'Bonifico bancario anticipato\n  Intestatario: Cotto & Servito\n  IBAN: IT32 J030 6974 4006 2502 1445 465\n  Causale: Ordine Cotto & Servito — '+nome;
     const note = document.getElementById('f-note')?.value || '—';
+    const subtotalBody = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const shippingBody = deliveryMode==='consegna' ? shippingCost : 0;
+    const shippingLine = shippingBody>0 ? `\nSpese consegna: €${shippingBody.toFixed(2)}` : '';
     return `Nuovo ordine ricevuto dal sito Cotto & Servito!\n\n` +
       `═══════════════════════════\n` +
       `N° ORDINE: ${ordN}\n` +
       `═══════════════════════════\n\n` +
       `CLIENTE\nNome: ${nome}\nTelefono: ${tel}\nEmail: ${email || '—'}\n\n` +
-      `PRODOTTI ORDINATI\n${righe}\n\nTOTALE: €${total}\n\n` +
+      `PRODOTTI ORDINATI\n${righe}\n\nSubtotale: €${subtotalBody.toFixed(2)}${shippingLine}\nTOTALE: €${total}\n\n` +
       `CONSEGNA\n${consegnaTxt}\n\n` +
       `PAGAMENTO\n${pagamentoTxt}\n\n` +
       `NOTE\n${note}`;
@@ -1793,7 +1805,7 @@
     const tel     = document.getElementById('f-tel').value.trim();
     const email   = document.getElementById('f-email').value.trim();
     const nomeCompleto = (nome + ' ' + cognome).trim();
-    const total = cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2).replace('.',',');
+    const total = (cart.reduce((s,i)=>s+i.price*i.qty,0) + (deliveryMode==='consegna'?shippingCost:0)).toFixed(2).replace('.',',');
 
     if (typeof emailjs === 'undefined') {
       console.error('❌ EmailJS SDK non caricato — disabilita adblocker e ricarica la pagina');
@@ -1832,7 +1844,9 @@
     if (!email || !email.includes('@')) return;
 
     const nomeCompleto = (nome + ' ' + cognome).trim();
-    const total = cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2).replace('.',',');
+    const subtotalEmail = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const shippingEmail = deliveryMode==='consegna' ? shippingCost : 0;
+    const total = (subtotalEmail + shippingEmail).toFixed(2).replace('.',',');
     const righe = cart.map(i=>`• ${i.name} × ${i.qty}  →  €${(i.price*i.qty).toFixed(2)}`).join('\n');
     const consegnaTxt = deliveryMode==='ritiro'
       ? `Ritiro in negozio — Via Ori Martin n.4, Ceprano (FR)\nFascia oraria: ${selectedTime}\nData: ${document.getElementById('pickup-date').value||'da concordare'}`
@@ -1845,7 +1859,7 @@
       `═══════════════════════════\n` +
       `N° ORDINE: ${ordN}\n` +
       `═══════════════════════════\n\n` +
-      `PRODOTTI ORDINATI\n${righe}\n\nTOTALE: €${total}\n\n` +
+      `PRODOTTI ORDINATI\n${righe}\n\n${shippingEmail>0?`Subtotale: €${subtotalEmail.toFixed(2)}\nSpese consegna: €${shippingEmail.toFixed(2)}\n`:''}TOTALE: €${total}\n\n` +
       `CONSEGNA\n${consegnaTxt}\n\n` +
       `PAGAMENTO\n${pagamentoTxt}\n\n` +
       `Per qualsiasi informazione contattaci:\n` +
@@ -2108,6 +2122,7 @@
   let paymentMode = 'contanti';
   let selectedTime = '09:00–11:00';
   let currentStep = 1;
+  let shippingCost = 0;
 
   const cartFab = document.getElementById('cartFab');
   const cartDrawer = document.getElementById('cartDrawer');
@@ -2299,12 +2314,16 @@
   }
 
   function renderCheckoutSummary(){
-    const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
-    const delivery = deliveryMode==='consegna' ? '<div class="summary-item"><span>Consegna</span><span>Da concordare</span></div>' : '';
+    const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const shipping = deliveryMode==='consegna' ? shippingCost : 0;
+    const total = subtotal + shipping;
+    const shippingRow = deliveryMode==='consegna'
+      ? `<div class="summary-item"><span>🚚 Spese di consegna</span><span>${shipping>0?'€'+shipping.toFixed(2).replace('.',','):'da calcolare'}</span></div>`
+      : '';
     document.getElementById('checkout-summary').innerHTML = `
       <h4>Riepilogo ordine</h4>
       ${cart.map(i=>`<div class="summary-item"><span>${i.name} × ${i.qty}</span><span>€${(i.price*i.qty).toFixed(2).replace('.',',')}</span></div>`).join('')}
-      ${delivery}
+      ${shippingRow}
       <div class="summary-total"><span>Totale</span><span class="tot">€${total.toFixed(2).replace('.',',')}</span></div>
     `;
     document.getElementById('bonifico-importo').textContent = '€'+total.toFixed(2).replace('.',',');
@@ -2312,14 +2331,16 @@
 
   function renderConfirmation(){
     const nome = document.getElementById('f-nome').value;
-    const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const shipping = deliveryMode==='consegna' ? shippingCost : 0;
+    const total = subtotal + shipping;
     const ordN = 'CS-' + Date.now().toString().slice(-6);
     document.getElementById('order-num').textContent = 'N° ordine: ' + ordN;
     let msg = '';
     if(paymentMode==='contanti'){
       msg = deliveryMode==='ritiro'
         ? `Grazie ${nome}! Il tuo ordine è confermato. Potrai pagare in contanti al momento del ritiro in negozio.`
-        : `Grazie ${nome}! Il tuo ordine è confermato. Pagherai €${total.toFixed(2).replace('.',',')} in contanti alla consegna.`;
+        : `Grazie ${nome}! Il tuo ordine è confermato. Pagherai €${total.toFixed(2).replace('.',',')} in contanti alla consegna (di cui €${shipping.toFixed(2).replace('.',',')} spese di consegna).`;
     } else {
       msg = `Grazie ${nome}! Effettua il bonifico di €${total.toFixed(2).replace('.',',')} a: Cotto & Servito — IBAN IT32 J030 6974 4006 2502 1445 465 — causale: Ordine Cotto & Servito – ${nome}. L'ordine sarà confermato alla ricezione del pagamento.`;
     }
@@ -2385,9 +2406,47 @@
     }
   }
 
+  /* ── Spese di consegna ── */
+  const RISTORANTE_LAT = 41.5471, RISTORANTE_LON = 13.5136; // Ceprano (FR)
+  function haversineKm(la1,lo1,la2,lo2){
+    const R=6371, dL=(la2-la1)*Math.PI/180, dO=(lo2-lo1)*Math.PI/180;
+    const a=Math.sin(dL/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dO/2)**2;
+    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  }
+  function tariffaKm(km){ if(km<=5)return 3; if(km<=10)return 4; if(km<=15)return 5; if(km<=20)return 6; return null; }
+  function showShippingMsg(txt,ok){ const el=document.getElementById('shipping-msg'); el.textContent=txt; el.style.color=ok?'green':ok===false?'var(--red)':'var(--text-soft)'; }
+  function rilevaPosizione(){
+    if(!navigator.geolocation){ showShippingMsg('❌ Geolocalizzazione non disponibile. Contattaci per confermare le spese.',false); return; }
+    const btn=document.getElementById('shipping-btn');
+    btn.disabled=true; btn.textContent='⌛ Rilevamento…';
+    navigator.geolocation.getCurrentPosition(
+      pos=>{
+        const km=haversineKm(pos.coords.latitude,pos.coords.longitude,RISTORANTE_LAT,RISTORANTE_LON);
+        const tariffa=tariffaKm(km);
+        btn.disabled=false; btn.textContent='📍 Aggiorna posizione';
+        if(tariffa===null){
+          shippingCost=0;
+          showShippingMsg(`❌ Zona non coperta (${km.toFixed(1)} km da noi). Consegna disponibile solo entro 20 km.`,false);
+        } else {
+          shippingCost=tariffa;
+          showShippingMsg(`✅ ${km.toFixed(1)} km da noi — Spese di consegna: €${tariffa.toFixed(2).replace('.',',')}`,true);
+          renderCheckoutSummary();
+        }
+      },
+      ()=>{
+        shippingCost=3;
+        showShippingMsg('⚠️ Posizione non rilevata — applicate spese minime €3,00. Ti contatteremo per confermare.',null);
+        document.getElementById('shipping-btn').disabled=false;
+        document.getElementById('shipping-btn').textContent='📍 Riprova';
+        renderCheckoutSummary();
+      }
+    );
+  }
+
   /* Delivery selection */
   function selectDelivery(mode){
     deliveryMode = mode;
+    if(mode==='ritiro'){ shippingCost=0; }
     document.getElementById('opt-ritiro').classList.toggle('selected', mode==='ritiro');
     document.getElementById('opt-consegna').classList.toggle('selected', mode==='consegna');
     document.getElementById('ritiro-info').style.display = mode==='ritiro' ? '' : 'none';
