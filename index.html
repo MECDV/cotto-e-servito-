@@ -196,30 +196,31 @@
   }
   .hero-title em { font-style: italic; color: var(--gold-light); font-weight: 300; }
 
-  /* ── Icona hero composizione/scomposizione ── */
-  .hero-icon-wrap {
+  /* ── Titolo hero composizione/scomposizione ── */
+  .hero-title-compose {
+    display: grid;
     position: relative;
-    width: 220px; height: 220px;
-    margin: 1.8rem auto 2.2rem;
+    margin: 0 auto 1rem;
     opacity: 0;
-    animation: fadeUp 1s 0.7s var(--ease-out) forwards;
+    animation: fadeUp 1s 0.4s var(--ease-out) forwards;
   }
-  .compose-piece {
-    position: absolute; inset: 0;
-    border-radius: 50%; overflow: hidden;
+  .hero-title-compose .compose-piece {
+    grid-area: 1 / 1;
+    overflow: hidden;
   }
-  .hero-icon-img {
-    position: absolute;
-    width: 660px; height: auto;
-    left: -222px; top: -68px;
-    filter: brightness(0);
-    pointer-events: none;
+  .hero-title-compose .hero-title {
+    opacity: 1 !important;
+    animation: none !important;
+    margin: 0; padding: 0.4rem 0;
+  }
+  .hero-title-compose .hero-icon-shine {
+    grid-area: 1 / 1;
   }
   /* Quadranti — parti volano da lontano e si assemblano */
-  .p-tl { clip-path: inset(0 50% 50% 0 round 50%); animation: sc-tl 7s cubic-bezier(0.4,0,0.2,1) infinite; }
-  .p-tr { clip-path: inset(0 0 50% 50% round 50%); animation: sc-tr 7s cubic-bezier(0.4,0,0.2,1) infinite; }
-  .p-bl { clip-path: inset(50% 50% 0 0 round 50%); animation: sc-bl 7s cubic-bezier(0.4,0,0.2,1) infinite; }
-  .p-br { clip-path: inset(50% 0 0 50% round 50%); animation: sc-br 7s cubic-bezier(0.4,0,0.2,1) infinite; }
+  .p-tl { clip-path: inset(0 50% 50% 0); animation: sc-tl 7s cubic-bezier(0.4,0,0.2,1) infinite; }
+  .p-tr { clip-path: inset(0 0 50% 50%); animation: sc-tr 7s cubic-bezier(0.4,0,0.2,1) infinite; }
+  .p-bl { clip-path: inset(50% 50% 0 0); animation: sc-bl 7s cubic-bezier(0.4,0,0.2,1) infinite; }
+  .p-br { clip-path: inset(50% 0 0 50%); animation: sc-br 7s cubic-bezier(0.4,0,0.2,1) infinite; }
   @keyframes sc-tl {
     0%,5%  { transform:translate(-120px,-90px) scale(0.4) rotate(-25deg); opacity:0; filter:blur(10px); }
     20%    { transform:translate(0,0) scale(1) rotate(0deg);              opacity:1; filter:blur(0); }
@@ -1315,13 +1316,12 @@
   <div class="hero-bg-pattern"></div>
   <div class="hero-content">
     <p class="hero-tagline">L'Oasi del Ristoro della Buona Tavola · Ceprano (FR)</p>
-    <h1 class="hero-title">Cotto <em>&</em><br>Servito</h1>
-    <div class="hero-icon-wrap">
-      <div class="compose-piece p-tl"><img src="foto/logo-cotto-e-servito.png" alt="" class="hero-icon-img"></div>
-      <div class="compose-piece p-tr"><img src="foto/logo-cotto-e-servito.png" alt="" class="hero-icon-img"></div>
-      <div class="compose-piece p-bl"><img src="foto/logo-cotto-e-servito.png" alt="" class="hero-icon-img"></div>
-      <div class="compose-piece p-br"><img src="foto/logo-cotto-e-servito.png" alt="" class="hero-icon-img"></div>
-      <div class="hero-icon-shine"></div>
+    <div class="hero-title-compose">
+      <div class="compose-piece p-tl"><h1 class="hero-title">Cotto <em>&</em><br>Servito</h1></div>
+      <div class="compose-piece p-tr" aria-hidden="true"><h1 class="hero-title">Cotto <em>&</em><br>Servito</h1></div>
+      <div class="compose-piece p-bl" aria-hidden="true"><h1 class="hero-title">Cotto <em>&</em><br>Servito</h1></div>
+      <div class="compose-piece p-br" aria-hidden="true"><h1 class="hero-title">Cotto <em>&</em><br>Servito</h1></div>
+      <div class="hero-icon-shine" aria-hidden="true"></div>
     </div>
     <p class="hero-subtitle">Cucina artigianale, già pronta per te</p>
     <div class="hero-line">
