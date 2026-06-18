@@ -2123,6 +2123,7 @@
   let selectedTime = '09:00–11:00';
   let currentStep = 1;
   let shippingCost = 0;
+  let shippingBlocked = false;
 
   const cartFab = document.getElementById('cartFab');
   const cartDrawer = document.getElementById('cartDrawer');
@@ -2270,6 +2271,11 @@
   }
 
   function goStep(n){
+    // Blocca se consegna fuori zona (>100km)
+    if(n===2 && deliveryMode==='consegna' && shippingBlocked){
+      showShippingMsg('❌ Zona non coperta. Non è possibile procedere con la consegna oltre 100 km.',false);
+      return;
+    }
     // Validate step 2 required fields before going to step 3
     if(n===3){
         clearAllErrors();
@@ -2425,10 +2431,10 @@
         const tariffa=tariffaKm(km);
         btn.disabled=false; btn.textContent='📍 Aggiorna posizione';
         if(tariffa===null){
-          shippingCost=0;
+          shippingCost=0; shippingBlocked=true;
           showShippingMsg(`❌ Zona non coperta (${km.toFixed(1)} km da noi). Consegna disponibile solo entro 100 km.`,false);
         } else {
-          shippingCost=tariffa;
+          shippingCost=tariffa; shippingBlocked=false;
           showShippingMsg(`✅ ${km.toFixed(1)} km da noi — Spese di consegna: €${tariffa.toFixed(2).replace('.',',')}`,true);
           renderCheckoutSummary();
         }
@@ -2446,7 +2452,7 @@
   /* Delivery selection */
   function selectDelivery(mode){
     deliveryMode = mode;
-    if(mode==='ritiro'){ shippingCost=0; }
+    if(mode==='ritiro'){ shippingCost=0; shippingBlocked=false; }
     document.getElementById('opt-ritiro').classList.toggle('selected', mode==='ritiro');
     document.getElementById('opt-consegna').classList.toggle('selected', mode==='consegna');
     document.getElementById('ritiro-info').style.display = mode==='ritiro' ? '' : 'none';
