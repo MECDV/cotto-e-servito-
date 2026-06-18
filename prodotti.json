@@ -28,12 +28,18 @@
         "img": "https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80"
       },
       {
-        "id": "lasagna-porcini",
+        "id": "lasagna-porcini-e-salsiccia",
         "name": "Lasagna Porcini e Salsiccia",
-        "description": "Sfoglia all'uovo con funghi porcini, salsiccia di suino e besciamella profumata.",
-        "weight": "400g · monoporzione",
+        "description": "INGREDIENTI: Sfoglia:(Acqua, Farina e uova.) FUNGHI., besciamella olio extra vergine di oliva, sale Mozzarella, Parmigiano reggiano",
+        "weight": "500g · monoporzione",
         "price": 5.7,
-        "img": "https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80"
+        "img": "https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80",
+        "media": [
+          {
+            "type": "image",
+            "src": "https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80"
+          }
+        ]
       },
       {
         "id": "cannelloni-alla-carne",
