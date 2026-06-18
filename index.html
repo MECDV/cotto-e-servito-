@@ -1710,10 +1710,12 @@
         </div>
       </div>
       <div class="bonifico-details" id="bonifico-box" style="display:none;">
-        <strong>Intestatario:</strong> Rita Fortuna — L'Oasi della Buona Tavola<br>
-        <strong>IBAN:</strong> IT00 X000 0000 0000 0000 0000 000 <span style="opacity:0.5;font-size:0.75rem;">(da inserire)</span><br>
-        <strong>Causale:</strong> Ordine Cotto &amp; Servito — [tuo nome]<br>
-        <strong>Importo:</strong> <span id="bonifico-importo"></span>
+        <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.8rem;font-weight:600;">Coordinate bancarie</div>
+        <div style="margin-bottom:0.55rem;"><span style="font-size:0.72rem;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.1em;">Intestatario</span><br><strong style="font-size:0.95rem;">Cotto &amp; Servito</strong></div>
+        <div style="margin-bottom:0.55rem;"><span style="font-size:0.72rem;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.1em;">IBAN</span><br><strong style="font-size:0.95rem;letter-spacing:0.08em;font-family:monospace;">IT32 J030 6974 4006 2502 1445 465</strong></div>
+        <div style="margin-bottom:0.55rem;"><span style="font-size:0.72rem;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.1em;">Causale</span><br><strong style="font-size:0.95rem;">Ordine Cotto &amp; Servito — [il tuo nome]</strong></div>
+        <div><span style="font-size:0.72rem;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.1em;">Importo da versare</span><br><strong style="font-size:1.1rem;color:var(--red);" id="bonifico-importo"></strong></div>
+        <div style="margin-top:1rem;padding-top:0.8rem;border-top:1px solid rgba(184,150,90,0.2);font-size:0.78rem;color:var(--text-soft);line-height:1.6;">⚠️ L'ordine sarà confermato dopo la ricezione del bonifico. Ti contatteremo entro 24h.</div>
       </div>
       <div class="checkout-nav">
         <button class="btn-back" onclick="goStep(2)">← Indietro</button>
@@ -1765,7 +1767,7 @@
     const consegnaTxt = deliveryMode === 'ritiro'
       ? `Ritiro in negozio — orario: ${selectedTime}\nData: ${document.getElementById('pickup-date').value || 'da concordare'}`
       : `Consegna a domicilio\nIndirizzo: ${document.getElementById('f-indirizzo')?.value} ${document.getElementById('f-citta')?.value} ${document.getElementById('f-cap')?.value}\nData: ${document.getElementById('delivery-date')?.value || 'da concordare'} · Fascia: ${document.getElementById('delivery-time')?.value}`;
-    const pagamentoTxt = paymentMode === 'contanti' ? 'Contanti alla consegna/ritiro' : 'Bonifico bancario anticipato';
+    const pagamentoTxt = paymentMode === 'contanti' ? 'Contanti alla consegna/ritiro' : 'Bonifico bancario anticipato\n  Intestatario: Cotto & Servito\n  IBAN: IT32 J030 6974 4006 2502 1445 465\n  Causale: Ordine Cotto & Servito — '+nome;
     const note = document.getElementById('f-note')?.value || '—';
     return `Nuovo ordine ricevuto dal sito Cotto & Servito!\n\n` +
       `═══════════════════════════\n` +
@@ -1835,7 +1837,7 @@
     const consegnaTxt = deliveryMode==='ritiro'
       ? `Ritiro in negozio — Via Ori Martin n.4, Ceprano (FR)\nFascia oraria: ${selectedTime}\nData: ${document.getElementById('pickup-date').value||'da concordare'}`
       : `Consegna a domicilio\nIndirizzo: ${document.getElementById('f-indirizzo')?.value} ${document.getElementById('f-citta')?.value}\nData: ${document.getElementById('delivery-date')?.value||'da concordare'} · Fascia: ${document.getElementById('delivery-time')?.value}`;
-    const pagamentoTxt = paymentMode==='contanti' ? 'Contanti alla consegna/ritiro' : 'Bonifico bancario anticipato';
+    const pagamentoTxt = paymentMode==='contanti' ? 'Contanti alla consegna/ritiro' : 'Bonifico bancario anticipato\n  Intestatario: Cotto & Servito\n  IBAN: IT32 J030 6974 4006 2502 1445 465\n  Causale: Ordine Cotto & Servito — '+nomeCompleto;
 
     const body =
       `Gentile ${nomeCompleto},\n\n` +
@@ -2319,7 +2321,7 @@
         ? `Grazie ${nome}! Il tuo ordine è confermato. Potrai pagare in contanti al momento del ritiro in negozio.`
         : `Grazie ${nome}! Il tuo ordine è confermato. Pagherai €${total.toFixed(2).replace('.',',')} in contanti alla consegna.`;
     } else {
-      msg = `Grazie ${nome}! Riceverai le istruzioni per il bonifico bancario. L'ordine sarà confermato alla ricezione del pagamento (€${total.toFixed(2).replace('.',',')}).`;
+      msg = `Grazie ${nome}! Effettua il bonifico di €${total.toFixed(2).replace('.',',')} a: Cotto & Servito — IBAN IT32 J030 6974 4006 2502 1445 465 — causale: Ordine Cotto & Servito – ${nome}. L'ordine sarà confermato alla ricezione del pagamento.`;
     }
     document.getElementById('success-msg').textContent = msg;
 
