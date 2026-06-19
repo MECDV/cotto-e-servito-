@@ -2964,8 +2964,8 @@
           const firstImg = media.find(m=>m.type==='image');
           const imgEsc   = (firstImg?.src||p.img||'').replace(/`/g,"'");
           const wEsc     = (p.weight||'').replace(/`/g,"'");
-          const pid      = p.id || ('p'+i);
-          /* Salva nel db globale */
+          const pid      = i;
+          /* Usa l'indice numerico come chiave — evita problemi se ci sono id duplicati nel JSON */
           window._prodDB[cat][pid] = {name:p.name||'',description:p.description||'',weight:p.weight||'',price:Number(p.price),media,img:firstImg?.src||p.img||''};
 
           let mediaHtml;
