@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /gestione.html
+
+Sitemap: https://mecdv.github.io/cotto-e-servito-/sitemap.xml
