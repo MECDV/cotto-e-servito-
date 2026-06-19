@@ -1720,6 +1720,72 @@
   }
   .btn-close-modal:hover { background: var(--bark); color: white; }
 
+  /* ── MODAL SCHEDA PRODOTTO ── */
+  .prod-modal-overlay{position:fixed;inset:0;z-index:600;background:rgba(26,15,6,.75);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .35s var(--ease-out);}
+  .prod-modal-overlay.open{opacity:1;pointer-events:all;}
+  .prod-modal{background:var(--white);max-width:980px;width:100%;max-height:90vh;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;position:relative;transform:translateY(30px) scale(.97);transition:transform .4s var(--ease-out);scrollbar-width:thin;scrollbar-color:rgba(184,150,90,.3) transparent;}
+  .prod-modal-overlay.open .prod-modal{transform:translateY(0) scale(1);}
+  .prod-modal-close{position:absolute;top:1.2rem;right:1.2rem;z-index:10;width:36px;height:36px;background:var(--cream);border:1px solid rgba(184,150,90,.3);cursor:none;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+  .prod-modal-close:hover{background:var(--gold-pale);}
+  .prod-modal-close svg{width:14px;height:14px;stroke:var(--bark);stroke-width:2;fill:none;}
+  /* Galleria sx */
+  .pm-gallery{padding:2rem;border-right:1px solid rgba(184,150,90,.12);display:flex;flex-direction:column;gap:1rem;position:sticky;top:0;align-self:start;}
+  .pm-main-img{width:100%;aspect-ratio:1;background:var(--gold-pale);overflow:hidden;position:relative;}
+  .pm-main-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease-out);}
+  .pm-main-img:hover img{transform:scale(1.04);}
+  .pm-thumbs{display:flex;gap:.6rem;flex-wrap:wrap;}
+  .pm-thumb{width:68px;height:68px;background:var(--gold-pale);border:2px solid transparent;overflow:hidden;cursor:none;transition:border-color .2s,transform .2s;flex-shrink:0;}
+  .pm-thumb:hover{border-color:var(--gold);transform:scale(1.05);}
+  .pm-thumb.active{border-color:var(--red-it);}
+  .pm-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  /* Info dx */
+  .pm-info{padding:2.5rem 2rem 2.5rem 2.5rem;display:flex;flex-direction:column;}
+  .pm-category{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--green-it);font-weight:500;margin-bottom:.8rem;}
+  .pm-name{font-family:var(--font-display);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:300;color:var(--bark);line-height:1.15;margin-bottom:.8rem;}
+  .pm-stars{display:flex;align-items:center;gap:.5rem;margin-bottom:1.2rem;font-size:.78rem;color:var(--text-soft);}
+  .pm-stars-row{color:var(--gold);font-size:.9rem;letter-spacing:.05em;}
+  .pm-price-box{border-top:1px solid rgba(184,150,90,.2);border-bottom:1px solid rgba(184,150,90,.2);padding:1.2rem 0;margin-bottom:1.2rem;}
+  .pm-price{font-family:var(--font-display);font-size:2.4rem;color:var(--red-it);font-weight:600;letter-spacing:-.02em;line-height:1;}
+  .pm-price-sub{font-size:.7rem;color:var(--text-soft);margin-top:.3rem;letter-spacing:.05em;}
+  .pm-weight{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold-pale);padding:.4rem 1rem;font-size:.75rem;letter-spacing:.08em;color:var(--bark-mid);font-weight:500;margin-bottom:1.2rem;}
+  .pm-desc-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-soft);font-weight:600;margin-bottom:.5rem;}
+  .pm-desc{font-size:.88rem;color:var(--text-soft);line-height:1.8;margin-bottom:1.2rem;}
+  .pm-disponibile{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--green-it);font-weight:600;margin-bottom:1.2rem;}
+  .pm-disponibile::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green-it);flex-shrink:0;}
+  /* Quantità */
+  .pm-qty-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-soft);font-weight:600;margin-bottom:.6rem;}
+  .pm-qty{display:flex;align-items:center;gap:0;margin-bottom:1.2rem;width:fit-content;border:1px solid rgba(184,150,90,.35);}
+  .pm-qty-btn{width:44px;height:44px;background:var(--cream-warm);border:none;cursor:none;font-size:1.3rem;color:var(--bark);font-weight:300;transition:background .2s;display:flex;align-items:center;justify-content:center;}
+  .pm-qty-btn:hover{background:var(--gold-pale);}
+  .pm-qty-val{min-width:52px;height:44px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.3rem;color:var(--bark);font-weight:400;border-left:1px solid rgba(184,150,90,.25);border-right:1px solid rgba(184,150,90,.25);}
+  /* Calcolatore */
+  .pm-calc{background:var(--espresso);padding:1.1rem 1.3rem;margin-bottom:1.2rem;border-left:3px solid var(--gold);}
+  .pm-calc-header{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:.8rem;}
+  .pm-calc-row{display:flex;justify-content:space-between;align-items:center;font-size:.83rem;color:rgba(255,255,255,.6);margin-bottom:.3rem;}
+  .pm-calc-unit{color:rgba(255,255,255,.7);}
+  .pm-calc-total-row{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(184,150,90,.25);padding-top:.6rem;margin-top:.3rem;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);}
+  .pm-calc-total{font-family:var(--font-display);font-size:1.8rem;font-weight:300;color:var(--gold-light);letter-spacing:-.01em;line-height:1;transition:transform .2s var(--ease-out),color .2s;}
+  .pm-calc-total.bump{transform:scale(1.1);color:#f0d080;}
+  .pm-calc-note{font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.6rem;font-style:italic;min-height:.9rem;}
+  /* Bottoni */
+  .pm-actions{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.2rem;}
+  .pm-btn-cart{width:100%;padding:1.1rem;background:var(--red-it);color:white;border:none;cursor:none;font-family:var(--font-body);font-size:.73rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;transition:background .3s;display:flex;align-items:center;justify-content:center;gap:.6rem;}
+  .pm-btn-cart:hover{background:#a0202a;}
+  .pm-btn-cart svg{width:15px;height:15px;stroke:white;fill:none;stroke-width:2;}
+  .pm-btn-wa{width:100%;padding:1rem;background:#25D366;color:white;border:none;cursor:none;font-family:var(--font-body);font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:background .3s;}
+  .pm-btn-wa:hover{background:#1ea952;}
+  /* Info consegna */
+  .pm-delivery{background:var(--cream);border:1px solid rgba(184,150,90,.15);padding:1rem;display:flex;flex-direction:column;gap:.5rem;}
+  .pm-del-row{display:flex;align-items:flex-start;gap:.7rem;font-size:.76rem;color:var(--text-soft);}
+  .pm-del-row strong{color:var(--bark);display:block;font-size:.7rem;letter-spacing:.04em;}
+  .pm-del-icon{font-size:.95rem;flex-shrink:0;}
+  /* Card — overlay vedi dettagli */
+  .product-card{cursor:none;}
+  .card-detail-overlay{position:absolute;inset:0;background:rgba(26,15,6,.42);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;z-index:1;pointer-events:none;}
+  .product-card:hover .card-detail-overlay{opacity:1;}
+  .card-detail-overlay span{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:white;font-weight:600;border:1px solid rgba(255,255,255,.55);padding:.45rem 1.1rem;}
+  @media(max-width:700px){.prod-modal{grid-template-columns:1fr;}.pm-gallery{position:static;border-right:none;border-bottom:1px solid rgba(184,150,90,.12);}}
+
   /* ── Email toast ── */
   .toast {
     position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -2009,6 +2075,51 @@
   <p class="footer-piva">P.IVA: 02131930600 · C.F: FRT RTI 71R60C479Z · Via Ori Martin n.4, 03024 Ceprano (FR)</p>
   <p style="margin-top: 0.5rem; font-size: 0.7rem; color: rgba(255,255,255,0.2);">© 2025 Cotto & Servito. Tutti i diritti riservati.</p>
 </footer>
+
+<!-- MODAL SCHEDA PRODOTTO -->
+<div class="prod-modal-overlay" id="prodModalOverlay">
+  <div class="prod-modal" id="prodModal">
+    <button class="prod-modal-close" id="prodModalClose"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="pm-gallery">
+      <div class="pm-main-img"><img id="pmMainImg" src="" alt=""></div>
+      <div class="pm-thumbs" id="pmThumbs"></div>
+    </div>
+    <div class="pm-info">
+      <div class="pm-category" id="pmCategory"></div>
+      <h2 class="pm-name" id="pmName"></h2>
+      <div class="pm-stars"><div class="pm-stars-row">★★★★★</div><span>Prodotto artigianale</span></div>
+      <div class="pm-price-box">
+        <div class="pm-price" id="pmPrice"></div>
+        <div class="pm-price-sub">IVA inclusa · Prezzo per monoporzione</div>
+      </div>
+      <div class="pm-weight" id="pmWeight"></div>
+      <div class="pm-desc-label">Descrizione</div>
+      <div class="pm-desc" id="pmDesc"></div>
+      <div class="pm-disponibile">Disponibile · Pronto da scaldare</div>
+      <div class="pm-qty-label">Quantità</div>
+      <div class="pm-qty">
+        <button class="pm-qty-btn" id="pmMinus">−</button>
+        <div class="pm-qty-val" id="pmQtyVal">1</div>
+        <button class="pm-qty-btn" id="pmPlus">+</button>
+      </div>
+      <div class="pm-calc">
+        <div class="pm-calc-header">🧮 Riepilogo ordine</div>
+        <div class="pm-calc-row"><span id="pmCalcLabel"></span><span class="pm-calc-unit" id="pmCalcUnit"></span></div>
+        <div class="pm-calc-total-row"><span>Totale</span><span class="pm-calc-total" id="pmCalcTotal"></span></div>
+        <div class="pm-calc-note" id="pmCalcNote"></div>
+      </div>
+      <div class="pm-actions">
+        <button class="pm-btn-cart" id="pmBtnCart"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Aggiungi al Carrello</button>
+        <a href="#" class="pm-btn-wa" id="pmBtnWA">💬 Ordina su WhatsApp</a>
+      </div>
+      <div class="pm-delivery">
+        <div class="pm-del-row"><span class="pm-del-icon">🚚</span><div><strong>Consegna a domicilio</strong>Da €3 fino a 100 km da Ceprano</div></div>
+        <div class="pm-del-row"><span class="pm-del-icon">🏪</span><div><strong>Ritiro in negozio</strong>Via Ori Martin n.4 · Ceprano (FR) · Gratis</div></div>
+        <div class="pm-del-row"><span class="pm-del-icon">❄️</span><div><strong>30 giorni in frigo</strong>Confezionato in atmosfera protetta M.A.P.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- WHATSAPP FAB -->
 <a href="https://wa.me/393922340754" target="_blank" class="whatsapp-fab" aria-label="Scrivici su WhatsApp">💬</a>
@@ -2833,6 +2944,9 @@
     _carTX=0;
   });
 
+  /* Database prodotti globale per il modal */
+  window._prodDB = {};
+
   async function loadProducts(){
     try{
       const res = await fetch('./prodotti.json?t='+Date.now(), {cache:'no-cache'});
@@ -2842,6 +2956,7 @@
         const grid = document.getElementById('grid-'+cat);
         if(!grid) return;
         const list = (data.products||{})[cat]||[];
+        window._prodDB[cat] = {};
         grid.innerHTML = list.map((p,i)=>{
           const media    = p.media&&p.media.length ? p.media : (p.img ? [{type:'image',src:p.img}] : []);
           const priceStr = '€'+Number(p.price).toFixed(2).replace('.',',');
@@ -2849,24 +2964,28 @@
           const firstImg = media.find(m=>m.type==='image');
           const imgEsc   = (firstImg?.src||p.img||'').replace(/`/g,"'");
           const wEsc     = (p.weight||'').replace(/`/g,"'");
+          const pid      = p.id || ('p'+i);
+          /* Salva nel db globale */
+          window._prodDB[cat][pid] = {name:p.name||'',description:p.description||'',weight:p.weight||'',price:Number(p.price),media,img:firstImg?.src||p.img||''};
 
           let mediaHtml;
           if(!media.length){
-            mediaHtml = `<div class="product-img"></div>`;
+            mediaHtml = `<div class="product-img"><div class="card-detail-overlay"><span>Vedi Dettagli</span></div></div>`;
           } else if(media.length===1){
-            mediaHtml = `<div class="product-img"><div class="media-slides">${_slideHtml(media[0],p.name||'')}</div></div>`;
+            mediaHtml = `<div class="product-img"><div class="media-slides">${_slideHtml(media[0],p.name||'')}</div><div class="card-detail-overlay"><span>Vedi Dettagli</span></div></div>`;
           } else {
             const slides = media.map(m=>_slideHtml(m,p.name||'')).join('');
-            const dots   = media.map((_,di)=>`<button class="media-dot${di===0?' active':''}" onclick="prodDot(this,${di})"></button>`).join('');
+            const dots   = media.map((_,di)=>`<button class="media-dot${di===0?' active':''}" onclick="event.stopPropagation();prodDot(this,${di})"></button>`).join('');
             mediaHtml = `<div class="product-img" data-cur="0" data-tot="${media.length}">
               <div class="media-slides">${slides}</div>
-              <button class="media-arr prev" onclick="prodNav(this,-1)" aria-label="Precedente">&#8249;</button>
-              <button class="media-arr next" onclick="prodNav(this,1)" aria-label="Successivo">&#8250;</button>
+              <button class="media-arr prev" onclick="event.stopPropagation();prodNav(this,-1)" aria-label="Precedente">&#8249;</button>
+              <button class="media-arr next" onclick="event.stopPropagation();prodNav(this,1)" aria-label="Successivo">&#8250;</button>
               <div class="media-dots">${dots}</div>
+              <div class="card-detail-overlay"><span>Vedi Dettagli</span></div>
             </div>`;
           }
 
-          return `<div class="product-card reveal" style="transition-delay:${(i%4)*0.08}s">
+          return `<div class="product-card reveal" style="transition-delay:${(i%4)*0.08}s" onclick="openProdModal('${cat}','${pid}')">
             ${mediaHtml}
             <div class="product-body">
               <h3 class="product-name">${p.name||''}</h3>
@@ -2874,7 +2993,7 @@
               <p class="product-weight">${p.weight||''}</p>
               <div class="product-prices"><span class="price-sell">${priceStr}</span></div>
             </div>
-            <button class="add-to-cart" onclick="addToCart({name:\`${nameEsc}\`,price:${Number(p.price)},img:\`${imgEsc}\`,weight:\`${wEsc}\`})">+ Aggiungi al carrello</button>
+            <button class="add-to-cart" onclick="event.stopPropagation();addToCart({name:\`${nameEsc}\`,price:${Number(p.price)},img:\`${imgEsc}\`,weight:\`${wEsc}\`})">+ Aggiungi al carrello</button>
           </div>`;
         }).join('');
         grid.querySelectorAll('.product-card').forEach(el=>revealObs.observe(el));
@@ -2885,6 +3004,81 @@
     }
   }
   loadProducts();
+
+  /* ── MODAL SCHEDA PRODOTTO ── */
+  const CAT_LABELS = {primi:'Primi Piatti',secondi:'Secondi Piatti',fritti:'Fritti',dolci:'Dolci'};
+  let _pmQty = 1, _pmProd = null;
+
+  function openProdModal(cat, pid){
+    const p = (window._prodDB[cat]||{})[pid];
+    if(!p) return;
+    _pmProd = p; _pmQty = 1;
+
+    document.getElementById('pmCategory').textContent = CAT_LABELS[cat]||cat;
+    document.getElementById('pmName').textContent     = p.name;
+    document.getElementById('pmPrice').textContent    = '€ '+p.price.toFixed(2);
+    document.getElementById('pmWeight').textContent   = p.weight ? '⚖ '+p.weight : '';
+    document.getElementById('pmDesc').textContent     = p.description || '—';
+    document.getElementById('pmQtyVal').textContent   = '1';
+
+    /* Immagini */
+    const imgs = (p.media||[]).filter(m=>m.type==='image').map(m=>m.src);
+    if(!imgs.length && p.img) imgs.push(p.img);
+    document.getElementById('pmMainImg').src = imgs[0]||'';
+    document.getElementById('pmMainImg').alt = p.name;
+
+    const thumbs = document.getElementById('pmThumbs');
+    thumbs.innerHTML = imgs.length > 1
+      ? imgs.map((src,i)=>`<div class="pm-thumb ${i===0?'active':''}" onclick="pmSelectThumb(this,'${src}')"><img src="${src}" alt=""></div>`).join('')
+      : '';
+
+    _pmUpdateCalc();
+    _pmUpdateWA();
+    document.getElementById('prodModalOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+
+  function pmSelectThumb(el, src){
+    document.querySelectorAll('.pm-thumb').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('pmMainImg').src = src;
+  }
+
+  function _pmUpdateCalc(){
+    if(!_pmProd) return;
+    const tot = _pmProd.price * _pmQty;
+    document.getElementById('pmCalcLabel').textContent = `${_pmQty} × ${_pmProd.name}`;
+    document.getElementById('pmCalcUnit').textContent  = `€ ${_pmProd.price.toFixed(2)} cad.`;
+    const totEl = document.getElementById('pmCalcTotal');
+    totEl.classList.remove('bump');
+    void totEl.offsetWidth;
+    totEl.textContent = '€ '+tot.toFixed(2);
+    totEl.classList.add('bump');
+    setTimeout(()=>totEl.classList.remove('bump'),300);
+    const note = document.getElementById('pmCalcNote');
+    note.textContent = _pmQty===1?'':_pmQty<5?`🍽 Perfetto per ${_pmQty} persone`:_pmQty<10?'👨‍👩‍👧‍👦 Ideale per una cena in famiglia':'🎉 Ordine grande! Contattaci per disponibilità';
+  }
+
+  function _pmUpdateWA(){
+    if(!_pmProd) return;
+    const tot = (_pmProd.price*_pmQty).toFixed(2);
+    const txt = encodeURIComponent(`Ciao! Vorrei ordinare:\n\n${_pmQty}× ${_pmProd.name} (€ ${_pmProd.price.toFixed(2)} cad.)\nTotale: € ${tot}\n\nCome posso procedere?`);
+    document.getElementById('pmBtnWA').href='https://wa.me/393922340754?text='+txt;
+  }
+
+  document.getElementById('pmMinus').addEventListener('click',()=>{ if(_pmQty>1){_pmQty--;document.getElementById('pmQtyVal').textContent=_pmQty;_pmUpdateCalc();_pmUpdateWA();}});
+  document.getElementById('pmPlus').addEventListener('click', ()=>{ if(_pmQty<99){_pmQty++;document.getElementById('pmQtyVal').textContent=_pmQty;_pmUpdateCalc();_pmUpdateWA();}});
+
+  document.getElementById('pmBtnCart').addEventListener('click',()=>{
+    if(!_pmProd) return;
+    for(let i=0;i<_pmQty;i++) addToCart({name:_pmProd.name,price:_pmProd.price,img:_pmProd.img,weight:_pmProd.weight});
+    document.getElementById('prodModalOverlay').classList.remove('open');
+    document.body.style.overflow='';
+  });
+
+  document.getElementById('prodModalClose').addEventListener('click',()=>{ document.getElementById('prodModalOverlay').classList.remove('open');document.body.style.overflow=''; });
+  document.getElementById('prodModalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('prodModalOverlay')){document.getElementById('prodModalOverlay').classList.remove('open');document.body.style.overflow='';} });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&document.getElementById('prodModalOverlay').classList.contains('open')){document.getElementById('prodModalOverlay').classList.remove('open');document.body.style.overflow='';} });
 
   async function loadGallery(){
     try{
