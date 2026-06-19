@@ -1314,6 +1314,43 @@
   }
 
   /* Cart FAB button */
+  /* ── WHATSAPP FAB ── */
+  .whatsapp-fab {
+    position: fixed;
+    bottom: 6.5rem; right: 2.5rem;
+    z-index: 350;
+    width: 62px; height: 62px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 30px rgba(37,211,102,0.4);
+    text-decoration: none;
+    font-size: 1.6rem;
+    transition: transform 0.3s var(--ease-out), box-shadow 0.3s;
+    animation: waPulse 3s 4s ease-in-out infinite;
+  }
+  .whatsapp-fab:hover { transform: scale(1.08); box-shadow: 0 12px 40px rgba(37,211,102,0.5); }
+  @keyframes waPulse {
+    0%,100% { box-shadow: 0 8px 30px rgba(37,211,102,0.4); }
+    50%     { box-shadow: 0 8px 30px rgba(37,211,102,0.4), 0 0 0 10px rgba(37,211,102,0); }
+  }
+  .whatsapp-fab-label {
+    position: fixed;
+    bottom: 7.8rem; right: 6rem;
+    background: var(--espresso);
+    color: white;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.73rem;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(8px);
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 349;
+  }
+  .whatsapp-fab:hover + .whatsapp-fab-label { opacity: 1; transform: translateX(0); }
+
   .cart-fab {
     position: fixed;
     bottom: 2.5rem; right: 2.5rem;
@@ -1972,6 +2009,10 @@
   <p class="footer-piva">P.IVA: 02131930600 · C.F: FRT RTI 71R60C479Z · Via Ori Martin n.4, 03024 Ceprano (FR)</p>
   <p style="margin-top: 0.5rem; font-size: 0.7rem; color: rgba(255,255,255,0.2);">© 2025 Cotto & Servito. Tutti i diritti riservati.</p>
 </footer>
+
+<!-- WHATSAPP FAB -->
+<a href="https://wa.me/393922340754" target="_blank" class="whatsapp-fab" aria-label="Scrivici su WhatsApp">💬</a>
+<span class="whatsapp-fab-label">Ordina su WhatsApp</span>
 
 <!-- CART FAB -->
 <div class="toast" id="toast"></div>
