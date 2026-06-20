@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagina non trovata — Cotto &amp; Servito</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --espresso: #1C0F06;
+      --bark: #4A2C12;
+      --gold: #B8965A;
+      --gold-light: #D4AF7A;
+      --gold-pale: #F0E6D3;
+      --cream: #FAF7F2;
+      --red-it: #C0272D;
+      --green-it: #008C45;
+      --white: #FFFEFB;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Outfit', system-ui, sans-serif;
+    }
+    html, body {
+      height: 100%;
+      font-family: var(--font-body);
+      background: var(--espresso);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 520px;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 3rem;
+    }
+    .logo em { color: var(--gold-light); font-style: italic; }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 3rem;
+      opacity: 0.5;
+    }
+    .code {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 20vw, 8rem);
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .title {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 5vw, 1.8rem);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 1rem;
+      letter-spacing: 0.03em;
+    }
+    .subtitle {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.5rem;
+      background: transparent;
+      border: 1px solid rgba(184,150,90,0.5);
+      color: var(--gold-light);
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+    }
+    .btn:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--espresso);
+    }
+    .wa-link {
+      display: block;
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .wa-link:hover { color: #25D366; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="https://mecdv.github.io/cotto-e-servito-/" class="logo">Cotto <em>&</em> Servito</a>
+    <div class="divider"></div>
+    <div class="code">404</div>
+    <h1 class="title">Pagina non trovata</h1>
+    <p class="subtitle">La pagina che cerchi non esiste o è stata spostata.<br>Torna alla homepage per scoprire i nostri prodotti.</p>
+    <a href="https://mecdv.github.io/cotto-e-servito-/" class="btn">← Torna alla Homepage</a>
+    <a href="https://wa.me/393922340754" target="_blank" class="wa-link">💬 Hai bisogno di aiuto? Scrivici su WhatsApp</a>
+  </div>
+</body>
+</html>
