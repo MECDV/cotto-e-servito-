@@ -2057,10 +2057,18 @@
       </div>
 
       <div class="reveal">
-        <div class="map-placeholder">
-          <span class="map-icon">🗺️</span>
-          <span style="font-weight:700; color: var(--brown-dark);">Via Ori Martin n.4, Ceprano (FR)</span>
-          <a href="https://maps.google.com/?q=Via+Ori+Martin+4+Ceprano+FR" target="_blank" style="color: var(--red-it); font-size: 0.85rem; text-decoration: none; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Apri in Google Maps →</a>
+        <div style="width:100%;height:370px;overflow:hidden;border:1px solid rgba(184,150,90,0.2);">
+          <iframe
+            src="https://maps.google.com/maps?q=Via+Ori+Martin+4,+03024+Ceprano+FR,+Italia&t=&z=15&ie=UTF8&iwloc=&output=embed&hl=it"
+            width="100%" height="370" style="border:0;display:block;" allowfullscreen="" loading="lazy"
+            title="Cotto &amp; Servito — Via Ori Martin n.4, Ceprano (FR)">
+          </iframe>
+        </div>
+        <div style="text-align:center;margin-top:0.8rem;">
+          <a href="https://maps.google.com/?q=Via+Ori+Martin+4+Ceprano+FR" target="_blank"
+             style="color:var(--red-it);font-size:0.8rem;text-decoration:none;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">
+            🗺️ Apri in Google Maps →
+          </a>
         </div>
       </div>
     </div>
@@ -2073,7 +2081,7 @@
   <p>L'Oasi del Ristoro della Buona Tavola · Di Rita Fortuna</p>
   <div class="footer-divider"></div>
   <p class="footer-piva">P.IVA: 02131930600 · C.F: FRT RTI 71R60C479Z · Via Ori Martin n.4, 03024 Ceprano (FR)</p>
-  <p style="margin-top: 0.5rem; font-size: 0.7rem; color: rgba(255,255,255,0.2);">© 2025 Cotto & Servito. Tutti i diritti riservati.</p>
+  <p style="margin-top: 0.5rem; font-size: 0.7rem; color: rgba(255,255,255,0.2);">© 2026 Cotto & Servito. Tutti i diritti riservati.</p>
 </footer>
 
 <!-- MODAL SCHEDA PRODOTTO -->
@@ -3492,6 +3500,41 @@
 
   /* Inizializza la vista del carrello (totale €0,00 e stato vuoto) */
   updateCart();
+</script>
+
+<!-- BANNER COOKIE GDPR -->
+<div id="cookieBanner" style="
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;
+  background:var(--espresso);color:rgba(255,255,255,0.85);
+  padding:1.1rem 2rem;display:flex;align-items:center;justify-content:space-between;
+  gap:1.5rem;flex-wrap:wrap;border-top:2px solid var(--gold);
+  font-size:0.78rem;line-height:1.6;font-family:var(--font-body);">
+  <span>
+    🍪 Questo sito utilizza <strong style="color:var(--gold-light)">Google Fonts</strong> e un servizio di invio email per gestire gli ordini.
+    Nessun cookie di profilazione o tracciamento. Continuando la navigazione acconsenti all'utilizzo di questi servizi.
+    <a href="https://policies.google.com/privacy" target="_blank"
+       style="color:var(--gold-light);text-decoration:underline;margin-left:0.3rem;">Privacy Policy</a>
+  </span>
+  <button onclick="cookieAccept()" style="
+    background:var(--gold);color:var(--espresso);border:none;
+    padding:0.6rem 1.6rem;font-family:var(--font-body);font-size:0.72rem;
+    font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+    cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background 0.2s;">
+    Accetto
+  </button>
+</div>
+<script>
+  (function(){
+    if(!localStorage.getItem('cookie_ok')){
+      var b=document.getElementById('cookieBanner');
+      if(b) b.style.display='flex';
+    }
+  })();
+  function cookieAccept(){
+    localStorage.setItem('cookie_ok','1');
+    var b=document.getElementById('cookieBanner');
+    if(b){ b.style.transition='opacity 0.4s'; b.style.opacity='0'; setTimeout(function(){b.style.display='none';},400); }
+  }
 </script>
 
 </body>
