@@ -582,7 +582,7 @@
     font-size: 1.1rem; font-weight: 400;
     color: var(--bark); margin-bottom: 0.3rem;
   }
-  .product-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.55; margin-bottom: 0.6rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .product-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.55; margin-bottom: 0.6rem; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .product-weight { font-size: 0.75rem; color: var(--text-soft); opacity: 0.65; margin-bottom: 1rem; letter-spacing: 0.05em; }
   .product-prices { display: flex; justify-content: flex-end; align-items: flex-end; padding-top: 0.75rem; border-top: 1px solid rgba(184,150,90,0.15); }
   .price-sell { font-family: var(--font-display); font-size: 1.35rem; color: var(--red-it); font-weight: 600; letter-spacing: -0.01em; }
@@ -1292,10 +1292,30 @@
     /* ── Toast ── */
     .toast { white-space: normal; text-align: center; left: 1rem; right: 1rem; width: auto; transform: translateX(0) translateY(20px); }
     .toast.show { transform: translateX(0) translateY(0); }
+
+    /* ── Fix cursore: alcuni elementi hanno cursor:none hardcoded ── */
+    * { cursor: auto !important; }
+
+    /* ── Nav: nasconde icona account su mobile (affollava la navbar) ── */
+    .nav-account-btn { display: none; }
+
+    /* ── WhatsApp FAB: posizione mobile + nascondi tooltip hover ── */
+    .whatsapp-fab { bottom: 5rem; right: 1.2rem; width: 54px; height: 54px; }
+    .whatsapp-fab-label { display: none; }
+
+    /* ── FAB sopra il banner cookie quando è visibile ── */
+    body.cookie-shown .cart-fab { bottom: 7rem; }
+    body.cookie-shown .whatsapp-fab { bottom: 11.5rem; }
+
+    /* ── Media dot: target touch più grande ── */
+    .media-dot { width: 12px; height: 12px; }
+
+    /* ── Checkout: safe area per iPhone con home bar ── */
+    .checkout-box { padding-bottom: calc(2rem + env(safe-area-inset-bottom)); }
   }
 
-  /* ══ Extra small (≤ 380px) ══ */
-  @media (max-width: 380px) {
+  /* ══ Extra small (≤ 400px) ══ */
+  @media (max-width: 400px) {
     .hero-title { font-size: 2.6rem; }
     .products-grid { grid-template-columns: 1fr; }
     .delivery-options { grid-template-columns: 1fr; }
@@ -3506,7 +3526,7 @@
 <div id="cookieBanner" style="
   display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;
   background:var(--espresso);color:rgba(255,255,255,0.85);
-  padding:1.1rem 2rem;display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 2rem;align-items:center;justify-content:space-between;
   gap:1.5rem;flex-wrap:wrap;border-top:2px solid var(--gold);
   font-size:0.78rem;line-height:1.6;font-family:var(--font-body);">
   <span>
@@ -3528,10 +3548,12 @@
     if(!localStorage.getItem('cookie_ok')){
       var b=document.getElementById('cookieBanner');
       if(b) b.style.display='flex';
+      document.body.classList.add('cookie-shown');
     }
   })();
   function cookieAccept(){
     localStorage.setItem('cookie_ok','1');
+    document.body.classList.remove('cookie-shown');
     var b=document.getElementById('cookieBanner');
     if(b){ b.style.transition='opacity 0.4s'; b.style.opacity='0'; setTimeout(function(){b.style.display='none';},400); }
   }
