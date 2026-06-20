@@ -78,9 +78,14 @@
   ]
 }
 </script>
-<!-- EmailJS SDK (locale) -->
-<script src="emailjs.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Preconnect: riduce latenza DNS/TLS per risorse critiche -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://images.unsplash.com">
+<!-- Preload immagine hero: la risorsa più importante above-the-fold -->
+<link rel="preload" as="image" href="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1600&q=80" fetchpriority="high">
+<!-- Font: rimossa Playfair Display (solo fallback generico, mai usato direttamente) -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
      COTTO & SERVITO — Professional Redesign v2
@@ -415,7 +420,7 @@
     letter-spacing: -0.01em;
     margin-bottom: 2rem;
   }
-  .section-title em { color: var(--gold); font-style: italic; }
+  .section-title em { color: var(--gold); font-style: italic; will-change: background-position; }
 
   /* ── STORIA ── */
   #storia {
@@ -589,7 +594,7 @@
   .product-desc { font-size: 0.78rem; color: var(--text-soft); line-height: 1.55; margin-bottom: 0.6rem; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .product-weight { font-size: 0.75rem; color: var(--text-soft); opacity: 0.65; margin-bottom: 1rem; letter-spacing: 0.05em; }
   .product-prices { display: flex; justify-content: flex-end; align-items: flex-end; padding-top: 0.75rem; border-top: 1px solid rgba(184,150,90,0.15); }
-  .price-sell { font-family: var(--font-display); font-size: 1.35rem; color: var(--red-it); font-weight: 600; letter-spacing: -0.01em; }
+  .price-sell { font-family: var(--font-display); font-size: 1.35rem; color: var(--red-it); font-weight: 600; letter-spacing: -0.01em; will-change: auto; }
 
   /* ── GALLERIA ── */
   #galleria { background: var(--espresso); padding: 9rem 2rem; color: white; content-visibility: auto; contain-intrinsic-size: auto 1000px; }
@@ -726,7 +731,7 @@
   /* Blob luminosi hero */
   .hero-blob {
     position: absolute; border-radius: 50%;
-    filter: blur(60px); pointer-events: none; z-index: 0;
+    filter: blur(40px); pointer-events: none; z-index: 0;
     will-change: transform;
   }
   .hero-blob-gold {
@@ -1924,7 +1929,7 @@
 
       <div class="storia-visual reveal reveal-right">
         <div class="storia-image-placeholder">
-          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=800&fit=crop&q=80" alt="La nostra cucina artigianale" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=800&fit=crop&q=80" alt="La nostra cucina artigianale" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>
         <div class="since-badge">
           <span>Dal</span>
@@ -2434,6 +2439,8 @@
   </div>
 </div>
 
+<!-- EmailJS SDK (locale) — caricato qui così non blocca il rendering -->
+<script src="emailjs.min.js"></script>
 <script>
   /* ══ EMAILJS CONFIG ══
      1. Vai su https://www.emailjs.com e crea un account gratuito
@@ -3036,8 +3043,6 @@
       console.error('Errore caricamento prodotti:',err);
     }
   }
-  loadProducts();
-
   /* ── MODAL SCHEDA PRODOTTO ── */
   const CAT_LABELS = {primi:'Primi Piatti',secondi:'Secondi Piatti',fritti:'Fritti',dolci:'Dolci'};
   let _pmQty = 1, _pmProd = null;
@@ -3140,7 +3145,8 @@
       grid.querySelectorAll('.gallery-item').forEach(el=>revealObs.observe(el));
     }catch(err){ console.error('Errore galleria:',err); }
   }
-  loadGallery();
+  /* Carica prodotti e galleria in parallelo */
+  Promise.all([loadProducts(), loadGallery()]);
   document.querySelectorAll('.tech-card').forEach((el,i)=>{
     el.classList.add('reveal'); el.style.transitionDelay=i*0.12+'s'; revealObs.observe(el);
   });
