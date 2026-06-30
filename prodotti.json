@@ -130,12 +130,18 @@
         "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80"
       },
       {
-        "id": "insalata-farro",
+        "id": "insalata-di-farro",
         "name": "Insalata di Farro",
         "description": "Farro con verdure grigliate, feta, pomodori secchi e un filo d'olio extravergine.",
         "weight": "300g · monoporzione",
         "price": 6.1,
-        "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80"
+        "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782842100499_4yhs.jpg",
+        "media": [
+          {
+            "type": "image",
+            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782842100499_4yhs.jpg"
+          }
+        ]
       }
     ],
     "secondi": [
