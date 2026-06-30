@@ -20,12 +20,22 @@
   "products": {
     "primi": [
       {
-        "id": "lasagna-ragu",
+        "id": "lasagna-al-ragu",
         "name": "Lasagna al Ragù",
         "description": "Sfoglia all'uovo fatta a mano, ragù di carne bovina e suina e besciamella artigianale.",
         "weight": "400g · monoporzione",
         "price": 5.3,
-        "img": "https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80"
+        "img": "https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80",
+        "media": [
+          {
+            "type": "image",
+            "src": "https://images.unsplash.com/photo-1574894709920-11b28be1e588?w=400&h=300&fit=crop&q=80"
+          },
+          {
+            "type": "image",
+            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782841097893_rjae.jpg"
+          }
+        ]
       },
       {
         "id": "lasagna-porcini-e-salsiccia",
