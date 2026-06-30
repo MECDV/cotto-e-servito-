@@ -53,7 +53,13 @@
         "description": "Cannelloni farciti con ragù di carne, cotti al forno con sugo di pomodoro",
         "weight": "400g · monoporzione",
         "price": 6,
-        "img": ""
+        "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782841581958_zzxg.jpg",
+        "media": [
+          {
+            "type": "image",
+            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782841581958_zzxg.jpg"
+          }
+        ]
       },
       {
         "id": "cannelloni-ricotta",
