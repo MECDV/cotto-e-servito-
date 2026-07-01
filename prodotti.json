@@ -122,12 +122,22 @@
         "img": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80"
       },
       {
-        "id": "insalata-riso",
+        "id": "insalata-di-riso",
         "name": "Insalata di Riso",
         "description": "Riso freddo con verdure di stagione, tonno, olive e pomodorini. Fresco e leggero.",
         "weight": "350g · monoporzione",
         "price": 5.3,
-        "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80"
+        "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80",
+        "media": [
+          {
+            "type": "image",
+            "src": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80"
+          },
+          {
+            "type": "image",
+            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932785587_bm4q.jpg"
+          }
+        ]
       },
       {
         "id": "insalata-di-farro",
