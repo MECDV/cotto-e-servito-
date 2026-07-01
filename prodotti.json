@@ -146,12 +146,18 @@
     ],
     "secondi": [
       {
-        "id": "arista-olive",
+        "id": "arista-di-maiale-e-olive",
         "name": "Arista di Maiale e Olive",
         "description": "Arrosto di maiale cotto lentamente con olive, rosmarino e vino bianco.",
         "weight": "250g · monoporzione",
         "price": 6.3,
-        "img": "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&q=80"
+        "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782932464406_au9a.jpg",
+        "media": [
+          {
+            "type": "image",
+            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932464406_au9a.jpg"
+          }
+        ]
       },
       {
         "id": "broccoletti-salsiccia",
