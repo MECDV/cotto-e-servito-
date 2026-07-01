@@ -135,15 +135,11 @@
         "description": "Farro con verdure grigliate, feta, pomodori secchi e un filo d'olio extravergine.",
         "weight": "300g · monoporzione",
         "price": 6.1,
-        "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782842100499_4yhs.jpg",
+        "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782932158400_rzfr.jpg",
         "media": [
           {
             "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782842100499_4yhs.jpg"
-          },
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782931280806_e83z.jpg"
+            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932158400_rzfr.jpg"
           }
         ]
       }
