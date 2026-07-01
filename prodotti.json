@@ -194,12 +194,22 @@
         ]
       },
       {
-        "id": "peperone-carne",
+        "id": "peperone-ripieno-alla-carne",
         "name": "Peperone Ripieno alla Carne",
         "description": "Peperone farcito con carne macinata, uova e parmigiano, gratinato al forno.",
         "weight": "250g · monoporzione",
         "price": 6.3,
-        "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80"
+        "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80",
+        "media": [
+          {
+            "type": "image",
+            "src": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80"
+          },
+          {
+            "type": "image",
+            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932697108_a7fj.jpg"
+          }
+        ]
       },
       {
         "id": "alette-pollo",
