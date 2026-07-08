@@ -366,6 +366,35 @@ Per test completi usare: `npx serve .` o `python -m http.server`
 
 ---
 
+## 12. INTEGRAZIONI OPZIONALI
+
+### Analytics (GoatCounter)
+Nel `<head>` di `index.html` c'è uno script GoatCounter (privacy-friendly,
+nessun cookie, nessun banner di consenso necessario). Per attivarlo:
+1. Vai su https://www.goatcounter.com → Sign up gratuito.
+2. Scegli un "site code" (es. `cottoeservito`).
+3. Sostituisci `XXXXX` nello script con quel codice.
+Finché non è configurato, lo script non fa nulla (nessun errore).
+
+### Log ordini su Google Sheet
+`index.html` include `logOrderToSheet()`, che invia una copia di ogni ordine
+a un Google Sheet come backup indipendente dall'email (utile se EmailJS
+fallisce o l'email finisce in spam). Istruzioni complete di attivazione
+in `ordini-apps-script.gs`. Finché `ORDERS_WEBHOOK_URL` è vuoto in
+`index.html`, la funzione non fa nulla e non blocca mai l'ordine.
+
+### EmailJS — restrizioni di sicurezza consigliate
+Le chiavi EmailJS in `index.html` sono necessariamente pubbliche (è normale
+per EmailJS), ma vanno protette lato dashboard:
+1. Accedi su https://dashboard.emailjs.com
+2. Account → Security → **Allowed origins**: aggiungi
+   `https://mecdv.github.io` per impedire che le chiavi vengano usate da
+   altri siti.
+3. Verifica in Account → Usage il piano/limite di invii mensili, per
+   accorgerti subito di eventuali abusi.
+
+---
+
 ## 11. VARIABILI DI STATO GLOBALI (gestione.html)
 
 ```javascript

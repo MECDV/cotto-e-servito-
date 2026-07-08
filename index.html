@@ -1818,6 +1818,10 @@
   .toast.error { border-left-color: var(--red-it); }
 
 </style>
+<!-- Analytics privacy-friendly (nessun cookie, nessun consenso richiesto) -->
+<!-- Attivazione (2 minuti): 1) vai su https://www.goatcounter.com -> Sign up gratis
+     2) scegli un "site code" (es. cottoeservito) 3) sostituisci XXXXX qui sotto -->
+<script data-goatcounter="https://XXXXX.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div class="cursor cursor-dot" style="position:fixed;pointer-events:none;z-index:9999;"></div>
@@ -2446,6 +2450,36 @@
     console.log('✅ EmailJS inizializzato correttamente');
   } else {
     console.error('❌ EmailJS SDK non disponibile. Controlla la connessione o disabilita l\'adblocker.');
+  }
+
+  /* ── LOG ORDINI SU GOOGLE SHEET (backup indipendente dall'email) ── */
+  /* Configurazione da completare a cura del titolare: vedi ordini-apps-script.gs
+     per le istruzioni di attivazione (5 minuti, nessun coding richiesto). */
+  const ORDERS_WEBHOOK_URL = ''; // Incolla qui l'URL del Web App Google Apps Script
+  const ORDERS_WEBHOOK_KEY = 'CAMBIA_QUESTA_CHIAVE'; // stessa chiave impostata nello script
+
+  async function logOrderToSheet(ordN, nomeCompleto, tel, email, total){
+    if (!ORDERS_WEBHOOK_URL) return; // non ancora configurato: nessun log, nessun errore
+    try {
+      await fetch(ORDERS_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Apps Script Web App non restituisce risposta leggibile in fetch semplice
+        body: JSON.stringify({
+          key:          ORDERS_WEBHOOK_KEY,
+          orderNumber:  ordN,
+          clientName:   nomeCompleto,
+          clientPhone:  tel,
+          clientEmail:  email,
+          items:        cart.map(i => `${i.name} x${i.qty}`).join(', '),
+          total:        '€' + total,
+          deliveryMode: deliveryMode === 'ritiro' ? 'Ritiro in negozio' : 'Consegna a domicilio',
+          paymentMode:  paymentMode === 'contanti' ? 'Contanti' : 'Bonifico bancario',
+          notes:        document.getElementById('f-note')?.value || ''
+        })
+      });
+    } catch(err) {
+      console.warn('Log ordine su Sheet non riuscito (ordine comunque confermato):', err);
+    }
   }
 
   function buildEmailBody(ordN, nome, tel, email, total){
@@ -3401,6 +3435,7 @@
     const email = document.getElementById('f-email').value.trim();
     const totalStr = total.toFixed(2).replace('.',',');
     const waText = buildEmailBody(ordN, nomeCompleto, tel, email, totalStr);
+    logOrderToSheet(ordN, nomeCompleto, tel, email, totalStr);
     document.getElementById('whatsappOrderBtn').href = 'https://wa.me/393922340754?text=' + encodeURIComponent(waText);
   }
 
