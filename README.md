@@ -86,6 +86,18 @@ Poi apri http://localhost:3000
 
 ---
 
+## Funzionalità da implementare
+
+| # | Funzione | Descrizione |
+|---|---|---|
+| 1 | **PWA — App installabile** | `manifest.json` + service worker: il sito diventa installabile come app sul telefono (icona sulla schermata home) e funziona anche offline |
+| 2 | **Coupon / Codice sconto** | Il cliente inserisce un codice al checkout → sconto applicato automaticamente; i codici sono gestiti dall'admin |
+| 3 | **Slot orario di ritiro** | Nel checkout il cliente sceglie l'orario di ritiro — evita code e aiuta a organizzare la produzione |
+| 4 | **Countdown offerta** | Banner con timer a conto alla rovescia per un'offerta a tempo (es. "Lasagna -20% ancora per 2 ore") |
+| 5 | **Storico ordini cliente** | Il cliente vede i suoi ultimi ordini salvati nel browser e può ri-ordinare con un click |
+
+---
+
 ## Note tecniche
 
 - **Nessun build step** — file statici puri, funziona su GitHub Pages senza CI
