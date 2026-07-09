@@ -40,6 +40,11 @@ sito chiapposo/
 │
 ├── video/              ← Video caricati dal pannello (si crea al primo upload)
 │
+├── ordini-apps-script.gs ← Script Google Apps Script per log ordini su Google Sheet
+├── 404.html            ← Pagina errore 404 personalizzata
+├── robots.txt          ← Istruzioni per i motori di ricerca
+├── sitemap.xml         ← Mappa del sito per SEO
+│
 ├── LEGGIMI.md          ← Questo file
 ├── README.md           ← Note tecniche originali (in inglese)
 │
@@ -96,7 +101,15 @@ Ogni prodotto diventa una card. Se il prodotto ha più media (`media` array), la
 
 ### Email di conferma
 - Usa la libreria `emailjs.min.js` (file locale — non CDN per evitare blocchi di Edge)
-- Service ID e template configurati in `index.html` (cercare `emailjs.send`)
+- Costanti configurate nel blocco `<script>` in fondo a `index.html` (cercare `EMAILJS_PUBLIC_KEY`):
+  ```javascript
+  const EMAILJS_PUBLIC_KEY  = 'LPWG1GOMEs-11_JNk';
+  const EMAILJS_SERVICE_ID  = 'service_rhw871l';
+  const EMAILJS_TEMPLATE_ID = 'template_jmbwqyb';
+  // to_email hardcoded in sendOrderEmail() → 'oasidellabuonatavola@gmail.com'
+  ```
+- **IBAN**: `IT32 J030 6974 4006 2502 1445 465` — hardcoded in **4 punti** di `index.html`
+  (cercare `IT32 J030`). Se cambia va aggiornato in tutti e 4.
 
 ### Galleria
 - Carica da `galleria.json`
@@ -380,8 +393,18 @@ Finché non è configurato, lo script non fa nulla (nessun errore).
 `index.html` include `logOrderToSheet()`, che invia una copia di ogni ordine
 a un Google Sheet come backup indipendente dall'email (utile se EmailJS
 fallisce o l'email finisce in spam). Istruzioni complete di attivazione
-in `ordini-apps-script.gs`. Finché `ORDERS_WEBHOOK_URL` è vuoto in
-`index.html`, la funzione non fa nulla e non blocca mai l'ordine.
+in `ordini-apps-script.gs`. La funzione non fa nulla e non blocca mai
+l'ordine finché le variabili non sono configurate.
+
+Per attivare, impostare in `index.html` (blocco `<script>` in fondo, cercare
+`ORDERS_WEBHOOK_URL`):
+```javascript
+const ORDERS_WEBHOOK_URL = '';              // ← incolla l'URL del Web App Google
+const ORDERS_WEBHOOK_KEY = 'CAMBIA_QUESTA_CHIAVE'; // ← scegli una password
+```
+**Entrambe** le variabili hanno ancora i valori placeholder. `ORDERS_WEBHOOK_KEY`
+deve coincidere esattamente con `SHARED_KEY` nel file `ordini-apps-script.gs`
+(quella password autentica le richieste e impedisce scritture false nel foglio).
 
 ### EmailJS — restrizioni di sicurezza consigliate
 Le chiavi EmailJS in `index.html` sono necessariamente pubbliche (è normale
