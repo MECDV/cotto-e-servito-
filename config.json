@@ -1,0 +1,13 @@
+{
+  "orari": {
+    "lun": {"aperto": true, "dalle": "09:00", "alle": "19:00"},
+    "mar": {"aperto": true, "dalle": "09:00", "alle": "19:00"},
+    "mer": {"aperto": true, "dalle": "09:00", "alle": "19:00"},
+    "gio": {"aperto": true, "dalle": "09:00", "alle": "19:00"},
+    "ven": {"aperto": true, "dalle": "09:00", "alle": "19:00"},
+    "sab": {"aperto": true, "dalle": "09:00", "alle": "19:00"},
+    "dom": {"aperto": false, "dalle": "", "alle": ""}
+  },
+  "chiusura_straordinaria": false,
+  "chiusura_messaggio": ""
+}

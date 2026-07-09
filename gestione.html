@@ -152,6 +152,55 @@
     .ach input[type=checkbox] { width:16px; height:16px; cursor:pointer; accent-color:var(--red); }
     .field-hint { font-size:0.7rem; color:var(--text-soft); margin-top:0.4rem; }
 
+    /* ── ANTEPRIMA PRODOTTO (feature 10) ── */
+    .modal-box { position:relative; }
+    @media(min-width:900px){
+      .modal-box.with-preview { max-width:1050px; display:grid; grid-template-columns:1fr 340px; }
+      .modal-box.with-preview .modal-header { grid-column:1/-1; }
+      .modal-box.with-preview .modal-body   { overflow-y:auto; }
+      .modal-box.with-preview .modal-footer { grid-column:1; }
+      .modal-box.with-preview .save-status  { grid-column:1; }
+    }
+    .preview-panel {
+      background:#FAF7F2; border-left:1px solid rgba(184,150,90,0.2);
+      padding:1.5rem 1.2rem; display:flex; flex-direction:column; gap:1rem;
+    }
+    @media(max-width:899px){ .preview-panel { display:none; } }
+    .preview-label { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-soft); font-weight:600; }
+    .preview-card {
+      border:1px solid rgba(184,150,90,0.2); background:#fff; overflow:hidden;
+      font-family:'Outfit',sans-serif;
+    }
+    .preview-img { width:100%; aspect-ratio:4/3; object-fit:cover; background:#EDE0C8; display:block; }
+    .preview-img-placeholder { width:100%; aspect-ratio:4/3; background:linear-gradient(135deg,#EDE0C8,#D4AF7A33); display:flex; align-items:center; justify-content:center; color:#B8965A; font-size:2rem; }
+    .preview-body { padding:0.8rem; }
+    .preview-name { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:#4A2C12; margin-bottom:0.2rem; line-height:1.2; }
+    .preview-desc { font-size:0.72rem; color:#6B4423; line-height:1.5; margin-bottom:0.4rem; opacity:0.8; }
+    .preview-weight { font-size:0.65rem; color:#7A4E28; margin-bottom:0.5rem; }
+    .preview-price { font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:#C0272D; font-weight:600; }
+    .preview-note { font-size:0.7rem; color:var(--text-soft); text-align:center; padding:0.5rem; border:1px dashed rgba(184,150,90,0.3); }
+
+    /* ── SEZIONE ORARI (feature 9) ── */
+    .orari-section { padding:2rem; max-width:700px; }
+    .orari-title { font-size:1.1rem; font-weight:600; color:var(--espresso); margin-bottom:0.5rem; }
+    .orari-subtitle { font-size:0.82rem; color:var(--text-soft); margin-bottom:1.8rem; line-height:1.6; }
+    .orari-grid { display:flex; flex-direction:column; gap:0.8rem; margin-bottom:2rem; }
+    .orari-row {
+      display:grid; grid-template-columns:110px 90px 1fr 1fr; gap:0.8rem; align-items:center;
+      padding:0.9rem 1rem; background:var(--white); border:1px solid var(--border);
+    }
+    @media(max-width:600px){ .orari-row { grid-template-columns:1fr 1fr; } }
+    .orari-giorno { font-weight:600; font-size:0.88rem; color:var(--bark); }
+    .orari-toggle { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; color:var(--text-soft); cursor:pointer; }
+    .orari-toggle input[type=checkbox] { width:16px; height:16px; accent-color:var(--gold); cursor:pointer; }
+    .orari-time { padding:0.5rem 0.7rem; border:1px solid var(--border); border-radius:4px; font-family:var(--font-b); font-size:0.88rem; background:var(--cream); color:var(--text); width:100%; }
+    .orari-time:disabled { opacity:0.35; cursor:not-allowed; }
+    .orari-chiusura-box { background:rgba(192,39,45,0.06); border:1px solid rgba(192,39,45,0.2); padding:1rem 1.2rem; margin-bottom:1.5rem; }
+    .orari-chiusura-box label { display:flex; align-items:center; gap:0.6rem; font-size:0.88rem; color:var(--bark); cursor:pointer; font-weight:600; }
+    .orari-chiusura-box input[type=checkbox] { width:18px; height:18px; accent-color:var(--red); cursor:pointer; }
+    .orari-chiusura-msg { margin-top:0.8rem; }
+    .orari-chiusura-msg input { width:100%; padding:0.6rem 0.8rem; border:1px solid var(--border); font-family:var(--font-b); font-size:0.85rem; background:var(--white); color:var(--text); }
+
     /* ── GALLERY IMAGE/VIDEO PICKER ── */
     .media-section { margin-bottom:1.5rem; }
     .media-type-row { display:flex; gap:0.75rem; margin-bottom:1rem; }
@@ -283,6 +332,7 @@
     <div class="admin-tabs">
       <button type="button" class="tab-btn active" onclick="showSection('prodotti',this)">Prodotti</button>
       <button type="button" class="tab-btn" onclick="showSection('galleria',this)">Galleria</button>
+      <button type="button" class="tab-btn" onclick="showSection('orari',this)">🕐 Orari</button>
     </div>
     <button type="button" class="btn-add" id="btnAddMain" onclick="onAddClick()">+ Aggiungi</button>
   </div>
@@ -308,13 +358,38 @@
       <div class="gallery-admin-grid" id="grid-admin-gallery"></div>
     </div>
 
+    <!-- ORARI -->
+    <div class="cat-panel" id="section-orari">
+      <div class="orari-section">
+        <h2 class="orari-title">Orari di apertura</h2>
+        <p class="orari-subtitle">Modifica gli orari — il badge "Aperto/Chiuso" sul sito si aggiornerà automaticamente.</p>
+
+        <div class="orari-chiusura-box" id="chiusuraBox">
+          <label>
+            <input type="checkbox" id="chiusuraCheck" onchange="toggleChiusura(this)">
+            Chiusura straordinaria (chiuso oggi per tutto il giorno)
+          </label>
+          <div class="orari-chiusura-msg" id="chiusuraMsgBox" style="display:none">
+            <input type="text" id="chiusuraMsg" placeholder="Messaggio opzionale (es: Chiusi per ferie fino al 20 agosto)">
+          </div>
+        </div>
+
+        <div class="orari-grid" id="orariGrid">
+          <!-- righe generate da JS -->
+        </div>
+
+        <button type="button" class="btn-save" id="btnSaveOrari" onclick="saveOrari()">Salva orari</button>
+        <div class="save-status" id="saveStatusOrari" style="margin-top:0.8rem;"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <!-- ════ PRODUCT MODAL ════ -->
 <div class="modal" id="editModal">
   <div class="modal-bg" onclick="closeEdit()"></div>
-  <div class="modal-box">
+  <div class="modal-box with-preview">
     <div class="modal-header">
       <h2 id="modalTitle">Modifica prodotto</h2>
       <button type="button" class="modal-close" onclick="closeEdit()">✕</button>
@@ -401,6 +476,22 @@
       <button type="button" class="btn-save" id="btnSave" onclick="saveProduct()">Salva e pubblica</button>
     </div>
     <div class="save-status" id="saveStatus"></div>
+
+    <!-- Colonna anteprima (solo desktop) -->
+    <div class="preview-panel" id="previewPanel">
+      <div class="preview-label">Anteprima sul sito</div>
+      <div class="preview-card" id="previewCard">
+        <div class="preview-img-placeholder" id="previewImgPlaceholder">🍝</div>
+        <img id="previewImg" class="preview-img" src="" alt="" style="display:none">
+        <div class="preview-body">
+          <div class="preview-name" id="previewName">Nome prodotto</div>
+          <div class="preview-desc" id="previewDesc"></div>
+          <div class="preview-weight" id="previewWeight"></div>
+          <div class="preview-price" id="previewPrice">€ —</div>
+        </div>
+      </div>
+      <div class="preview-note">Aggiorna mentre scrivi</div>
+    </div>
   </div>
 </div>
 
@@ -692,6 +783,124 @@
     grid.innerHTML = html;
   }
 
+  /* ══════════════════════════════════════════════
+     FEATURE 10: ANTEPRIMA PRODOTTO IN TEMPO REALE
+  ══════════════════════════════════════════════ */
+  function updatePreview(){
+    const name   = document.getElementById('editName').value.trim();
+    const price  = parseFloat(document.getElementById('editPrice').value);
+    const desc   = document.getElementById('editDesc').value.trim();
+    const weight = document.getElementById('editWeight').value.trim();
+    document.getElementById('previewName').textContent   = name   || 'Nome prodotto';
+    document.getElementById('previewDesc').textContent   = desc   || '';
+    document.getElementById('previewWeight').textContent = weight ? '⚖ '+weight : '';
+    document.getElementById('previewPrice').textContent  = !isNaN(price) && price>0 ? '€ '+price.toFixed(2) : '€ —';
+    // Immagine: usa prima media, poi img dal form
+    const firstMedia = pmItems && pmItems.find(m=>m.type==='image');
+    const imgSrc = firstMedia ? (firstMedia.preview||firstMedia.src) : '';
+    const imgEl  = document.getElementById('previewImg');
+    const phEl   = document.getElementById('previewImgPlaceholder');
+    if(imgSrc){ imgEl.src=imgSrc; imgEl.style.display='block'; phEl.style.display='none'; }
+    else { imgEl.style.display='none'; phEl.style.display='flex'; }
+  }
+
+  // Collega gli input al live preview
+  ['editName','editPrice','editDesc','editWeight'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', updatePreview);
+  });
+
+  /* ══════════════════════════════════════════════
+     FEATURE 9: GESTIONE ORARI DA ADMIN
+  ══════════════════════════════════════════════ */
+  const GIORNO_LABELS = {lun:'Lunedì',mar:'Martedì',mer:'Mercoledì',gio:'Giovedì',ven:'Venerdì',sab:'Sabato',dom:'Domenica'};
+  const GIORNI_ORDER  = ['lun','mar','mer','gio','ven','sab','dom'];
+  let configData = null;
+  let configSha  = null;
+
+  async function loadConfig(){
+    const token = getToken();
+    if(!token) return;
+    try{
+      const r = await fetch(`https://api.github.com/repos/MECDV/cotto-e-servito-/contents/config.json?t=${Date.now()}`,{
+        headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}
+      });
+      if(r.ok){
+        const d = await r.json();
+        configSha  = d.sha;
+        configData = JSON.parse(fromBase64(d.content));
+      } else {
+        configData = {orari:{lun:{aperto:true,dalle:'09:00',alle:'19:00'},mar:{aperto:true,dalle:'09:00',alle:'19:00'},mer:{aperto:true,dalle:'09:00',alle:'19:00'},gio:{aperto:true,dalle:'09:00',alle:'19:00'},ven:{aperto:true,dalle:'09:00',alle:'19:00'},sab:{aperto:true,dalle:'09:00',alle:'19:00'},dom:{aperto:false,dalle:'',alle:''}},chiusura_straordinaria:false,chiusura_messaggio:''};
+        configSha = null;
+      }
+      renderOrari();
+    } catch(e){ console.error('loadConfig',e); }
+  }
+
+  function renderOrari(){
+    if(!configData) return;
+    const grid = document.getElementById('orariGrid');
+    grid.innerHTML = GIORNI_ORDER.map(key=>{
+      const o = configData.orari[key]||{aperto:false,dalle:'09:00',alle:'19:00'};
+      return `<div class="orari-row" id="orari-row-${key}">
+        <span class="orari-giorno">${GIORNO_LABELS[key]}</span>
+        <label class="orari-toggle">
+          <input type="checkbox" ${o.aperto?'checked':''} onchange="toggleGiorno('${key}',this)">
+          Aperto
+        </label>
+        <input type="time" class="orari-time" id="dalle-${key}" value="${o.dalle||'09:00'}" ${o.aperto?'':'disabled'} onchange="updateOrarioVal('${key}')">
+        <input type="time" class="orari-time" id="alle-${key}"  value="${o.alle||'19:00'}"  ${o.aperto?'':'disabled'} onchange="updateOrarioVal('${key}')">
+      </div>`;
+    }).join('');
+    // Chiusura straordinaria
+    document.getElementById('chiusuraCheck').checked = !!configData.chiusura_straordinaria;
+    document.getElementById('chiusuraMsg').value     = configData.chiusura_messaggio||'';
+    document.getElementById('chiusuraMsgBox').style.display = configData.chiusura_straordinaria ? 'block' : 'none';
+  }
+
+  function toggleGiorno(key, cb){
+    const on = cb.checked;
+    document.getElementById('dalle-'+key).disabled = !on;
+    document.getElementById('alle-'+key).disabled  = !on;
+    if(configData) configData.orari[key].aperto = on;
+  }
+
+  function updateOrarioVal(key){
+    if(!configData) return;
+    configData.orari[key].dalle = document.getElementById('dalle-'+key).value;
+    configData.orari[key].alle  = document.getElementById('alle-'+key).value;
+  }
+
+  function toggleChiusura(cb){
+    document.getElementById('chiusuraMsgBox').style.display = cb.checked ? 'block' : 'none';
+  }
+
+  async function saveOrari(){
+    const token = getToken();
+    if(!token){ alert('Nessun token — effettua il login.'); return; }
+    if(!configData){ alert('Configurazione non caricata.'); return; }
+    // Raccoglie valori
+    GIORNI_ORDER.forEach(key=>{
+      const cb = document.querySelector(`#orari-row-${key} input[type=checkbox]`);
+      if(cb){
+        configData.orari[key].aperto = cb.checked;
+        configData.orari[key].dalle  = document.getElementById('dalle-'+key).value;
+        configData.orari[key].alle   = document.getElementById('alle-'+key).value;
+      }
+    });
+    configData.chiusura_straordinaria = document.getElementById('chiusuraCheck').checked;
+    configData.chiusura_messaggio     = document.getElementById('chiusuraMsg').value.trim();
+
+    const btn = document.getElementById('btnSaveOrari');
+    btn.disabled = true;
+    setStatus('saveStatusOrari','loading','Salvataggio...');
+    try{
+      await commitFile('config.json', configData, configSha, 'Aggiorna orari di apertura');
+      setStatus('saveStatusOrari','success','✅ Orari aggiornati! Il sito si aggiornerà entro 1-2 minuti.');
+    } catch(e){
+      setStatus('saveStatusOrari','error','❌ '+(e.message||'Errore'));
+    } finally { btn.disabled = false; }
+  }
+
   /* ── SEZIONE / CAT TABS ── */
   function showSection(sec, btn){
     currentSection = sec;
@@ -699,6 +908,7 @@
     document.querySelectorAll('.admin-toolbar .tab-btn').forEach(b=>b.classList.remove('active'));
     document.getElementById('section-'+sec).classList.add('active');
     btn.classList.add('active');
+    if(sec==='orari' && !configData) loadConfig();
     document.getElementById('btnAddMain').textContent = sec==='galleria' ? '+ Aggiungi a galleria' : '+ Aggiungi prodotto';
   }
 
@@ -724,6 +934,7 @@
     document.querySelectorAll('#allergenChecks input[type=checkbox]').forEach(cb=>{ cb.checked=false; });
     pmInit([]);
     resetSaveStatus('saveStatus','btnSave');
+    setTimeout(updatePreview, 50);
     document.getElementById('editModal').classList.add('open');
   }
 
@@ -744,6 +955,7 @@
     const media = p.media&&p.media.length ? p.media : (p.img ? [{type:'image',src:p.img}] : []);
     pmInit(media);
     resetSaveStatus('saveStatus','btnSave');
+    setTimeout(updatePreview, 50);
     document.getElementById('editModal').classList.add('open');
   }
 
@@ -806,6 +1018,7 @@
       _up:     null
     }));
     pmRender();
+    setTimeout(updatePreview, 30);
     document.getElementById('pmVidPanel').classList.add('hidden');
     document.getElementById('pmVidUrl').value = '';
     if(document.getElementById('pmVidPicker')) document.getElementById('pmVidPicker').value='';

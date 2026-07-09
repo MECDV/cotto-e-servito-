@@ -133,6 +133,37 @@
 
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+    /* Dark mode tokens (light defaults) */
+    --dm-bg:        var(--cream);
+    --dm-bg-warm:   var(--cream-warm);
+    --dm-surface:   var(--white);
+    --dm-text:      var(--text);
+    --dm-text-soft: var(--text-soft);
+    --dm-border:    rgba(184,150,90,0.18);
+  }
+
+  /* ── Dark mode palette ── */
+  [data-theme="dark"] {
+    --cream:       #1A100A;
+    --cream-warm:  #211408;
+    --white:       #241608;
+    --text:        #EAD9C0;
+    --text-soft:   #B89878;
+    --bark:        #D4B890;
+    --bark-mid:    #C8A870;
+    --gold:        #C8A060;
+    --gold-light:  #DEB870;
+    --gold-pale:   rgba(200,160,96,0.12);
+    --espresso:    #100A04;
+    --beige-light: #6B4423;
+    --brown-dark:  #E0C898;
+    --dm-bg:       #1A100A;
+    --dm-bg-warm:  #211408;
+    --dm-surface:  #241608;
+    --dm-text:     #EAD9C0;
+    --dm-text-soft:#B89878;
+    --dm-border:   rgba(200,160,96,0.15);
   }
 
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -231,6 +262,41 @@
   }
   .nav-account-btn:hover { border-color: var(--gold-light); background: rgba(184,150,90,0.12); }
   .nav-account-btn svg { width: 16px; height: 16px; stroke: var(--white); fill: none; stroke-width: 1.6; }
+
+  /* ── Dark mode toggle ── */
+  .dark-toggle {
+    width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: transparent; cursor: none; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; line-height: 1; transition: border-color 0.3s, background 0.3s;
+  }
+  .dark-toggle:hover { border-color: var(--gold-light); background: rgba(184,150,90,0.12); }
+
+  /* ── Fly-to-cart animation ── */
+  .fly-clone {
+    position: fixed; border-radius: 6px; z-index: 9999;
+    pointer-events: none; object-fit: cover;
+    transition: left 0.65s cubic-bezier(0.4,0,0.2,1),
+                top  0.65s cubic-bezier(0.4,0,0.2,1),
+                width 0.65s cubic-bezier(0.4,0,0.2,1),
+                height 0.65s cubic-bezier(0.4,0,0.2,1),
+                opacity 0.65s ease,
+                border-radius 0.65s ease;
+  }
+  @keyframes cartBounce { 0%{transform:scale(1)} 40%{transform:scale(1.35)} 70%{transform:scale(0.92)} 100%{transform:scale(1)} }
+  .cart-fab.bounce { animation: cartBounce 0.5s var(--ease-out); }
+
+  /* ── Share button (modal prodotto) ── */
+  .pm-share-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.55rem 0.9rem; border: 1px solid rgba(184,150,90,0.35);
+    background: none; cursor: none; font-family: var(--font-body);
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-soft); transition: all 0.2s; border-radius: 2px;
+    margin-top: 0.6rem; font-weight: 500;
+  }
+  .pm-share-btn:hover { border-color: var(--gold); color: var(--bark); background: var(--gold-pale); }
 
   /* ── Orario badge ── */
   .orario-badge {
@@ -1906,6 +1972,7 @@
     <li><a href="#galleria">Galleria</a></li>
     <li><a href="#contatti">Contatti</a></li>
   </ul>
+  <button type="button" class="dark-toggle" id="darkToggle" aria-label="Cambia tema chiaro/scuro" title="Tema chiaro/scuro">🌙</button>
   <button class="nav-account-btn" id="accountBtn" aria-label="Iscriviti">
     <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
   </button>
@@ -2227,6 +2294,7 @@
         <button class="pm-btn-cart" id="pmBtnCart"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Aggiungi al Carrello</button>
         <a href="https://wa.me/393922340754" target="_blank" rel="noopener noreferrer" class="pm-btn-wa" id="pmBtnWA">💬 Ordina su WhatsApp</a>
       </div>
+      <button type="button" class="pm-share-btn" id="pmShareBtn" onclick="shareProdotto()">↗ Condividi questo prodotto</button>
       <div class="pm-delivery">
         <div class="pm-del-row"><span class="pm-del-icon">🚚</span><div><strong>Consegna a domicilio</strong>Da €3 fino a 100 km da Ceprano</div></div>
         <div class="pm-del-row"><span class="pm-del-icon">🏪</span><div><strong>Ritiro in negozio</strong>Via Ori Martin n.4 · Ceprano (FR) · Gratis</div></div>
@@ -2805,33 +2873,142 @@
     applyAllergenFilter();
   }
 
-  /* ── Orario apertura dinamico ── */
-  (function initOrario(){
-    const OPENS=9*60, CLOSES=19*60;
-    function update(){
-      const d=new Date(), day=d.getDay(), min=d.getHours()*60+d.getMinutes();
-      const isOpen=day>=1&&day<=6&&min>=OPENS&&min<CLOSES;
-      const badge=document.getElementById('orario-badge');
-      if(!badge) return;
-      if(isOpen){
-        badge.innerHTML='<span class="orario-dot"></span>Aperto';
-        badge.className='orario-badge is-open';
-      } else {
-        let quando;
-        if(!isOpen){
-          if(day===0) quando='lunedì alle 09:00';
-          else if(day===6&&min>=CLOSES) quando='lunedì alle 09:00';
-          else if(day===5&&min>=CLOSES) quando='lunedì alle 09:00';
-          else if(day>=1&&day<=4&&min>=CLOSES) quando='domani alle 09:00';
-          else quando='oggi alle 09:00';
-        }
-        badge.innerHTML='<span class="orario-dot"></span>Chiuso · apre '+quando;
-        badge.className='orario-badge is-closed';
-      }
+  /* ══════════════════════════════════════════════
+     5. DARK MODE
+  ══════════════════════════════════════════════ */
+  (function initDarkMode(){
+    const root = document.documentElement;
+    const btn  = document.getElementById('darkToggle');
+    const stored = localStorage.getItem('cs_theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+    let dark = stored ? stored==='dark' : prefersDark;
+
+    function apply(){
+      root.setAttribute('data-theme', dark ? 'dark' : 'light');
+      btn.textContent = dark ? '☀️' : '🌙';
+      btn.title = dark ? 'Passa al tema chiaro' : 'Passa al tema scuro';
     }
-    update();
-    setInterval(update,60000);
+    apply();
+    btn.addEventListener('click', ()=>{
+      dark = !dark;
+      localStorage.setItem('cs_theme', dark ? 'dark' : 'light');
+      apply();
+    });
   })();
+
+  /* ══════════════════════════════════════════════
+     7. ANIMAZIONE VOLA AL CARRELLO
+  ══════════════════════════════════════════════ */
+  function flyToCart(sourceEl){
+    const fab = document.getElementById('cartFab');
+    if(!sourceEl || !fab) return;
+    const src = sourceEl.getBoundingClientRect();
+    const dst = fab.getBoundingClientRect();
+    const clone = document.createElement('div');
+    clone.className = 'fly-clone';
+    clone.style.cssText = `left:${src.left}px;top:${src.top}px;width:${src.width}px;height:${src.height}px;background:${getComputedStyle(sourceEl).backgroundImage};background-size:cover;background-position:center;`;
+    // Se è un'immagine, usa la src
+    const img = sourceEl.tagName==='IMG' ? sourceEl : sourceEl.querySelector('img');
+    if(img) clone.style.backgroundImage = `url('${img.src||img.currentSrc}')`;
+    document.body.appendChild(clone);
+    requestAnimationFrame(()=>{ requestAnimationFrame(()=>{
+      const cx = dst.left + dst.width/2 - 16;
+      const cy = dst.top  + dst.height/2 - 16;
+      clone.style.left    = cx+'px';
+      clone.style.top     = cy+'px';
+      clone.style.width   = '32px';
+      clone.style.height  = '32px';
+      clone.style.opacity = '0';
+      clone.style.borderRadius = '50%';
+    });});
+    setTimeout(()=>{
+      clone.remove();
+      fab.classList.remove('bounce');
+      void fab.offsetWidth; // reflow per re-triggerare
+      fab.classList.add('bounce');
+    }, 680);
+  }
+
+  /* ══════════════════════════════════════════════
+     8. CONDIVIDI PRODOTTO
+  ══════════════════════════════════════════════ */
+  function shareProdotto(){
+    if(!_pmProd) return;
+    const text = `${_pmProd.name} — €${_pmProd.price.toFixed(2)}\nOrdina da Cotto & Servito, Ceprano (FR)`;
+    const url  = window.location.href;
+    if(navigator.share){
+      navigator.share({ title: _pmProd.name, text, url }).catch(()=>{});
+    } else {
+      navigator.clipboard.writeText(url).then(()=>{
+        showToast('🔗 Link copiato!');
+      }).catch(()=> showToast('Copia manualmente: '+url));
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     9. ORARIO DA config.json (dinamico)
+  ══════════════════════════════════════════════ */
+  const _DAYS = ['dom','lun','mar','mer','gio','ven','sab'];
+  let _orariCfg = null;
+
+  async function loadOrariConfig(){
+    try {
+      const r = await fetch('config.json?t='+Date.now());
+      _orariCfg = (await r.json()).orari;
+    } catch(e) {
+      // fallback hardcoded
+      _orariCfg = {
+        lun:{aperto:true,dalle:'09:00',alle:'19:00'},
+        mar:{aperto:true,dalle:'09:00',alle:'19:00'},
+        mer:{aperto:true,dalle:'09:00',alle:'19:00'},
+        gio:{aperto:true,dalle:'09:00',alle:'19:00'},
+        ven:{aperto:true,dalle:'09:00',alle:'19:00'},
+        sab:{aperto:true,dalle:'09:00',alle:'19:00'},
+        dom:{aperto:false,dalle:'',alle:''}
+      };
+    }
+    updateOrarioBadge();
+    setInterval(updateOrarioBadge, 60000);
+  }
+
+  function updateOrarioBadge(){
+    const badge = document.getElementById('orario-badge');
+    if(!badge || !_orariCfg) return;
+    const now  = new Date();
+    const key  = _DAYS[now.getDay()];
+    const cfg  = _orariCfg[key] || {aperto:false};
+    const min  = now.getHours()*60 + now.getMinutes();
+    const toMin = t => { const [h,m]=(t||'00:00').split(':').map(Number); return h*60+m; };
+    const isOpen = cfg.aperto && min >= toMin(cfg.dalle) && min < toMin(cfg.alle);
+
+    if(isOpen){
+      badge.innerHTML='<span class="orario-dot"></span>Aperto';
+      badge.className='orario-badge is-open';
+    } else {
+      // Trova prossima apertura
+      let quando = '';
+      const dayIdx = now.getDay();
+      for(let d=1; d<=7; d++){
+        const nextKey = _DAYS[(dayIdx+d)%7];
+        const nextCfg = _orariCfg[nextKey];
+        if(nextCfg && nextCfg.aperto){
+          const nome = ['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'][(dayIdx+d)%7];
+          quando = (d===1 ? 'domani' : nome)+' alle '+nextCfg.dalle;
+          break;
+        }
+      }
+      // Se la chiusura è oggi dopo l'orario, mostra "domani" correttamente
+      if(cfg.aperto && min >= toMin(cfg.alle)){
+        // cerca già gestito sopra
+      } else if(cfg.aperto && min < toMin(cfg.dalle)){
+        quando = 'oggi alle '+cfg.dalle;
+      }
+      badge.innerHTML='<span class="orario-dot"></span>Chiuso · apre '+quando;
+      badge.className='orario-badge is-closed';
+    }
+  }
+
+  loadOrariConfig();
 
   /* ── Filtri allergeni ── */
   const _activeAllergens=new Set();
@@ -3215,7 +3392,7 @@
               <p class="product-weight">${esc(p.weight)}</p>
               <div class="product-prices"><span class="price-sell">${priceStr}</span></div>
             </div>
-            <button class="add-to-cart" onclick="event.stopPropagation();addToCart({id:\`${idEsc}\`,name:\`${nameEsc}\`,price:${Number(p.price)},img:\`${imgEsc}\`,weight:\`${wEsc}\`})">+ Aggiungi al carrello</button>
+            <button class="add-to-cart" onclick="event.stopPropagation();addToCart({id:\`${idEsc}\`,name:\`${nameEsc}\`,price:${Number(p.price)},img:\`${imgEsc}\`,weight:\`${wEsc}\`},this.closest('.product-card').querySelector('img'))">+ Aggiungi al carrello</button>
           </div>`;
         }).join('');
         grid.querySelectorAll('.product-card').forEach(el=>revealObs.observe(el));
@@ -3291,7 +3468,8 @@
 
   document.getElementById('pmBtnCart').addEventListener('click',()=>{
     if(!_pmProd) return;
-    for(let i=0;i<_pmQty;i++) addToCart({name:_pmProd.name,price:_pmProd.price,img:_pmProd.img,weight:_pmProd.weight});
+    const srcImg = document.getElementById('pmMainImg');
+    for(let i=0;i<_pmQty;i++) addToCart({id:_pmProd.id||_pmProd.name,name:_pmProd.name,price:_pmProd.price,img:_pmProd.img,weight:_pmProd.weight}, i===0 ? srcImg : null);
     document.getElementById('prodModalOverlay').classList.remove('open');
     document.body.style.overflow='';
   });
@@ -3435,14 +3613,17 @@
     if(dy > 100 && checkoutBox.scrollTop === 0) closeCheckout();
   }, {passive:true});
 
-  function addToCart(product){
+  function addToCart(product, sourceEl){
     const existing = cart.find(i=>(product.id ? i.id===product.id : i.name===product.name));
     if(existing){ existing.qty++; }
     else { cart.push({...product, qty:1}); }
     updateCart();
-    // Bounce FAB
-    cartFab.style.transform='scale(1.25)';
-    setTimeout(()=>cartFab.style.transform='',300);
+    if(sourceEl) flyToCart(sourceEl);
+    else {
+      cartFab.classList.remove('bounce');
+      void cartFab.offsetWidth;
+      cartFab.classList.add('bounce');
+    }
   }
 
   function updateCart(){
