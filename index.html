@@ -14,6 +14,12 @@
 <!-- SEO: Google Search Console verification -->
 <meta name="google-site-verification" content="YboVRckG5goLy0CpruU_g2WQO7LUE9W2Uf5ZBNiq4cQ">
 
+<!-- SEO: Geolocalizzazione locale -->
+<meta name="geo.region" content="IT-FR">
+<meta name="geo.placename" content="Ceprano, Frosinone">
+<meta name="geo.position" content="41.5483;13.5131">
+<meta name="ICBM" content="41.5483, 13.5131">
+
 <!-- SEO: Canonical -->
 <link rel="canonical" href="https://mecdv.github.io/cotto-e-servito-/">
 
@@ -38,14 +44,17 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "FoodEstablishment",
+  "@type": ["Restaurant", "FoodStore"],
   "name": "Cotto & Servito",
   "alternateName": "Cotto & Servito — L'Oasi della Buona Tavola",
   "description": "Gastronomia artigianale, bar, tavola calda e pizzeria a Ceprano in provincia di Frosinone. Piatti pronti da asporto, consegna a domicilio e ritiro in negozio.",
   "url": "https://mecdv.github.io/cotto-e-servito-/",
+  "menu": "https://mecdv.github.io/cotto-e-servito-/",
   "telephone": "+393922340754",
   "email": "fortunarita@pec.it",
   "vatID": "02131930600",
+  "logo": "https://mecdv.github.io/cotto-e-servito-/foto/logo-cotto-e-servito.png",
+  "image": "https://mecdv.github.io/cotto-e-servito-/foto/logo-cotto-e-servito.png",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Via Ori Martin n.4",
@@ -59,10 +68,19 @@
     "latitude": 41.5483,
     "longitude": 13.5131
   },
+  "areaServed": [
+    {"@type": "City", "name": "Ceprano"},
+    {"@type": "City", "name": "Arce"},
+    {"@type": "City", "name": "Frosinone"},
+    {"@type": "City", "name": "Pontecorvo"},
+    {"@type": "City", "name": "Roccasecca"}
+  ],
   "servesCuisine": ["Italiana", "Gastronomia", "Pizzeria", "Tavola Calda"],
   "priceRange": "€€",
   "currenciesAccepted": "EUR",
-  "paymentAccepted": "Contanti, Carte di credito",
+  "paymentAccepted": "Contanti, Bonifico bancario",
+  "takeOut": true,
+  "delivery": true,
   "hasMap": "https://maps.google.com/?q=Via+Ori+Martin+4+Ceprano+FR",
   "openingHoursSpecification": [
     {
