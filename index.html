@@ -2339,7 +2339,7 @@
         </div>
       </div>
 
-      <label class="consent-row" id="consent-row" onclick="toggleConsent()">
+      <label class="consent-row" id="consent-row" onclick="toggleConsent(event)">
         <input type="checkbox" id="f-consent-email">
         <div class="consent-box" id="consent-box"></div>
         <div class="consent-text">
@@ -2434,6 +2434,9 @@
 <!-- EmailJS SDK (locale) — caricato qui così non blocca il rendering -->
 <script src="emailjs.min.js"></script>
 <script>
+  /* Escape HTML — previene XSS su dati dal JSON */
+  function esc(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
   /* ══ EMAILJS CONFIG ══
      1. Vai su https://www.emailjs.com e crea un account gratuito
      2. Crea un "Email Service" (Gmail consigliato) → copia il Service ID
@@ -2447,7 +2450,6 @@
 
   if (typeof emailjs !== 'undefined') {
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-    console.log('✅ EmailJS inizializzato correttamente');
   } else {
     console.error('❌ EmailJS SDK non disponibile. Controlla la connessione o disabilita l\'adblocker.');
   }
@@ -2537,8 +2539,7 @@
     };
 
     try {
-      const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-      console.log('✅ Email ordine inviata:', result);
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
       showToast('✅ Ordine inviato! Controlla la tua email.');
     } catch(err) {
       console.error('❌ Errore EmailJS:', err);
@@ -2590,7 +2591,6 @@
         total:         '€'+total,
         order_body:    body,
       });
-      console.log('✅ Email conferma inviata al cliente');
     } catch(err) {
       console.error('❌ Errore email conferma cliente:', err);
     }
@@ -2615,7 +2615,6 @@
     };
     try {
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-      console.log('✅ Email iscrizione inviata');
     } catch(err) {
       console.error('❌ Errore iscrizione EmailJS:', err);
     }
@@ -3023,6 +3022,7 @@
           const firstImg = media.find(m=>m.type==='image');
           const imgEsc   = (firstImg?.src||p.img||'').replace(/`/g,"'");
           const wEsc     = (p.weight||'').replace(/`/g,"'");
+          const idEsc    = (p.id||String(pid)).replace(/`/g,"'");
           const pid      = i;
           /* Usa l'indice numerico come chiave — evita problemi se ci sono id duplicati nel JSON */
           window._prodDB[cat][pid] = {name:p.name||'',description:p.description||'',weight:p.weight||'',price:Number(p.price),media,img:firstImg?.src||p.img||''};
@@ -3047,12 +3047,12 @@
           return `<div class="product-card reveal" style="transition-delay:${(i%4)*0.08}s" onclick="openProdModal('${cat}','${pid}')">
             ${mediaHtml}
             <div class="product-body">
-              <h3 class="product-name">${p.name||''}</h3>
-              ${p.description?`<p class="product-desc">${p.description}</p>`:''}
-              <p class="product-weight">${p.weight||''}</p>
+              <h3 class="product-name">${esc(p.name)}</h3>
+              ${p.description?`<p class="product-desc">${esc(p.description)}</p>`:''}
+              <p class="product-weight">${esc(p.weight)}</p>
               <div class="product-prices"><span class="price-sell">${priceStr}</span></div>
             </div>
-            <button class="add-to-cart" onclick="event.stopPropagation();addToCart({name:\`${nameEsc}\`,price:${Number(p.price)},img:\`${imgEsc}\`,weight:\`${wEsc}\`})">+ Aggiungi al carrello</button>
+            <button class="add-to-cart" onclick="event.stopPropagation();addToCart({id:\`${idEsc}\`,name:\`${nameEsc}\`,price:${Number(p.price)},img:\`${imgEsc}\`,weight:\`${wEsc}\`})">+ Aggiungi al carrello</button>
           </div>`;
         }).join('');
         grid.querySelectorAll('.product-card').forEach(el=>revealObs.observe(el));
@@ -3273,7 +3273,7 @@
   }, {passive:true});
 
   function addToCart(product){
-    const existing = cart.find(i=>i.name===product.name);
+    const existing = cart.find(i=>(product.id ? i.id===product.id : i.name===product.name));
     if(existing){ existing.qty++; }
     else { cart.push({...product, qty:1}); }
     updateCart();
@@ -3300,8 +3300,8 @@
       <div class="cart-item">
         ${item.img ? `<img class="cart-item-img" src="${item.img}" alt="${item.name}">` : '<div class="cart-item-img"></div>'}
         <div class="cart-item-info">
-          <div class="name">${item.name}</div>
-          <div class="weight">${item.weight}${item.weight && item.weight.includes('kg') ? ' <span style="color:var(--red-it);font-size:0.68rem;">· prezzo al kg</span>' : ''}</div>
+          <div class="name">${esc(item.name)}</div>
+          <div class="weight">${esc(item.weight)}${item.weight && item.weight.includes('kg') ? ' <span style="color:var(--red-it);font-size:0.68rem;">· prezzo al kg</span>' : ''}</div>
         </div>
         <div class="cart-item-controls">
           <div class="cart-item-price">€${(item.price*item.qty).toFixed(2).replace('.',',')}</div>
@@ -3369,7 +3369,8 @@
         }
         if(consent.checked){
           const emailVal=document.getElementById('f-email').value.trim();
-          if(!emailVal||!emailVal.includes('@')){ showFieldError('f-email','Inserisci un\'email valida'); hasError=true; }
+          const _ei=document.createElement('input'); _ei.type='email'; _ei.value=emailVal;
+          if(!emailVal||!_ei.validity.valid){ showFieldError('f-email','Inserisci un\'email valida'); hasError=true; }
         }
         if(hasError) return;
     }
@@ -3470,7 +3471,8 @@
   }
 
   /* Consenso email */
-  function toggleConsent(){
+  function toggleConsent(e){
+    if(e) e.preventDefault();
     const cb  = document.getElementById('f-consent-email');
     const row = document.getElementById('consent-row');
     const lbl = document.getElementById('email-label');
@@ -3562,7 +3564,7 @@
   <span>
     🍪 Questo sito utilizza <strong style="color:var(--gold-light)">Google Fonts</strong> e un servizio di invio email per gestire gli ordini.
     Nessun cookie di profilazione o tracciamento. Continuando la navigazione acconsenti all'utilizzo di questi servizi.
-    <a href="https://policies.google.com/privacy" target="_blank"
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
        style="color:var(--gold-light);text-decoration:underline;margin-left:0.3rem;">Privacy Policy</a>
   </span>
   <button onclick="cookieAccept()" style="

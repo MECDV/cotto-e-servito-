@@ -1220,13 +1220,21 @@
       headers:{Authorization:'token '+token,'Content-Type':'application/json'},
       body: JSON.stringify(body)
     });
-    if(!res.ok){ const d=await res.json().catch(()=>({})); throw new Error(d.message||'Commit fallito ('+res.status+')'); }
+    if(!res.ok){
+      const d=await res.json().catch(()=>({}));
+      if(res.status===422) throw new Error('Conflitto: il file è stato modificato da un\'altra sessione. Ricarica la pagina e riprova.');
+      throw new Error(d.message||'Commit fallito ('+res.status+')');
+    }
     const d = await res.json();
     if(filename==='prodotti.json') prodSha   = d.content.sha;
     if(filename==='galleria.json')  gallerySha= d.content.sha;
   }
 
   async function uploadFile(file, folder){
+    const MAX_SIZE = 50 * 1024 * 1024;
+    const ALLOWED  = ['image/jpeg','image/png','image/webp','image/gif','video/mp4','video/quicktime','video/webm'];
+    if(file.size > MAX_SIZE) return Promise.reject(new Error('File troppo grande (max 50 MB)'));
+    if(!ALLOWED.includes(file.type)) return Promise.reject(new Error('Tipo file non supportato: '+file.type));
     const token = getToken();
     return new Promise((resolve,reject) => {
       const reader = new FileReader();
