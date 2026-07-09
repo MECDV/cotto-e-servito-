@@ -156,7 +156,7 @@
     --gold-light:  #DEB870;
     --gold-pale:   rgba(200,160,96,0.12);
     --espresso:    #100A04;
-    --beige-light: #6B4423;
+    --beige-light: #D4B890;
     --brown-dark:  #E0C898;
     --dm-bg:       #1A100A;
     --dm-bg-warm:  #211408;
@@ -166,6 +166,13 @@
     --dm-border:   rgba(200,160,96,0.15);
   }
 
+  /* Dark mode: fix elementi che usano --white come colore testo su sfondi scuri */
+  [data-theme="dark"] nav .logo                          { color: var(--text); }
+  [data-theme="dark"] nav ul a:hover                     { color: var(--text); }
+  [data-theme="dark"] .nav-account-btn svg               { stroke: var(--text); }
+  [data-theme="dark"] .hero-title,
+  [data-theme="dark"] .hero-title-2                      { color: var(--text); }
+  [data-theme="dark"] .btn-geolocate                     { color: var(--text); }
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; font-size: 16px; }
 
