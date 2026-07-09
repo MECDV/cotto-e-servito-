@@ -2072,8 +2072,8 @@
         </div>
 
         <div class="social-links">
-          <a href="https://www.instagram.com/cotto_da_servire_" target="_blank" class="social-btn">Instagram</a>
-          <a href="https://www.facebook.com/cotto-da-servire" target="_blank" class="social-btn">Facebook</a>
+          <a href="https://www.instagram.com/cotto_da_servire_" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+          <a href="https://www.facebook.com/cotto-da-servire" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
         </div>
       </div>
 
@@ -2086,7 +2086,7 @@
           </iframe>
         </div>
         <div style="text-align:center;margin-top:0.8rem;">
-          <a href="https://maps.google.com/?q=Via+Ori+Martin+4+Ceprano+FR" target="_blank"
+          <a href="https://maps.google.com/?q=Via+Ori+Martin+4+Ceprano+FR" target="_blank" rel="noopener noreferrer"
              style="color:var(--red-it);font-size:0.8rem;text-decoration:none;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">
             🗺️ Apri in Google Maps →
           </a>
@@ -2139,7 +2139,7 @@
       </div>
       <div class="pm-actions">
         <button class="pm-btn-cart" id="pmBtnCart"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Aggiungi al Carrello</button>
-        <a href="https://wa.me/393922340754" target="_blank" class="pm-btn-wa" id="pmBtnWA">💬 Ordina su WhatsApp</a>
+        <a href="https://wa.me/393922340754" target="_blank" rel="noopener noreferrer" class="pm-btn-wa" id="pmBtnWA">💬 Ordina su WhatsApp</a>
       </div>
       <div class="pm-delivery">
         <div class="pm-del-row"><span class="pm-del-icon">🚚</span><div><strong>Consegna a domicilio</strong>Da €3 fino a 100 km da Ceprano</div></div>
@@ -2151,7 +2151,7 @@
 </div>
 
 <!-- WHATSAPP FAB -->
-<a href="https://wa.me/393922340754" target="_blank" class="whatsapp-fab" aria-label="Scrivici su WhatsApp">💬</a>
+<a href="https://wa.me/393922340754" target="_blank" rel="noopener noreferrer" class="whatsapp-fab" aria-label="Scrivici su WhatsApp">💬</a>
 <span class="whatsapp-fab-label">Ordina su WhatsApp</span>
 
 <!-- CART FAB -->
@@ -2421,7 +2421,7 @@
         <p style="margin-top:1rem;font-size:0.82rem;opacity:0.6;">Ti contatteremo al numero fornito per confermare i dettagli.</p>
         <div class="success-actions">
           <button class="btn-close-modal" onclick="closeAll()">Chiudi</button>
-          <a href="https://wa.me/393922340754" target="_blank" class="btn-next" id="whatsappOrderBtn" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;">
+          <a href="https://wa.me/393922340754" target="_blank" rel="noopener noreferrer" class="btn-next" id="whatsappOrderBtn" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;">
             💬 Invia l'ordine su WhatsApp
           </a>
         </div>
@@ -3022,8 +3022,8 @@
           const firstImg = media.find(m=>m.type==='image');
           const imgEsc   = (firstImg?.src||p.img||'').replace(/`/g,"'");
           const wEsc     = (p.weight||'').replace(/`/g,"'");
-          const idEsc    = (p.id||String(pid)).replace(/`/g,"'");
           const pid      = i;
+          const idEsc    = (p.id||String(pid)).replace(/`/g,"'");
           /* Usa l'indice numerico come chiave — evita problemi se ci sono id duplicati nel JSON */
           window._prodDB[cat][pid] = {name:p.name||'',description:p.description||'',weight:p.weight||'',price:Number(p.price),media,img:firstImg?.src||p.img||''};
 
@@ -3157,9 +3157,9 @@
             media = `<video src="${src}" autoplay muted loop playsinline></video>`;
           }
         } else {
-          media = `<img src="${item.src||''}" alt="${item.title||''}" loading="lazy">`;
+          media = `<img src="${item.src||''}" alt="${esc(item.title)}" loading="lazy">`;
         }
-        return `<div class="${cls} reveal">${media}<div class="gallery-overlay"><span>${item.title||''}</span></div></div>`;
+        return `<div class="${cls} reveal">${media}<div class="gallery-overlay"><span>${esc(item.title)}</span></div></div>`;
       }).join('');
       grid.querySelectorAll('.gallery-item').forEach(el=>revealObs.observe(el));
     }catch(err){ console.error('Errore galleria:',err); }
@@ -3298,7 +3298,7 @@
     }
     cartItemsEl.innerHTML = cart.map((item,idx)=>`
       <div class="cart-item">
-        ${item.img ? `<img class="cart-item-img" src="${item.img}" alt="${item.name}">` : '<div class="cart-item-img"></div>'}
+        ${item.img ? `<img class="cart-item-img" src="${item.img}" alt="${esc(item.name)}">` : '<div class="cart-item-img"></div>'}
         <div class="cart-item-info">
           <div class="name">${esc(item.name)}</div>
           <div class="weight">${esc(item.weight)}${item.weight && item.weight.includes('kg') ? ' <span style="color:var(--red-it);font-size:0.68rem;">· prezzo al kg</span>' : ''}</div>
@@ -3401,7 +3401,7 @@
       : '';
     document.getElementById('checkout-summary').innerHTML = `
       <h4>Riepilogo ordine</h4>
-      ${cart.map(i=>`<div class="summary-item"><span>${i.name} × ${i.qty}</span><span>€${(i.price*i.qty).toFixed(2).replace('.',',')}</span></div>`).join('')}
+      ${cart.map(i=>`<div class="summary-item"><span>${esc(i.name)} × ${i.qty}</span><span>€${(i.price*i.qty).toFixed(2).replace('.',',')}</span></div>`).join('')}
       ${shippingRow}
       <div class="summary-total"><span>Totale</span><span class="tot">€${total.toFixed(2).replace('.',',')}</span></div>
     `;
