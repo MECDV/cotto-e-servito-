@@ -1,21 +1,9 @@
 {
   "categories": [
-    {
-      "id": "primi",
-      "label": "Primi Piatti"
-    },
-    {
-      "id": "secondi",
-      "label": "Secondi Piatti"
-    },
-    {
-      "id": "fritti",
-      "label": "Fritti"
-    },
-    {
-      "id": "dolci",
-      "label": "Dolci"
-    }
+    {"id":"primi","label":"Primi Piatti"},
+    {"id":"secondi","label":"Secondi Piatti"},
+    {"id":"fritti","label":"Fritti"},
+    {"id":"dolci","label":"Dolci"}
   ],
   "products": {
     "primi": [
@@ -25,13 +13,9 @@
         "description": "INGREDIENTI:Sfoglia:(Acqua,Farina e uova.)Salsa Pomodro:(Acqua,passata di pomodoro,olio extra vergine di oliva,sale)Macinato: carne di bovino,Brodo vegetale,sale) Mozzarella,Parmigiano reggiano \n\nProdotto già cotto confezionato in vaschetta termosigillata in atmosfera protetta.\nOpzionale scaldare in forno anche con pellicola a max 180°per 15 min o micronde max 500w per 9 min.",
         "weight": "400g · monoporzione",
         "price": 5.3,
+        "allergeni": [],
         "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782841097893_rjae.jpg",
-        "media": [
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782841097893_rjae.jpg"
-          }
-        ]
+        "media": [{"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782841097893_rjae.jpg"}]
       },
       {
         "id": "lasagna-porcini-e-salsiccia",
@@ -39,13 +23,9 @@
         "description": "INGREDIENTI: Sfoglia:(Acqua, Farina e uova.) FUNGHI.olio extra vergine di oliva, sale Mozzarella, Parmigiano reggiano \n\nProdotto già cotto confezionato in vaschetta termosigillata in atmosfera protetta.\nOpzionale scaldare in forno anche con pellicola a max 180°per 15 min o micronde max 500w per 9 min.",
         "weight": "500g · monoporzione",
         "price": 5.7,
+        "allergeni": [],
         "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782841331028_esb3.jpg",
-        "media": [
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782841331028_esb3.jpg"
-          }
-        ]
+        "media": [{"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782841331028_esb3.jpg"}]
       },
       {
         "id": "cannelloni-alla-carne",
@@ -53,13 +33,9 @@
         "description": "Cannelloni farciti con ragù di carne, cotti al forno con sugo di pomodoro",
         "weight": "400g · monoporzione",
         "price": 6,
+        "allergeni": [],
         "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782841581958_zzxg.jpg",
-        "media": [
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782841581958_zzxg.jpg"
-          }
-        ]
+        "media": [{"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782841581958_zzxg.jpg"}]
       },
       {
         "id": "cannelloni-ricotta",
@@ -67,6 +43,7 @@
         "description": "Cannelloni ripieni di ricotta fresca e spinaci, gratinati al forno con besciamella.",
         "weight": "400g · monoporzione",
         "price": 5.7,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -75,13 +52,9 @@
         "description": "Crepes delicate farcite con prosciutto cotto e mozzarella filante, gratinate al forno.",
         "weight": "400g · monoporzione",
         "price": 4.9,
+        "allergeni": [],
         "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782841885740_5clh.jpg",
-        "media": [
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782841885740_5clh.jpg"
-          }
-        ]
+        "media": [{"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782841885740_5clh.jpg"}]
       },
       {
         "id": "parmigiana-di-melanzane",
@@ -89,13 +62,9 @@
         "description": "Melanzane fritte a strati con sugo di pomodoro, mozzarella e parmigiano. La tradizione nel piatto.",
         "weight": "400g · monoporzione",
         "price": 5.7,
+        "allergeni": [],
         "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782841972623_vlea.jpg",
-        "media": [
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782841972623_vlea.jpg"
-          }
-        ]
+        "media": [{"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782841972623_vlea.jpg"}]
       },
       {
         "id": "risotto-pescatora",
@@ -103,6 +72,7 @@
         "description": "Risotto mantecato con frutti di mare freschi: cozze, vongole, gamberi e calamari.",
         "weight": "400g · monoporzione",
         "price": 6.3,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -111,6 +81,7 @@
         "description": "Gnocchi di patate fatti a mano avvolti in una cremosa salsa di scampi e brandy.",
         "weight": "400g · monoporzione",
         "price": 5.3,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -119,6 +90,7 @@
         "description": "Gnocchi di patate con pomodoro fresco, mozzarella filante e basilico profumato.",
         "weight": "400g · monoporzione",
         "price": 5.7,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -127,16 +99,11 @@
         "description": "Riso freddo con verdure di stagione, tonno, olive e pomodorini. Fresco e leggero.",
         "weight": "350g · monoporzione",
         "price": 5.3,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80",
         "media": [
-          {
-            "type": "image",
-            "src": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80"
-          },
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932785587_bm4q.jpg"
-          }
+          {"type":"image","src":"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop&q=80"},
+          {"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782932785587_bm4q.jpg"}
         ]
       },
       {
@@ -145,13 +112,9 @@
         "description": "Farro con verdure grigliate, feta, pomodori secchi e un filo d'olio extravergine.",
         "weight": "300g · monoporzione",
         "price": 6.1,
+        "allergeni": [],
         "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782932158400_rzfr.jpg",
-        "media": [
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932158400_rzfr.jpg"
-          }
-        ]
+        "media": [{"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782932158400_rzfr.jpg"}]
       }
     ],
     "secondi": [
@@ -161,16 +124,11 @@
         "description": "Arrosto di maiale cotto lentamente con olive, rosmarino e vino bianco.",
         "weight": "250g · monoporzione",
         "price": 6.3,
+        "allergeni": [],
         "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782932464406_au9a.jpg",
         "media": [
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932464406_au9a.jpg"
-          },
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932629628_r6oc.jpg"
-          }
+          {"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782932464406_au9a.jpg"},
+          {"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782932629628_r6oc.jpg"}
         ]
       },
       {
@@ -179,6 +137,7 @@
         "description": "Broccoletti ripassati in padella con salsiccia di suino, aglio e peperoncino.",
         "weight": "250g · monoporzione",
         "price": 6.3,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -187,6 +146,7 @@
         "description": "Polpette di carne bovina con fagioli borlotti in umido, sugo di pomodoro e spezie.",
         "weight": "250g · monoporzione",
         "price": 6.3,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -195,13 +155,9 @@
         "description": "Peperone dolce farcito con riso, verdure di stagione e formaggio, cotto al forno.",
         "weight": "250g · monoporzione",
         "price": 6.1,
+        "allergeni": [],
         "img": "https://mecdv.github.io/cotto-e-servito-/foto/1782932531125_4bos.jpg",
-        "media": [
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932531125_4bos.jpg"
-          }
-        ]
+        "media": [{"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782932531125_4bos.jpg"}]
       },
       {
         "id": "peperone-ripieno-alla-carne",
@@ -209,16 +165,11 @@
         "description": "Peperone farcito con carne macinata, uova e parmigiano, gratinato al forno.",
         "weight": "250g · monoporzione",
         "price": 6.3,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80",
         "media": [
-          {
-            "type": "image",
-            "src": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80"
-          },
-          {
-            "type": "image",
-            "src": "https://mecdv.github.io/cotto-e-servito-/foto/1782932697108_a7fj.jpg"
-          }
+          {"type":"image","src":"https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop&q=80"},
+          {"type":"image","src":"https://mecdv.github.io/cotto-e-servito-/foto/1782932697108_a7fj.jpg"}
         ]
       },
       {
@@ -227,6 +178,7 @@
         "description": "Alette di pollo croccanti marinate con erbe aromatiche, servite con patatine.",
         "weight": "250g · monoporzione",
         "price": 6.3,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -235,6 +187,7 @@
         "description": "Petto di pollo in scaloppina al limone, tenero e saporito, con patatine croccanti.",
         "weight": "250g · monoporzione",
         "price": 6.3,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1598103442097-8b74394b95c0?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -243,6 +196,7 @@
         "description": "Hamburger da 200g di vitello selezionato, macinato fresco ogni giorno.",
         "weight": "200g · monoporzione",
         "price": 6.5,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&q=80"
       }
     ],
@@ -253,6 +207,7 @@
         "description": "Supplì romani fritti con riso al pomodoro e cuore di mozzarella filante.",
         "weight": "4 pz da 70g",
         "price": 10.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -261,6 +216,7 @@
         "description": "Crocchette di purè di patate con provola filante, dorate in olio extravergine.",
         "weight": "4 pz da 70g",
         "price": 10.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -269,6 +225,7 @@
         "description": "Bocconcini di patate croccanti, ideali come aperitivo o contorno sfizioso.",
         "weight": "6 pz da 30g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -277,6 +234,7 @@
         "description": "Olive verdi farcite con carne, impanate e fritte secondo la tradizione marchigiana.",
         "weight": "6 pz da 30g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1559181567-c3190dff4aaa?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -285,6 +243,7 @@
         "description": "Cubetti di melanzana impanati e fritti, leggeri e croccanti. Venduti al kg.",
         "weight": "Venduto al kg · min. 500g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&h=300&fit=crop&q=80"
       }
     ],
@@ -295,6 +254,7 @@
         "description": "Biscotti tradizionali laziali con mandorle tostate, perfetti con il vino dolce.",
         "weight": "4 confezioni da 250g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -303,6 +263,7 @@
         "description": "Variante al cioccolato dei tozzetti tradizionali, croccanti e irresistibili.",
         "weight": "4 confezioni da 250g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -311,6 +272,7 @@
         "description": "Ciambelline rustiche aromatizzate al vino rosso, friabili e profumate.",
         "weight": "4 confezioni da 250g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -319,6 +281,7 @@
         "description": "Ciambelline delicate al vino bianco, leggere e croccanti, ideali col caffè.",
         "weight": "4 confezioni da 250g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -327,6 +290,7 @@
         "description": "Soffice pan di spagna con frutta candita colorata, ricetta della tradizione.",
         "weight": "4 confezioni da 250g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -335,6 +299,7 @@
         "description": "Muffin soffici e profumati, preparati freschi ogni mattina con ingredienti genuini.",
         "weight": "4 confezioni da 250g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=400&h=300&fit=crop&q=80"
       },
       {
@@ -343,6 +308,7 @@
         "description": "Crostata frolla con confettura di ciliegie, preparata secondo la ricetta tradizionale.",
         "weight": "4 confezioni da 250g",
         "price": 9.8,
+        "allergeni": [],
         "img": "https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&h=300&fit=crop&q=80"
       }
     ]

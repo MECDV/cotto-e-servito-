@@ -147,6 +147,10 @@
     .price-input { position:relative; }
     .price-input span { position:absolute; left:0.9rem; top:50%; transform:translateY(-50%); color:var(--text-soft); font-size:0.9rem; }
     .price-input input { padding-left:1.8rem; }
+    .allergen-checks { display:flex; flex-wrap:wrap; gap:0.5rem 1rem; margin-top:0.3rem; }
+    .ach { display:flex; align-items:center; gap:0.4rem; font-size:0.82rem; color:var(--text); cursor:pointer; font-weight:400; letter-spacing:0; text-transform:none; }
+    .ach input[type=checkbox] { width:16px; height:16px; cursor:pointer; accent-color:var(--red); }
+    .field-hint { font-size:0.7rem; color:var(--text-soft); margin-top:0.4rem; }
 
     /* ── GALLERY IMAGE/VIDEO PICKER ── */
     .media-section { margin-bottom:1.5rem; }
@@ -370,6 +374,25 @@
         <div class="form-group full">
           <label>Formato / Peso</label>
           <input type="text" id="editWeight" placeholder="Es. 400g · monoporzione">
+        </div>
+        <div class="form-group full">
+          <label>Allergeni presenti</label>
+          <div class="allergen-checks" id="allergenChecks">
+            <label class="ach"><input type="checkbox" value="glutine"> Glutine</label>
+            <label class="ach"><input type="checkbox" value="latte"> Latte</label>
+            <label class="ach"><input type="checkbox" value="uova"> Uova</label>
+            <label class="ach"><input type="checkbox" value="pesce"> Pesce</label>
+            <label class="ach"><input type="checkbox" value="crostacei"> Crostacei / Molluschi</label>
+            <label class="ach"><input type="checkbox" value="frutta-guscio"> Frutta a guscio</label>
+            <label class="ach"><input type="checkbox" value="soia"> Soia</label>
+            <label class="ach"><input type="checkbox" value="sesamo"> Sesamo</label>
+            <label class="ach"><input type="checkbox" value="solfiti"> Solfiti</label>
+            <label class="ach"><input type="checkbox" value="arachidi"> Arachidi</label>
+            <label class="ach"><input type="checkbox" value="lupini"> Lupini</label>
+            <label class="ach"><input type="checkbox" value="sedano"> Sedano</label>
+            <label class="ach"><input type="checkbox" value="senape"> Senape</label>
+          </div>
+          <p class="field-hint">Seleziona gli allergeni contenuti nel prodotto.</p>
         </div>
       </div>
     </div>
@@ -698,6 +721,7 @@
     document.getElementById('editPrice').value    = '';
     document.getElementById('editDesc').value     = '';
     document.getElementById('editWeight').value   = '';
+    document.querySelectorAll('#allergenChecks input[type=checkbox]').forEach(cb=>{ cb.checked=false; });
     pmInit([]);
     resetSaveStatus('saveStatus','btnSave');
     document.getElementById('editModal').classList.add('open');
@@ -713,6 +737,10 @@
     document.getElementById('editPrice').value           = p.price||'';
     document.getElementById('editDesc').value            = p.description||'';
     document.getElementById('editWeight').value          = p.weight||'';
+    const alg = Array.isArray(p.allergeni) ? p.allergeni : [];
+    document.querySelectorAll('#allergenChecks input[type=checkbox]').forEach(cb=>{
+      cb.checked = alg.includes(cb.value);
+    });
     const media = p.media&&p.media.length ? p.media : (p.img ? [{type:'image',src:p.img}] : []);
     pmInit(media);
     resetSaveStatus('saveStatus','btnSave');
@@ -722,11 +750,12 @@
   function closeEdit(){ document.getElementById('editModal').classList.remove('open'); }
 
   async function saveProduct(){
-    const name   = document.getElementById('editName').value.trim();
-    const cat    = document.getElementById('editCategory').value;
-    const price  = parseFloat(document.getElementById('editPrice').value);
-    const desc   = document.getElementById('editDesc').value.trim();
-    const weight = document.getElementById('editWeight').value.trim();
+    const name     = document.getElementById('editName').value.trim();
+    const cat      = document.getElementById('editCategory').value;
+    const price    = parseFloat(document.getElementById('editPrice').value);
+    const desc     = document.getElementById('editDesc').value.trim();
+    const weight   = document.getElementById('editWeight').value.trim();
+    const allergeni= [...document.querySelectorAll('#allergenChecks input[type=checkbox]:checked')].map(cb=>cb.value);
     if(!name){ alert('Inserisci il nome del prodotto.'); return; }
     if(isNaN(price)||price<=0){ alert('Inserisci un prezzo valido (es. 5.30).'); return; }
 
@@ -746,6 +775,7 @@
         id:   genId(name),
         name, description:desc, weight,
         price: Math.round(price*100)/100,
+        allergeni,
         img:  firstImg ? firstImg.src : '',
         ...(finalMedia.length ? {media: finalMedia} : {})
       };

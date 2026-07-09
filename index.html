@@ -232,6 +232,56 @@
   .nav-account-btn:hover { border-color: var(--gold-light); background: rgba(184,150,90,0.12); }
   .nav-account-btn svg { width: 16px; height: 16px; stroke: var(--white); fill: none; stroke-width: 1.6; }
 
+  /* ── Orario badge ── */
+  .orario-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+    padding: 0.28rem 0.7rem; border-radius: 20px;
+    flex-shrink: 0; transition: opacity 0.3s;
+    white-space: nowrap;
+  }
+  .orario-badge.is-open  { background: rgba(30,160,60,0.18);  color: #5cd87a; border: 1px solid rgba(30,160,60,0.3); }
+  .orario-badge.is-closed{ background: rgba(220,50,50,0.15);  color: #f07070; border: 1px solid rgba(220,50,50,0.25); }
+  .orario-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .is-open  .orario-dot { background: #5cd87a; box-shadow: 0 0 5px #5cd87a; animation: pulse-dot 1.8s infinite; }
+  .is-closed .orario-dot { background: #f07070; }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @media(max-width:480px){ .orario-badge{ font-size:0.6rem; padding:0.22rem 0.55rem; } }
+
+  /* ── Filtri allergeni ── */
+  .allergen-bar {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+    margin-bottom: 1.5rem; padding: 1rem 1.2rem;
+    background: rgba(184,150,90,0.07); border: 1px solid rgba(184,150,90,0.18);
+  }
+  .allergen-bar-label {
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-soft); margin-right: 0.3rem; flex-shrink: 0; font-weight: 600;
+  }
+  .allergen-chip {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    padding: 0.35rem 0.75rem; border: 1px solid rgba(184,150,90,0.3);
+    background: transparent; cursor: pointer; font-size: 0.68rem; color: var(--text-soft);
+    letter-spacing: 0.06em; transition: all 0.2s; border-radius: 20px;
+    font-family: var(--font-body); white-space: nowrap;
+  }
+  .allergen-chip:hover { border-color: var(--gold); color: var(--bark); }
+  .allergen-chip.active {
+    background: var(--red-it); border-color: var(--red-it); color: white;
+  }
+  .allergen-chip.active::before { content: '✕ '; font-size: 0.6rem; }
+  .allergen-reset {
+    margin-left: auto; font-size: 0.63rem; color: var(--text-soft);
+    background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0;
+    font-family: var(--font-body);
+  }
+  .allergen-reset:hover { color: var(--bark); }
+  .allergen-msg {
+    text-align: center; padding: 2.5rem 1rem; color: var(--text-soft);
+    font-size: 0.85rem; display: none;
+  }
+  .allergen-msg.visible { display: block; }
+
   /* ── HERO ── */
   #hero {
     min-height: 100vh;
@@ -1494,8 +1544,9 @@
   .cart-item-price { font-family: var(--font-display); font-size: 1rem; color: var(--red-it); font-weight: 600; }
   .qty-controls { display: flex; align-items: center; gap: 0.5rem; }
   .qty-btn {
-    width: 26px; height: 26px; border: 1px solid rgba(184,150,90,0.4);
-    background: none; cursor: none; font-size: 0.9rem; color: var(--bark);
+    width: 44px; height: 44px; min-width: 44px; min-height: 44px;
+    border: 1px solid rgba(184,150,90,0.4);
+    background: none; cursor: none; font-size: 1rem; color: var(--bark);
     display: flex; align-items: center; justify-content: center;
     transition: background 0.2s;
   }
@@ -1848,6 +1899,7 @@
 <!-- NAV -->
 <nav>
   <a class="logo" href="#hero">Cotto <em>&</em> Servito</a>
+  <span id="orario-badge" class="orario-badge" aria-live="polite"></span>
   <ul>
     <li><a href="#storia">La Storia</a></li>
     <li><a href="#menu">I Prodotti</a></li>
@@ -2003,6 +2055,22 @@
   <div class="section-inner">
     <span class="section-label reveal">Menu</span>
     <h2 class="section-title reveal">I nostri <em>prodotti</em></h2>
+
+    <!-- Filtro allergeni -->
+    <div class="allergen-bar" id="allergen-bar">
+      <span class="allergen-bar-label">Escludi allergeni:</span>
+      <button class="allergen-chip" data-allergen="glutine"     onclick="toggleAllergen(this)">Glutine</button>
+      <button class="allergen-chip" data-allergen="latte"       onclick="toggleAllergen(this)">Latte</button>
+      <button class="allergen-chip" data-allergen="uova"        onclick="toggleAllergen(this)">Uova</button>
+      <button class="allergen-chip" data-allergen="pesce"       onclick="toggleAllergen(this)">Pesce</button>
+      <button class="allergen-chip" data-allergen="crostacei"   onclick="toggleAllergen(this)">Crostacei / Molluschi</button>
+      <button class="allergen-chip" data-allergen="frutta-guscio" onclick="toggleAllergen(this)">Frutta a guscio</button>
+      <button class="allergen-chip" data-allergen="soia"        onclick="toggleAllergen(this)">Soia</button>
+      <button class="allergen-chip" data-allergen="sesamo"      onclick="toggleAllergen(this)">Sesamo</button>
+      <button class="allergen-chip" data-allergen="solfiti"     onclick="toggleAllergen(this)">Solfiti</button>
+      <button class="allergen-reset" id="allergen-reset" onclick="resetAllergens()" style="display:none">Mostra tutto</button>
+    </div>
+    <div class="allergen-msg" id="allergen-msg">Nessun prodotto disponibile senza gli allergeni selezionati in questa categoria.</div>
 
     <div class="menu-tabs">
       <button class="tab-btn active" onclick="showTab(event,'primi')">Primi Piatti</button>
@@ -2730,7 +2798,78 @@
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
     document.getElementById('tab-'+name).classList.add('active');
     const btn = evt && (evt.currentTarget || evt.target);
-    if(btn) btn.classList.add('active');
+    if(btn){
+      btn.classList.add('active');
+      btn.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+    }
+    applyAllergenFilter();
+  }
+
+  /* ── Orario apertura dinamico ── */
+  (function initOrario(){
+    const OPENS=9*60, CLOSES=19*60;
+    function update(){
+      const d=new Date(), day=d.getDay(), min=d.getHours()*60+d.getMinutes();
+      const isOpen=day>=1&&day<=6&&min>=OPENS&&min<CLOSES;
+      const badge=document.getElementById('orario-badge');
+      if(!badge) return;
+      if(isOpen){
+        badge.innerHTML='<span class="orario-dot"></span>Aperto';
+        badge.className='orario-badge is-open';
+      } else {
+        let quando;
+        if(!isOpen){
+          if(day===0) quando='lunedì alle 09:00';
+          else if(day===6&&min>=CLOSES) quando='lunedì alle 09:00';
+          else if(day===5&&min>=CLOSES) quando='lunedì alle 09:00';
+          else if(day>=1&&day<=4&&min>=CLOSES) quando='domani alle 09:00';
+          else quando='oggi alle 09:00';
+        }
+        badge.innerHTML='<span class="orario-dot"></span>Chiuso · apre '+quando;
+        badge.className='orario-badge is-closed';
+      }
+    }
+    update();
+    setInterval(update,60000);
+  })();
+
+  /* ── Filtri allergeni ── */
+  const _activeAllergens=new Set();
+
+  function toggleAllergen(btn){
+    const a=btn.dataset.allergen;
+    if(_activeAllergens.has(a)){ _activeAllergens.delete(a); btn.classList.remove('active'); }
+    else { _activeAllergens.add(a); btn.classList.add('active'); }
+    document.getElementById('allergen-reset').style.display=_activeAllergens.size?'':'none';
+    applyAllergenFilter();
+  }
+
+  function resetAllergens(){
+    _activeAllergens.clear();
+    document.querySelectorAll('.allergen-chip').forEach(b=>b.classList.remove('active'));
+    document.getElementById('allergen-reset').style.display='none';
+    applyAllergenFilter();
+  }
+
+  function applyAllergenFilter(){
+    if(!_activeAllergens.size){
+      document.querySelectorAll('.product-card').forEach(c=>c.style.display='');
+      document.getElementById('allergen-msg').classList.remove('visible');
+      return;
+    }
+    const activeTab=document.querySelector('.tab-content.active');
+    const cards=activeTab?activeTab.querySelectorAll('.product-card'):[];
+    let visible=0;
+    cards.forEach(card=>{
+      const raw=card.dataset.allergeni||'[]';
+      let allergeni=[];
+      try{ allergeni=JSON.parse(raw); }catch(e){}
+      const hasActive=[..._activeAllergens].some(a=>allergeni.includes(a));
+      card.style.display=hasActive?'none':'';
+      if(!hasActive) visible++;
+    });
+    const msg=document.getElementById('allergen-msg');
+    msg.classList.toggle('visible',visible===0);
   }
 
   /* ── Reveal observer (tutti i tipi) ── */
@@ -2904,40 +3043,45 @@
     }, 4500);
   })();
 
-  /* ── Card 3-D tilt (getBCR solo su mouseenter, RAF-throttled) ── */
-  (function cardTilt(){
-    document.addEventListener('mouseover', e=>{
-      const card=e.target.closest('.product-card');
-      if(card&&!card._tilt){
-        card._tilt=true;
-        let r=null, rafId=null;
-        card.addEventListener('mouseenter',function(){ r=this.getBoundingClientRect(); });
-        card.addEventListener('mousemove',function(e){
-          if(!r||rafId) return;
-          const cx=(e.clientX-r.left)/r.width-0.5, cy=(e.clientY-r.top)/r.height-0.5;
-          rafId=requestAnimationFrame(()=>{ card.style.transform=`translateY(-5px) rotateX(${-cy*10}deg) rotateY(${cx*10}deg) scale(1.02)`; rafId=null; });
-        });
-        card.addEventListener('mouseleave',function(){ if(rafId)cancelAnimationFrame(rafId); rafId=null; card.style.transform=''; r=null; });
-      }
-    });
-  })();
+  /* ── Card 3-D tilt e bottoni magnetici: solo su dispositivi con mouse ── */
+  if(!window.matchMedia('(pointer:coarse)').matches){
 
-  /* ── Bottoni magnetici (getBCR solo su mouseenter, RAF-throttled) ── */
-  (function magneticButtons(){
-    document.querySelectorAll('.btn-primary,.btn-secondary').forEach(btn=>{
-      let r=null, rafId=null;
-      btn.addEventListener('mouseenter',function(){ r=this.getBoundingClientRect(); });
-      btn.addEventListener('mousemove',function(e){
-        if(!r||rafId) return;
-        const dx=(e.clientX-r.left-r.width/2)*0.18, dy=(e.clientY-r.top-r.height/2)*0.28;
-        rafId=requestAnimationFrame(()=>{ btn.style.transform=`translate(${dx}px,${dy}px)`; rafId=null; });
+    /* Card 3-D tilt (getBCR solo su mouseenter, RAF-throttled) */
+    (function cardTilt(){
+      document.addEventListener('mouseover', e=>{
+        const card=e.target.closest('.product-card');
+        if(card&&!card._tilt){
+          card._tilt=true;
+          let r=null, rafId=null;
+          card.addEventListener('mouseenter',function(){ r=this.getBoundingClientRect(); });
+          card.addEventListener('mousemove',function(e){
+            if(!r||rafId) return;
+            const cx=(e.clientX-r.left)/r.width-0.5, cy=(e.clientY-r.top)/r.height-0.5;
+            rafId=requestAnimationFrame(()=>{ card.style.transform=`translateY(-5px) rotateX(${-cy*10}deg) rotateY(${cx*10}deg) scale(1.02)`; rafId=null; });
+          });
+          card.addEventListener('mouseleave',function(){ if(rafId)cancelAnimationFrame(rafId); rafId=null; card.style.transform=''; r=null; });
+        }
       });
-      btn.addEventListener('mouseleave',function(){
-        if(rafId)cancelAnimationFrame(rafId); rafId=null;
-        r=null; this.style.transform=''; this.style.transition='transform 0.5s var(--ease-out)';
+    })();
+
+    /* Bottoni magnetici (getBCR solo su mouseenter, RAF-throttled) */
+    (function magneticButtons(){
+      document.querySelectorAll('.btn-primary,.btn-secondary').forEach(btn=>{
+        let r=null, rafId=null;
+        btn.addEventListener('mouseenter',function(){ r=this.getBoundingClientRect(); });
+        btn.addEventListener('mousemove',function(e){
+          if(!r||rafId) return;
+          const dx=(e.clientX-r.left-r.width/2)*0.18, dy=(e.clientY-r.top-r.height/2)*0.28;
+          rafId=requestAnimationFrame(()=>{ btn.style.transform=`translate(${dx}px,${dy}px)`; rafId=null; });
+        });
+        btn.addEventListener('mouseleave',function(){
+          if(rafId)cancelAnimationFrame(rafId); rafId=null;
+          r=null; this.style.transform=''; this.style.transition='transform 0.5s var(--ease-out)';
+        });
       });
-    });
-  })();
+    })();
+
+  } /* end pointer:fine only */
 
   /* ── Ripple sui bottoni ── */
   document.querySelectorAll('.btn-primary,.btn-secondary,.btn-geolocate').forEach(btn => {
@@ -3062,7 +3206,8 @@
             </div>`;
           }
 
-          return `<div class="product-card reveal" style="transition-delay:${(i%4)*0.08}s" onclick="openProdModal('${cat}','${pid}')">
+          const allergeniJson=JSON.stringify(Array.isArray(p.allergeni)?p.allergeni:[]).replace(/"/g,'&quot;');
+          return `<div class="product-card reveal" data-allergeni="${allergeniJson}" style="transition-delay:${(i%4)*0.08}s" onclick="openProdModal('${cat}','${pid}')">
             ${mediaHtml}
             <div class="product-body">
               <h3 class="product-name">${esc(p.name)}</h3>
