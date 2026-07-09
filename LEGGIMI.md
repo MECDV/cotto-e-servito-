@@ -395,6 +395,121 @@ per EmailJS), ma vanno protette lato dashboard:
 
 ---
 
+## 13. AMBIENTE DI SVILUPPO — Note per agenti AI
+
+> Sezione critica. Contiene bug noti dell'ambiente sandbox che causano loop di
+> errori git. Leggila prima di toccare qualsiasi cosa.
+
+### 13a. Il mount FUSE: `rm` e `unlink()` non funzionano
+
+La cartella locale `sito chiapposo` viene letta dal tool shell (bash) tramite
+un **mount FUSE** che blocca `rm` e `unlink()` con `Operation not permitted`.
+Git usa `unlink()` internamente per rimuovere i propri file di lock dopo ogni
+comando: su questo mount quell'operazione fallisce silenziosamente, lasciando
+il lock in posizione e bloccando il comando successivo con:
+
+```
+fatal: Unable to create '.../.git/index.lock': File exists.
+```
+
+**Soluzione 1 — `mv` dal tool bash (sposta invece di cancellare):**
+```bash
+mv -f .git/index.lock "/tmp/discard_$RANDOM" 2>/dev/null
+git <comando>
+```
+Funziona per tutti i lock: `HEAD.lock`, `REBASE_HEAD.lock`,
+`refs/heads/main.lock`, `packed-refs.lock`. **Non lasciare mai un lock
+dentro `.git/refs/heads/`** — git lo interpreta come un ref e va in errore
+("bad object..."). Spostalo fuori da `.git/` interamente.
+
+**Soluzione 2 — PowerShell (la più affidabile per eliminare file/cartelle):**
+```powershell
+Remove-Item -Recurse -Force "C:\Users\Utente\Desktop\sito chiapposo\<percorso>" -Confirm:$false
+```
+Il tool PowerShell accede al filesystem Windows nativo senza passare per il
+bridge FUSE: non ha questi problemi. Preferirlo per operazioni di pulizia.
+
+### 13b. Operazioni che sovrascrivono file tracciati falliscono
+
+`git reset --hard`, `git checkout`, `git merge` con conflitti falliscono
+perché internamente fanno `unlink + create` sui file di lavoro. Se serve
+allineare la cartella locale a `origin/main`:
+
+1. Clona il repo pulito in `/tmp` (lì git funziona normalmente):
+   `git clone https://github.com/MECDV/cotto-e-servito-.git /tmp/clone-cotto`
+2. Copia i file necessari con `cp` (sovrascrivere un file esistente funziona):
+   `cp /tmp/clone-cotto/index.html "c:\Users\Utente\Desktop\sito chiapposo\index.html"`
+3. Se serve allineare anche `.git` locale: `mv` l'intera cartella `.git`
+   altrove, poi `cp -r` quella pulita dal clone.
+
+### 13c. Write/Edit e bash non sempre coerenti in tempo reale
+
+Un file scritto con il tool Write/Edit (percorso Windows `C:\...`) può
+risultare stantio o troncato se letto subito dopo via bash (`cat`, `git diff`).
+Causa: cache non invalidata tra i due bridge.
+
+**Soluzione:** usa sempre il tool `Read` (fonte di verità) per verificare il
+contenuto dopo una modifica. Se il file deve poi passare per `git`, riscrivilo
+da bash con un heredoc o `cp` invece di aspettare che la cache si allinei.
+
+### 13d. Permessi "fantasma" in git status
+
+Il mount mostra quasi tutti i file come modificati per un cambio di permesso
+644→755 senza alcun cambio di contenuto reale. In questo repo è già impostato:
+
+```bash
+git config core.fileMode false
+```
+
+Se in una sandbox nuova `git status` mostra decine di file "modified" senza
+diff reale, è questo. Verifica con `git diff --stat` (mostra `0` righe).
+
+### 13e. File che non si riescono a cancellare via bash
+
+Se un'operazione crea file di scarto non eliminabili (per il bug 13a), usa
+**PowerShell** (vedi 13a, soluzione 2) oppure spostali in una cartella
+dedicata (es. `_da_eliminare_manualmente/`) e chiedi all'utente di eliminarla
+da Esplora File di Windows.
+
+---
+
+## 14. CREDENZIALI GITHUB PER AGENTI
+
+Il progetto usa **due canali separati** per scrivere su GitHub:
+
+| Canale | Dove | Credenziale |
+|---|---|---|
+| Pannello admin (`gestione.html`) | Browser dell'utente | Personal Access Token in `localStorage`, chiave `cotto_token` |
+| Agente AI da shell (`git push`) | Sandbox dell'agente | Token chiesto in chat quando serve |
+
+L'agente **non ha accesso** al token del browser. Se serve fare `git push` e
+le credenziali non sono configurate, chiedi il token all'utente. Una volta
+ricevuto:
+
+```bash
+git config user.email "marcodevellis9@gmail.com"
+git config user.name "MECDV"
+git config credential.helper "store --file=.git/credentials-store"
+printf 'https://MECDV:IL_TOKEN@github.com\n' > .git/credentials-store
+chmod 600 .git/credentials-store
+```
+
+Il file `.git/credentials-store` resta locale, mai committato, valido solo
+per la sessione sandbox corrente. In una nuova sessione va riconfigurato.
+
+**Avviso push a sorpresa:** il pannello admin scrive direttamente su GitHub
+via API senza passare per git. Quindi `origin/main` può essere avanti rispetto
+alla copia locale anche senza che l'agente abbia fatto nulla. Prima di un
+push, controlla sempre se c'è qualcosa da pullare:
+
+```bash
+git fetch origin
+git status
+# Se dice "Your branch is behind" → git pull --rebase origin main prima di pushare
+```
+
+---
+
 ## 11. VARIABILI DI STATO GLOBALI (gestione.html)
 
 ```javascript
