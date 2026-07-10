@@ -1,0 +1,19 @@
+{
+  "name": "C&S Gestione",
+  "short_name": "Gestione",
+  "description": "Pannello admin Cotto & Servito",
+  "start_url": "/cotto-e-servito-/gestione.html",
+  "scope": "/cotto-e-servito-/",
+  "display": "standalone",
+  "background_color": "#1C0F06",
+  "theme_color": "#B8965A",
+  "lang": "it",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
