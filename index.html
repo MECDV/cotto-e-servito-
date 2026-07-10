@@ -752,7 +752,7 @@
     opacity: 0; animation: fadeUp 1s 1.3s var(--ease-out) forwards;
   }
   .hero-cta {
-    display: inline-flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
+    display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; justify-content: center;
     opacity: 0; animation: fadeUp 1s 1.55s var(--ease-out) forwards;
   }
   .btn-primary {
@@ -783,22 +783,25 @@
   .btn-secondary:hover { border-color: var(--gold-light); color: white; background: rgba(184,150,90,0.08); }
 
   .scroll-indicator {
-    position: absolute; bottom: 2.5rem; left: 50%;
-    transform: translateX(-50%);
     opacity: 0; animation: fadeUp 1s 2.2s forwards;
     display: flex; flex-direction: column; align-items: center; gap: 0.5rem; z-index: 3;
+    transform: translateY(-8px);
   }
   .scroll-indicator p {
-    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
-    color: rgba(255,255,255,0.3); font-family: var(--font-body);
+    font-size: 0.75rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: #f5d98a; font-family: var(--font-body);
+    text-shadow: 0 0 8px rgba(245,217,138,0.6);
   }
   .scroll-indicator span {
-    display: block; width: 1px; height: 55px;
+    display: block; width: 3px; height: 100px;
     background: rgba(255,255,255,0.2); margin: 0 auto; position: relative; overflow: hidden;
+    box-shadow: 0 0 8px rgba(184,150,90,0.4);
   }
   .scroll-indicator span::after {
-    content: ''; position: absolute; top: -100%; left: 0;
-    width: 100%; height: 100%; background: var(--gold-light);
+    content: ''; position: absolute; top: -100%; left: -3px;
+    width: 8px; height: 40%;
+    background: linear-gradient(to bottom, transparent, #f5d98a, #ffffff, #f5d98a, transparent);
+    box-shadow: 0 0 10px 4px rgba(245,217,138,0.7);
     animation: scrollLine 2s 2.8s infinite;
   }
   @keyframes scrollLine { 0% { top: -100%; } 100% { top: 200%; } }
@@ -2353,12 +2356,12 @@
     <p class="hero-desc">Piatti fatti a mano con passione, confezionati in vaschette bio senza additivi. Pronti da scaldare, pronti da gustare.</p>
     <div class="hero-cta">
       <a href="#menu" class="btn-primary">Scopri i Prodotti</a>
+      <div class="scroll-indicator" aria-hidden="true">
+        <p>Scorri</p>
+        <span></span>
+      </div>
       <a href="#storia" class="btn-secondary">La Nostra Storia</a>
     </div>
-  </div>
-  <div class="scroll-indicator" aria-hidden="true">
-    <p>Scorri</p>
-    <span></span>
   </div>
 </section>
 
