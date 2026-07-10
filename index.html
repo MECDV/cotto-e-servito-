@@ -471,6 +471,35 @@
   nav ul a:hover { color: var(--white); }
   nav ul a:hover::after { width: 100%; }
 
+  /* ── Nav ordini button ── */
+  .nav-ordini-btn {
+    width: 38px; height: 38px; background: none; border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 50%; cursor: none; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: border-color 0.2s, background 0.2s;
+  }
+  .nav-ordini-btn:hover { border-color: var(--gold-light); background: rgba(184,150,90,0.12); }
+  .nav-ordini-btn svg { width: 16px; height: 16px; stroke: var(--white); fill: none; stroke-width: 1.6; }
+  [data-theme="dark"] .nav-ordini-btn { border-color: var(--border-dm); }
+  [data-theme="dark"] .nav-ordini-btn svg { stroke: var(--text); }
+  [data-theme="dark"] .nav-ordini-btn:hover { background: var(--glow-sm); }
+
+  .ordine-card {
+    border: 1px solid rgba(184,150,90,0.18); border-radius: 10px;
+    padding: 1.1rem 1.2rem; margin-bottom: 1rem; background: var(--cream);
+  }
+  .ordine-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .ordine-card-data { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-soft); }
+  .ordine-card-tot { font-family: var(--font-display); font-size: 1.1rem; color: var(--bark); font-weight: 600; }
+  .ordine-card-prod { font-size: 0.82rem; color: var(--text-soft); margin-bottom: 0.8rem; line-height: 1.5; }
+  .btn-riordina {
+    background: var(--espresso); color: var(--white); border: none; padding: 0.55rem 1.2rem;
+    font-family: var(--font-body); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em;
+    cursor: none; transition: background 0.2s;
+  }
+  .btn-riordina:hover { background: var(--bark); }
+  [data-theme="dark"] .ordine-card { background: var(--surf-1-dm); border-color: var(--border-dm); }
+  [data-theme="dark"] .ordine-card-tot { color: var(--gold-light); }
+
   /* ── Nav account button ── */
   .nav-account-btn {
     display: flex; align-items: center; justify-content: center;
@@ -2195,6 +2224,9 @@
     <li><a href="#contatti">Contatti</a></li>
   </ul>
   <button type="button" class="dark-toggle" id="darkToggle" aria-label="Cambia tema chiaro/scuro" title="Tema chiaro/scuro">🌙</button>
+  <button type="button" class="nav-ordini-btn" id="ordiniBtn" aria-label="I miei ordini" title="I miei ordini">
+    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+  </button>
   <button class="nav-account-btn" id="accountBtn" aria-label="Iscriviti">
     <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
   </button>
@@ -2571,6 +2603,17 @@
     <p class="cart-note">Ritiro in negozio o consegna · Pagamento alla consegna o bonifico</p>
     <p class="cart-note" style="margin-top:0.3rem;font-size:0.68rem;">* I prodotti al kg verranno pesati in negozio · il prezzo è indicativo</p>
   </div>
+</div>
+
+<!-- ORDINI DRAWER -->
+<div class="cart-drawer" id="ordiniDrawer">
+  <div class="drawer-header">
+    <h2>I miei <em>ordini</em></h2>
+    <button type="button" class="drawer-close" id="ordiniClose">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-items" id="ordiniList"></div>
 </div>
 
 <!-- SIGNUP DRAWER -->
@@ -3828,7 +3871,64 @@
   function closeDrawer(){ cartDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }
   cartFab.addEventListener('click', openDrawer);
   drawerClose.addEventListener('click', closeDrawer);
-  drawerOverlay.addEventListener('click', ()=>{ closeDrawer(); closeCheckout(); closeSignupDrawer(); });
+  drawerOverlay.addEventListener('click', ()=>{ closeDrawer(); closeCheckout(); closeSignupDrawer(); closeOrdiniDrawer(); });
+
+  /* ── Ordini drawer ── */
+  const ordiniDrawer = document.getElementById('ordiniDrawer');
+  const ordiniBtn    = document.getElementById('ordiniBtn');
+  function openOrdiniDrawer(){ renderOrdini(); ordiniDrawer.classList.add('open'); drawerOverlay.classList.add('open'); }
+  function closeOrdiniDrawer(){ ordiniDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }
+  ordiniBtn.addEventListener('click', openOrdiniDrawer);
+  document.getElementById('ordiniClose').addEventListener('click', closeOrdiniDrawer);
+  ordiniDrawer.addEventListener('touchstart', e=>{ touchStartX=e.touches[0].clientX; },{passive:true});
+  ordiniDrawer.addEventListener('touchend',   e=>{ if(e.changedTouches[0].clientX-touchStartX>80) closeOrdiniDrawer(); },{passive:true});
+
+  function saveOrderHistory(){
+    const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const offSconto = calcOffertaSconto(subtotal);
+    const shipping = deliveryMode==='consegna' ? shippingCost : 0;
+    const ordine = {
+      id: Date.now().toString(),
+      data: new Date().toISOString(),
+      items: cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty,img:i.img||''})),
+      totale: +(subtotal-offSconto+shipping).toFixed(2),
+      modalita: deliveryMode
+    };
+    let storico = JSON.parse(localStorage.getItem('cs_ordini')||'[]');
+    storico.unshift(ordine);
+    if(storico.length>10) storico=storico.slice(0,10);
+    localStorage.setItem('cs_ordini', JSON.stringify(storico));
+  }
+
+  function renderOrdini(){
+    const storico = JSON.parse(localStorage.getItem('cs_ordini')||'[]');
+    const list = document.getElementById('ordiniList');
+    if(!storico.length){
+      list.innerHTML='<div class="cart-empty"><p>Nessun ordine ancora</p><span>I tuoi ordini appariranno qui dopo il primo acquisto</span></div>';
+      return;
+    }
+    list.innerHTML = storico.map((o,idx)=>`
+      <div class="ordine-card">
+        <div class="ordine-card-header">
+          <span class="ordine-card-data">${new Date(o.data).toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'})}</span>
+          <span class="ordine-card-tot">€${o.totale.toFixed(2).replace('.',',')}</span>
+        </div>
+        <div class="ordine-card-prod">${o.items.map(i=>`${esc(i.name)} ×${i.qty}`).join(' · ')}</div>
+        <button type="button" class="btn-riordina" onclick="riordina(${idx})">Ri-ordina →</button>
+      </div>
+    `).join('');
+  }
+
+  function riordina(idx){
+    const storico=JSON.parse(localStorage.getItem('cs_ordini')||'[]');
+    const ordine=storico[idx];
+    if(!ordine) return;
+    cart=ordine.items.map(i=>({...i}));
+    updateCart();
+    closeOrdiniDrawer();
+    openDrawer();
+    showToast('✅ Ordine caricato nel carrello!');
+  }
 
   /* ── Signup drawer ── */
   const accountBtn    = document.getElementById('accountBtn');
@@ -4054,6 +4154,9 @@
       msg = `Grazie ${nome}! Effettua il bonifico di €${total.toFixed(2).replace('.',',')} a: Cotto & Servito — IBAN IT32 J030 6974 4006 2502 1445 465 — causale: Ordine Cotto & Servito – ${nome}. L'ordine sarà confermato alla ricezione del pagamento.`;
     }
     document.getElementById('success-msg').textContent = msg;
+
+    // 💾 Salva nello storico ordini (localStorage)
+    saveOrderHistory();
 
     // 📧 Invia email al negozio + conferma al cliente
     sendOrderEmail(ordN);
