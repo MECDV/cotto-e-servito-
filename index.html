@@ -1543,6 +1543,28 @@
       transition: color 0.2s;
     }
     .mobile-nav a:active { color: var(--gold-light); }
+    .mobile-nav-divider {
+      width: 50px; height: 1px;
+      background: rgba(184,150,90,0.3);
+      flex-shrink: 0;
+    }
+    .mobile-nav-btn {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.03em;
+      font-style: italic;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .mobile-nav-btn:active { color: var(--gold-light); }
     .mobile-nav .tricolore-mini {
       width: 60px; height: 3px;
       background: linear-gradient(to right, var(--green-it) 33%, white 33%, white 66%, var(--red-it) 66%);
@@ -1749,6 +1771,8 @@
   @media (max-width: 600px) {
     .hamburger { display: flex; }
     .mobile-nav { display: flex; }
+    .nav-actions .dark-toggle { display: none; }
+    .nav-actions .nav-ordini-btn { display: none; }
   }
 
   /* Cart FAB button */
@@ -2295,6 +2319,14 @@
   <a href="#menu"      onclick="closeMobileNav()">I Prodotti</a>
   <a href="#galleria"  onclick="closeMobileNav()">Galleria</a>
   <a href="#contatti"  onclick="closeMobileNav()">Contatti</a>
+  <div class="mobile-nav-divider"></div>
+  <button type="button" class="mobile-nav-btn" onclick="closeMobileNav(); setTimeout(()=>openOrdiniDrawer(),350)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+    I miei ordini
+  </button>
+  <button type="button" class="mobile-nav-btn" id="mobileThemeBtn" onclick="toggleThemeMobile()">
+    <span id="mobileThemeIcon">🌙</span> Cambia tema
+  </button>
 </div>
 
 <!-- HERO -->
@@ -3106,6 +3138,13 @@
     mobileNav.setAttribute('aria-hidden','false');
     hamburgerBtn.setAttribute('aria-expanded','true');
     document.body.style.overflow = 'hidden';
+    const mIcon = document.getElementById('mobileThemeIcon');
+    if(mIcon) mIcon.textContent = document.documentElement.getAttribute('data-theme')==='dark' ? '☀️' : '🌙';
+  }
+  function toggleThemeMobile(){
+    document.getElementById('darkToggle').click();
+    const mIcon = document.getElementById('mobileThemeIcon');
+    if(mIcon) mIcon.textContent = document.documentElement.getAttribute('data-theme')==='dark' ? '☀️' : '🌙';
   }
   function closeMobileNav(){
     hamburgerBtn.classList.remove('open');
