@@ -1,4 +1,4 @@
-const CACHE = 'cotto-v1';
+const CACHE = 'cotto-v2';
 
 const STATIC = [
   '/cotto-e-servito-/',
@@ -7,6 +7,7 @@ const STATIC = [
   '/cotto-e-servito-/emailjs.min.js',
   '/cotto-e-servito-/icon.svg',
   '/cotto-e-servito-/manifest.json',
+  '/cotto-e-servito-/gestione-manifest.json',
 ];
 
 const DATA_PATTERNS = [
