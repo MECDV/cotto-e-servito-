@@ -450,6 +450,23 @@
     text-decoration: none;
   }
   nav .logo em { color: var(--gold-light); font-style: italic; }
+  /* Sinistra: brand + badge */
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    min-width: 0;
+  }
+
+  /* Destra: pulsanti raggruppati */
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
   nav ul { display: flex; gap: 2.5rem; list-style: none; }
   nav ul a {
     color: rgba(255,255,255,0.7);
@@ -1442,6 +1459,8 @@
     nav { padding: 1rem 1.5rem; }
     nav.scrolled { padding: 0.7rem 1.5rem; }
     nav ul { gap: 1.2rem; }
+    /* Badge abbreviato su tablet: solo il dot e lo stato */
+    .orario-badge { max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .storia-grid, .contatti-grid { grid-template-columns: 1fr; gap: 3rem; }
     .tech-grid { grid-template-columns: 1fr; gap: 1px; }
@@ -1474,6 +1493,8 @@
     nav.scrolled { padding: 0.7rem 1.2rem; }
     nav ul { display: none; }
     nav .logo { font-size: 1.2rem; }
+    /* Badge troppo lungo su mobile: si nasconde, visibile solo su tablet+ */
+    .nav-brand .orario-badge { display: none; }
 
     /* Hamburger button */
     .hamburger {
@@ -2230,25 +2251,33 @@
 
 <!-- NAV -->
 <nav>
-  <a class="logo" href="#hero">Cotto <em>&</em> Servito</a>
-  <span id="orario-badge" class="orario-badge" aria-live="polite"></span>
+  <!-- Sinistra: logo + badge apertura -->
+  <div class="nav-brand">
+    <a class="logo" href="#hero">Cotto <em>&</em> Servito</a>
+    <span id="orario-badge" class="orario-badge" aria-live="polite"></span>
+  </div>
+
+  <!-- Centro: link di navigazione -->
   <ul>
     <li><a href="#storia">La Storia</a></li>
     <li><a href="#menu">I Prodotti</a></li>
     <li><a href="#galleria">Galleria</a></li>
     <li><a href="#contatti">Contatti</a></li>
   </ul>
-  <button type="button" class="dark-toggle" id="darkToggle" aria-label="Cambia tema chiaro/scuro" title="Tema chiaro/scuro">🌙</button>
-  <button type="button" class="nav-ordini-btn" id="ordiniBtn" aria-label="I miei ordini" title="I miei ordini">
-    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
-  </button>
-  <button class="nav-account-btn" id="accountBtn" aria-label="Iscriviti">
-    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-  </button>
-  <!-- Hamburger (visibile solo su mobile) -->
-  <button class="hamburger" id="hamburgerBtn" aria-label="Apri menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
+
+  <!-- Destra: pulsanti azione + hamburger -->
+  <div class="nav-actions">
+    <button type="button" class="dark-toggle" id="darkToggle" aria-label="Cambia tema chiaro/scuro" title="Tema chiaro/scuro">🌙</button>
+    <button type="button" class="nav-ordini-btn" id="ordiniBtn" aria-label="I miei ordini" title="I miei ordini">
+      <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+    </button>
+    <button class="nav-account-btn" id="accountBtn" aria-label="Iscriviti">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Apri menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- BANNER OFFERTA -->
