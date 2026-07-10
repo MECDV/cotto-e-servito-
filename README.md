@@ -17,11 +17,16 @@ pagamento → conferma) con notifica via e-mail.
 - Scheda prodotto modale con galleria multi-media (foto + video YouTube)
 - Carrello persistente con animazione "fly-to-cart"
 - Checkout 4 step: consegna → dati → pagamento → conferma
+- **Slot orario di ritiro** generati dinamicamente ogni 30 min dagli orari di apertura
+- **Coupon/codice sconto** applicabile al checkout (% o importo fisso)
+- **Countdown offerta** — banner con timer per offerte a tempo, sconto automatico nel carrello
+- **Storico ordini** — drawer "I miei ordini" con ri-ordina in un click (localStorage)
 - Calcolo spese di spedizione con geolocalizzazione
 - Filtri allergeni (13 allergeni) per escludere prodotti non adatti
 - Badge orario apertura/chiusura in tempo reale (aggiornato da `config.json`)
 - Condivisione prodotto via Web Share API
 - **Dark mode** con sistema a 4 livelli di superficie e glow oro ambientale
+- **PWA** — installabile come app sul telefono, funziona offline grazie al service worker
 - Animazioni: cursor personalizzato, parallax hero, particelle, card tilt 3D,
   fly-to-cart, scroll reveal, shimmer titoli, bounce carrello
 - Iscrizione newsletter (drawer laterale)
@@ -30,6 +35,8 @@ pagamento → conferma) con notifica via e-mail.
 - Gestione prodotti: aggiunta, modifica, eliminazione con anteprima live
 - Gestione galleria: caricamento foto/video, ordinamento
 - Gestione orari: apertura/chiusura per giorno della settimana + chiusura straordinaria
+- **Gestione offerta a tempo**: attiva/disattiva banner countdown con scadenza e sconto %
+- **Gestione coupon**: crea, attiva/disattiva, elimina codici sconto (% o €)
 - Upload immagini codificate in base64 verso GitHub API
 - Tutte le modifiche salvate direttamente su GitHub (nessun backend)
 
@@ -43,7 +50,11 @@ pagamento → conferma) con notifica via e-mail.
 | `gestione.html` | Pannello admin |
 | `prodotti.json` | Database prodotti (menu) |
 | `galleria.json` | Database galleria |
-| `config.json` | Orari di apertura + flag chiusura straordinaria |
+| `config.json` | Orari di apertura, chiusura straordinaria, offerta a tempo |
+| `coupons.json` | Codici sconto (gestiti dal pannello admin) |
+| `manifest.json` | Manifest PWA per installazione come app |
+| `sw.js` | Service worker: cache offline-first |
+| `icon.svg` | Icona app PWA |
 | `emailjs.min.js` | Libreria EmailJS (non modificare) |
 | `foto/` | Immagini caricate dal pannello admin |
 
@@ -83,18 +94,6 @@ python3 -m http.server 3000
 ```
 
 Poi apri http://localhost:3000
-
----
-
-## Funzionalità da implementare
-
-| # | Funzione | Descrizione |
-|---|---|---|
-| 1 | **PWA — App installabile** | `manifest.json` + service worker: il sito diventa installabile come app sul telefono (icona sulla schermata home) e funziona anche offline |
-| 2 | **Coupon / Codice sconto** | Il cliente inserisce un codice al checkout → sconto applicato automaticamente; i codici sono gestiti dall'admin |
-| 3 | **Slot orario di ritiro** | Nel checkout il cliente sceglie l'orario di ritiro — evita code e aiuta a organizzare la produzione |
-| 4 | **Countdown offerta** | Banner con timer a conto alla rovescia per un'offerta a tempo (es. "Lasagna -20% ancora per 2 ore") |
-| 5 | **Storico ordini cliente** | Il cliente vede i suoi ultimi ordini salvati nel browser e può ri-ordinare con un click |
 
 ---
 
