@@ -1,0 +1,4 @@
+[
+  { "codice": "COTTO10", "tipo": "pct", "valore": 10, "attivo": true },
+  { "codice": "PROMO2",  "tipo": "eur", "valore": 2,  "attivo": true }
+]

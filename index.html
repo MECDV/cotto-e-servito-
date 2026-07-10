@@ -500,6 +500,20 @@
   [data-theme="dark"] .ordine-card { background: var(--surf-1-dm); border-color: var(--border-dm); }
   [data-theme="dark"] .ordine-card-tot { color: var(--gold-light); }
 
+  /* ── Coupon ── */
+  .coupon-box { margin-bottom: 1.5rem; }
+  .coupon-label { display: block; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); font-weight: 500; margin-bottom: 0.6rem; }
+  .coupon-row { display: flex; gap: 0.5rem; }
+  .coupon-row input { flex: 1; padding: 0.75rem 0.9rem; border: 1.5px solid rgba(184,150,90,0.3); background: var(--white); color: var(--text); font-family: var(--font-body); font-size: 0.88rem; letter-spacing: 0.06em; text-transform: uppercase; outline: none; transition: border-color 0.2s; }
+  .coupon-row input:focus { border-color: var(--gold); }
+  .coupon-apply { background: var(--espresso); color: var(--white); border: none; padding: 0.75rem 1.3rem; font-family: var(--font-body); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; cursor: none; white-space: nowrap; transition: background 0.2s; }
+  .coupon-apply:hover { background: var(--bark); }
+  .coupon-msg { font-size: 0.8rem; margin-top: 0.5rem; min-height: 1.2em; }
+  .coupon-msg.ok { color: #1a6b2f; }
+  .coupon-msg.err { color: var(--red-it); }
+  .coupon-remove { background: none; border: none; font-family: var(--font-body); font-size: 0.78rem; color: var(--text-soft); cursor: none; text-decoration: underline; margin-left: 0.5rem; }
+  [data-theme="dark"] .coupon-row input { background: var(--surf-1-dm); border-color: var(--border-dm); color: var(--text); }
+
   /* ── Nav account button ── */
   .nav-account-btn {
     display: flex; align-items: center; justify-content: center;
@@ -2796,6 +2810,15 @@
           <textarea id="f-note" placeholder="Allergie, preferenze, istruzioni particolari…"></textarea>
         </div>
       </div>
+      <div class="coupon-box">
+        <label class="coupon-label">Hai un codice sconto?</label>
+        <div class="coupon-row">
+          <input type="text" id="f-coupon" placeholder="es. COTTO10" autocomplete="off" maxlength="30">
+          <button type="button" class="coupon-apply" id="coupon-btn" onclick="applyCoupon()">Applica</button>
+        </div>
+        <div class="coupon-msg" id="coupon-msg"></div>
+      </div>
+
       <div class="checkout-nav">
         <button class="btn-back" onclick="goStep(1)">← Indietro</button>
         <button class="btn-next" onclick="goStep(3)">Continua →</button>
@@ -3283,6 +3306,47 @@
   }
 
   loadOrariConfig();
+
+  /* ── Coupon ── */
+  let activeCoupon = null;
+
+  async function applyCoupon(){
+    const code = (document.getElementById('f-coupon').value||'').trim().toUpperCase();
+    const msg  = document.getElementById('coupon-msg');
+    msg.className='coupon-msg'; msg.textContent='';
+    if(!code){ msg.className='coupon-msg err'; msg.textContent='Inserisci un codice.'; return; }
+    try {
+      const r = await fetch('coupons.json?t='+Date.now());
+      if(!r.ok) throw new Error('File coupon non trovato.');
+      const coupons = await r.json();
+      const found = coupons.find(c=>c.codice.toUpperCase()===code);
+      if(!found){ msg.className='coupon-msg err'; msg.textContent='Codice non valido.'; return; }
+      if(!found.attivo){ msg.className='coupon-msg err'; msg.textContent='Questo codice non è più attivo.'; return; }
+      activeCoupon = found;
+      document.getElementById('f-coupon').disabled = true;
+      document.getElementById('coupon-btn').style.display = 'none';
+      const scontoTxt = found.tipo==='pct' ? `-${found.valore}%` : `-€${found.valore.toFixed(2).replace('.',',')}`;
+      msg.className='coupon-msg ok';
+      msg.innerHTML=`✅ Codice applicato: <strong>${scontoTxt}</strong> <button type="button" class="coupon-remove" onclick="removeCoupon()">Rimuovi</button>`;
+    } catch(e){
+      msg.className='coupon-msg err'; msg.textContent='Errore di rete. Riprova.';
+    }
+  }
+
+  function removeCoupon(){
+    activeCoupon = null;
+    document.getElementById('f-coupon').value='';
+    document.getElementById('f-coupon').disabled=false;
+    document.getElementById('coupon-btn').style.display='';
+    const msg=document.getElementById('coupon-msg');
+    msg.textContent=''; msg.className='coupon-msg';
+  }
+
+  function calcCouponSconto(subtotaleDopoOfferta){
+    if(!activeCoupon) return 0;
+    if(activeCoupon.tipo==='pct') return subtotaleDopoOfferta * activeCoupon.valore/100;
+    return Math.min(activeCoupon.valore, subtotaleDopoOfferta);
+  }
 
   /* ── Offerta countdown ── */
   let _offerta = null;
@@ -3886,12 +3950,13 @@
   function saveOrderHistory(){
     const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
     const offSconto = calcOffertaSconto(subtotal);
+    const couponSconto = calcCouponSconto(subtotal-offSconto);
     const shipping = deliveryMode==='consegna' ? shippingCost : 0;
     const ordine = {
       id: Date.now().toString(),
       data: new Date().toISOString(),
       items: cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty,img:i.img||''})),
-      totale: +(subtotal-offSconto+shipping).toFixed(2),
+      totale: +(subtotal-offSconto-couponSconto+shipping).toFixed(2),
       modalita: deliveryMode
     };
     let storico = JSON.parse(localStorage.getItem('cs_ordini')||'[]');
@@ -4118,19 +4183,25 @@
 
   function renderCheckoutSummary(){
     const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
-    const offSconto = calcOffertaSconto(subtotal);
+    const offSconto    = calcOffertaSconto(subtotal);
+    const subtAfterOff = subtotal - offSconto;
+    const couponSconto = calcCouponSconto(subtAfterOff);
     const shipping = deliveryMode==='consegna' ? shippingCost : 0;
-    const total = subtotal - offSconto + shipping;
+    const total = subtAfterOff - couponSconto + shipping;
     const shippingRow = deliveryMode==='consegna'
       ? `<div class="summary-item"><span>🚚 Spese di consegna</span><span>${shipping>0?'€'+shipping.toFixed(2).replace('.',','):'da calcolare'}</span></div>`
       : '';
     const offertaRow = offSconto>0
-      ? `<div class="summary-item" style="color:#1a6b2f;"><span>🎉 Offerta (${_offerta.sconto_pct}% su ${_offerta.prodotto_id})</span><span>−€${offSconto.toFixed(2).replace('.',',')}</span></div>`
+      ? `<div class="summary-item" style="color:#1a6b2f;"><span>🎉 Offerta (${_offerta.sconto_pct}%)</span><span>−€${offSconto.toFixed(2).replace('.',',')}</span></div>`
+      : '';
+    const couponRow = couponSconto>0
+      ? `<div class="summary-item" style="color:#1a6b2f;"><span>🏷️ Coupon (${activeCoupon.codice})</span><span>−€${couponSconto.toFixed(2).replace('.',',')}</span></div>`
       : '';
     document.getElementById('checkout-summary').innerHTML = `
       <h4>Riepilogo ordine</h4>
       ${cart.map(i=>`<div class="summary-item"><span>${esc(i.name)} × ${i.qty}</span><span>€${(i.price*i.qty).toFixed(2).replace('.',',')}</span></div>`).join('')}
       ${offertaRow}
+      ${couponRow}
       ${shippingRow}
       <div class="summary-total"><span>Totale</span><span class="tot">€${total.toFixed(2).replace('.',',')}</span></div>
     `;
@@ -4140,9 +4211,11 @@
   function renderConfirmation(){
     const nome = document.getElementById('f-nome').value;
     const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
-    const offSconto = calcOffertaSconto(subtotal);
+    const offSconto    = calcOffertaSconto(subtotal);
+    const subtAfterOff = subtotal - offSconto;
+    const couponSconto = calcCouponSconto(subtAfterOff);
     const shipping = deliveryMode==='consegna' ? shippingCost : 0;
-    const total = subtotal - offSconto + shipping;
+    const total = subtAfterOff - couponSconto + shipping;
     const ordN = 'CS-' + Date.now().toString().slice(-6);
     document.getElementById('order-num').textContent = 'N° ordine: ' + ordN;
     let msg = '';

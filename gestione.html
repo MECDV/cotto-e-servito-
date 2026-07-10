@@ -334,6 +334,7 @@
       <button type="button" class="tab-btn" onclick="showSection('galleria',this)">Galleria</button>
       <button type="button" class="tab-btn" onclick="showSection('orari',this)">🕐 Orari</button>
       <button type="button" class="tab-btn" onclick="showSection('offerta',this)">🎯 Offerta</button>
+      <button type="button" class="tab-btn" onclick="showSection('coupon',this)">🏷️ Coupon</button>
     </div>
     <button type="button" class="btn-add" id="btnAddMain" onclick="onAddClick()">+ Aggiungi</button>
   </div>
@@ -422,6 +423,40 @@
 
         <button type="button" class="btn-save" id="btnSaveOfferta" onclick="saveOfferta()" style="margin-top:1.5rem;">Salva offerta</button>
         <div class="save-status" id="saveStatusOfferta" style="margin-top:0.8rem;"></div>
+      </div>
+    </div>
+
+    <!-- COUPON -->
+    <div class="cat-panel" id="section-coupon">
+      <div class="orari-section">
+        <h2 class="orari-title">Coupon e codici sconto</h2>
+        <p class="orari-subtitle">Gestisci i codici sconto che i clienti possono usare al checkout.</p>
+
+        <div id="coupon-list" style="margin-bottom:2rem;"></div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.5rem;max-width:480px;">
+          <div style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-soft);margin-bottom:1.2rem;font-weight:600;">Aggiungi nuovo coupon</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div>
+              <label class="orari-label" style="display:block;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.4rem;font-weight:500;">Codice</label>
+              <input type="text" id="new-coupon-code" placeholder="Es. ESTATE20" style="width:100%;padding:0.65rem 0.8rem;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-b);font-size:0.88rem;background:var(--cream);color:var(--text);outline:none;text-transform:uppercase;">
+            </div>
+            <div>
+              <label class="orari-label" style="display:block;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.4rem;font-weight:500;">Tipo sconto</label>
+              <select id="new-coupon-tipo" style="width:100%;padding:0.65rem 0.8rem;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-b);font-size:0.88rem;background:var(--cream);color:var(--text);outline:none;">
+                <option value="pct">Percentuale (%)</option>
+                <option value="eur">Importo fisso (€)</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:1.2rem;">
+            <label class="orari-label" style="display:block;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.4rem;font-weight:500;">Valore</label>
+            <input type="number" id="new-coupon-valore" min="0.01" step="0.01" placeholder="10" style="width:100%;max-width:200px;padding:0.65rem 0.8rem;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-b);font-size:0.88rem;background:var(--cream);color:var(--text);outline:none;">
+          </div>
+          <button type="button" class="btn-save" onclick="addCoupon()">+ Aggiungi coupon</button>
+        </div>
+
+        <div class="save-status" id="saveStatusCoupon" style="margin-top:1rem;"></div>
       </div>
     </div>
 
@@ -994,6 +1029,90 @@
     } finally { btn.disabled=false; }
   }
 
+  /* ── COUPON ── */
+  let couponsData = null;
+  let couponsSha  = null;
+
+  async function loadCoupons(){
+    const token = getToken();
+    if(!token) return;
+    try {
+      const r = await fetch(`https://api.github.com/repos/MECDV/cotto-e-servito-/contents/coupons.json?t=${Date.now()}`,
+        { headers:{ Authorization:'token '+token } });
+      if(r.ok){
+        const d = await r.json();
+        couponsSha  = d.sha;
+        couponsData = JSON.parse(fromBase64(d.content));
+      } else if(r.status===404){
+        couponsData = []; couponsSha = null;
+      }
+    } catch(e){ couponsData=[]; couponsSha=null; }
+    renderCoupons();
+  }
+
+  function renderCoupons(){
+    const list = document.getElementById('coupon-list');
+    if(!list) return;
+    if(!couponsData||!couponsData.length){
+      list.innerHTML='<p style="color:var(--text-soft);font-size:0.85rem;">Nessun coupon creato.</p>';
+      return;
+    }
+    list.innerHTML = couponsData.map((c,i)=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1.2rem;margin-bottom:0.7rem;max-width:580px;">
+        <div>
+          <span style="font-family:var(--font-d);font-size:1.05rem;font-weight:600;color:var(--espresso);margin-right:0.8rem;">${esc(c.codice)}</span>
+          <span style="font-size:0.78rem;color:var(--text-soft);">${c.tipo==='pct'?c.valore+'%':'€'+parseFloat(c.valore).toFixed(2).replace('.',',')} di sconto</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.8rem;">
+          <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.78rem;cursor:pointer;">
+            <input type="checkbox" ${c.attivo?'checked':''} onchange="toggleCoupon(${i},this.checked)"> Attivo
+          </label>
+          <button type="button" onclick="deleteCoupon(${i})" style="background:none;border:1px solid rgba(192,39,45,0.35);color:var(--red);padding:0.3rem 0.7rem;font-size:0.72rem;font-family:var(--font-b);cursor:pointer;border-radius:5px;">Elimina</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleCoupon(idx, val){
+    if(!couponsData) return;
+    couponsData[idx].attivo = val;
+    saveCoupons('Aggiorna coupon: '+couponsData[idx].codice);
+  }
+
+  function deleteCoupon(idx){
+    if(!couponsData) return;
+    if(!confirm('Eliminare il coupon "'+couponsData[idx].codice+'"?')) return;
+    const code = couponsData[idx].codice;
+    couponsData.splice(idx,1);
+    saveCoupons('Elimina coupon: '+code);
+  }
+
+  function addCoupon(){
+    const code  = (document.getElementById('new-coupon-code').value||'').trim().toUpperCase();
+    const tipo  = document.getElementById('new-coupon-tipo').value;
+    const val   = parseFloat(document.getElementById('new-coupon-valore').value)||0;
+    if(!code||!val){ setStatus('saveStatusCoupon','error','❌ Inserisci codice e valore.'); return; }
+    if(couponsData && couponsData.find(c=>c.codice===code)){ setStatus('saveStatusCoupon','error','❌ Codice già esistente.'); return; }
+    if(!couponsData) couponsData=[];
+    couponsData.push({codice:code, tipo, valore:val, attivo:true});
+    document.getElementById('new-coupon-code').value='';
+    document.getElementById('new-coupon-valore').value='';
+    saveCoupons('Aggiungi coupon: '+code);
+  }
+
+  async function saveCoupons(message){
+    const token=getToken();
+    if(!token){ setStatus('saveStatusCoupon','error','❌ Nessun token.'); return; }
+    setStatus('saveStatusCoupon','loading','Salvataggio...');
+    try {
+      await commitFile('coupons.json', couponsData, couponsSha, message);
+      setStatus('saveStatusCoupon','success','✅ Salvato! Il sito si aggiornerà entro 1-2 minuti.');
+      renderCoupons();
+    } catch(e){
+      setStatus('saveStatusCoupon','error','❌ '+(e.message||'Errore'));
+    }
+  }
+
   /* ── SEZIONE / CAT TABS ── */
   function showSection(sec, btn){
     currentSection = sec;
@@ -1003,7 +1122,8 @@
     btn.classList.add('active');
     if(sec==='orari' && !configData) loadConfig();
     if(sec==='offerta'){ if(!configData) loadConfig().then(renderOffertaForm); else renderOffertaForm(); }
-    document.getElementById('btnAddMain').style.display = (sec==='offerta') ? 'none' : '';
+    if(sec==='coupon') loadCoupons();
+    document.getElementById('btnAddMain').style.display = (sec==='offerta'||sec==='coupon') ? 'none' : '';
     document.getElementById('btnAddMain').textContent = sec==='galleria' ? '+ Aggiungi a galleria' : '+ Aggiungi prodotto';
   }
 
