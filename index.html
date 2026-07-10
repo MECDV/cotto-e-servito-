@@ -2204,6 +2204,14 @@
   </button>
 </nav>
 
+<!-- BANNER OFFERTA -->
+<div id="offerta-banner" style="display:none;background:linear-gradient(90deg,#B41E2E,#d42535);color:#fff;text-align:center;padding:0.55rem 2rem;position:sticky;top:0;z-index:199;font-family:var(--font-body);font-size:0.82rem;letter-spacing:0.04em;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;">
+    <span id="offerta-testo"></span>
+    <span id="offerta-timer" style="font-family:var(--font-display);font-size:1.05rem;font-weight:600;letter-spacing:0.12em;background:rgba(0,0,0,0.2);padding:0.15rem 0.7rem;border-radius:4px;"></span>
+  </div>
+</div>
+
 <!-- Mobile fullscreen nav -->
 <div class="mobile-nav" id="mobileNav" aria-hidden="true">
   <div class="tricolore-mini"></div>
@@ -3176,6 +3184,7 @@
       const _cfg = await r.json();
       _orariCfg = _cfg.orari;
       _chiusuraStr = _cfg.chiusura_straordinaria || false;
+      _offerta = _cfg.offerta || null;
     } catch(e) {
       // fallback hardcoded
       _orariCfg = {
@@ -3189,6 +3198,7 @@
       };
     }
     updateOrarioBadge();
+    initOffertaBanner();
     setInterval(updateOrarioBadge, 60000);
   }
 
@@ -3230,6 +3240,47 @@
   }
 
   loadOrariConfig();
+
+  /* ── Offerta countdown ── */
+  let _offerta = null;
+  let _offertaTimer = null;
+
+  function initOffertaBanner(){
+    if(!_offerta || !_offerta.attiva) return;
+    const scadenza = new Date(_offerta.scadenza);
+    if(isNaN(scadenza)||Date.now()>=scadenza.getTime()) return;
+    document.getElementById('offerta-testo').textContent = _offerta.testo;
+    document.getElementById('offerta-banner').style.display = '';
+    function tick(){
+      const diff = scadenza.getTime()-Date.now();
+      if(diff<=0){
+        document.getElementById('offerta-banner').style.display='none';
+        clearInterval(_offertaTimer);
+        _offerta = null;
+        renderCheckoutSummaryIfOpen();
+        return;
+      }
+      const h=Math.floor(diff/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+      document.getElementById('offerta-timer').textContent=
+        `⏱ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+    tick();
+    _offertaTimer = setInterval(tick,1000);
+  }
+
+  function renderCheckoutSummaryIfOpen(){
+    if(document.getElementById('panel-3').classList.contains('active')) renderCheckoutSummary();
+  }
+
+  function calcOffertaSconto(subtotaleSenzaSconto){
+    if(!_offerta||!_offerta.attiva||!_offerta.prodotto_id||!_offerta.sconto_pct) return 0;
+    const scadenza=new Date(_offerta.scadenza);
+    if(isNaN(scadenza)||Date.now()>=scadenza.getTime()) return 0;
+    return cart.reduce((s,i)=>{
+      if(i.id===_offerta.prodotto_id) return s+(i.price*i.qty*_offerta.sconto_pct/100);
+      return s;
+    },0);
+  }
 
   /* ── Filtri allergeni ── */
   const _activeAllergens=new Set();
@@ -3967,14 +4018,19 @@
 
   function renderCheckoutSummary(){
     const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const offSconto = calcOffertaSconto(subtotal);
     const shipping = deliveryMode==='consegna' ? shippingCost : 0;
-    const total = subtotal + shipping;
+    const total = subtotal - offSconto + shipping;
     const shippingRow = deliveryMode==='consegna'
       ? `<div class="summary-item"><span>🚚 Spese di consegna</span><span>${shipping>0?'€'+shipping.toFixed(2).replace('.',','):'da calcolare'}</span></div>`
+      : '';
+    const offertaRow = offSconto>0
+      ? `<div class="summary-item" style="color:#1a6b2f;"><span>🎉 Offerta (${_offerta.sconto_pct}% su ${_offerta.prodotto_id})</span><span>−€${offSconto.toFixed(2).replace('.',',')}</span></div>`
       : '';
     document.getElementById('checkout-summary').innerHTML = `
       <h4>Riepilogo ordine</h4>
       ${cart.map(i=>`<div class="summary-item"><span>${esc(i.name)} × ${i.qty}</span><span>€${(i.price*i.qty).toFixed(2).replace('.',',')}</span></div>`).join('')}
+      ${offertaRow}
       ${shippingRow}
       <div class="summary-total"><span>Totale</span><span class="tot">€${total.toFixed(2).replace('.',',')}</span></div>
     `;
@@ -3984,8 +4040,9 @@
   function renderConfirmation(){
     const nome = document.getElementById('f-nome').value;
     const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const offSconto = calcOffertaSconto(subtotal);
     const shipping = deliveryMode==='consegna' ? shippingCost : 0;
-    const total = subtotal + shipping;
+    const total = subtotal - offSconto + shipping;
     const ordN = 'CS-' + Date.now().toString().slice(-6);
     document.getElementById('order-num').textContent = 'N° ordine: ' + ordN;
     let msg = '';

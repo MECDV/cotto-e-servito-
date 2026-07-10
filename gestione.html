@@ -333,6 +333,7 @@
       <button type="button" class="tab-btn active" onclick="showSection('prodotti',this)">Prodotti</button>
       <button type="button" class="tab-btn" onclick="showSection('galleria',this)">Galleria</button>
       <button type="button" class="tab-btn" onclick="showSection('orari',this)">🕐 Orari</button>
+      <button type="button" class="tab-btn" onclick="showSection('offerta',this)">🎯 Offerta</button>
     </div>
     <button type="button" class="btn-add" id="btnAddMain" onclick="onAddClick()">+ Aggiungi</button>
   </div>
@@ -380,6 +381,47 @@
 
         <button type="button" class="btn-save" id="btnSaveOrari" onclick="saveOrari()">Salva orari</button>
         <div class="save-status" id="saveStatusOrari" style="margin-top:0.8rem;"></div>
+      </div>
+    </div>
+
+    <!-- OFFERTA -->
+    <div class="cat-panel" id="section-offerta">
+      <div class="orari-section">
+        <h2 class="orari-title">Offerta a tempo</h2>
+        <p class="orari-subtitle">Imposta un'offerta con countdown visibile sul sito. Lo sconto viene applicato automaticamente nel carrello.</p>
+
+        <div class="orari-chiusura-box" style="margin-bottom:1.5rem;">
+          <label style="display:flex;align-items:center;gap:0.7rem;font-size:0.88rem;font-weight:500;cursor:pointer;">
+            <input type="checkbox" id="offertaAttiva" onchange="toggleOffertaForm(this)">
+            Offerta attiva
+          </label>
+        </div>
+
+        <div id="offertaForm" style="display:none;">
+          <div class="orari-grid" style="grid-template-columns:1fr;gap:1rem;max-width:520px;">
+            <div>
+              <label class="orari-label" style="display:block;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.4rem;font-weight:500;">Testo del banner</label>
+              <input type="text" id="offertaTesto" placeholder="Es. Lasagna al Forno −20% solo oggi!" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.9rem;background:var(--cream);color:var(--text);outline:none;" oninput="this.style.borderColor='var(--border)'">
+            </div>
+            <div>
+              <label class="orari-label" style="display:block;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.4rem;font-weight:500;">Prodotto in offerta (ID)</label>
+              <select id="offertaProdotto" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.9rem;background:var(--cream);color:var(--text);outline:none;">
+                <option value="">— Seleziona un prodotto —</option>
+              </select>
+            </div>
+            <div>
+              <label class="orari-label" style="display:block;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.4rem;font-weight:500;">Sconto (%)</label>
+              <input type="number" id="offertaSconto" min="1" max="99" placeholder="20" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.9rem;background:var(--cream);color:var(--text);outline:none;">
+            </div>
+            <div>
+              <label class="orari-label" style="display:block;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.4rem;font-weight:500;">Scadenza (data e ora)</label>
+              <input type="datetime-local" id="offertaScadenza" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.9rem;background:var(--cream);color:var(--text);outline:none;">
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-save" id="btnSaveOfferta" onclick="saveOfferta()" style="margin-top:1.5rem;">Salva offerta</button>
+        <div class="save-status" id="saveStatusOfferta" style="margin-top:0.8rem;"></div>
       </div>
     </div>
 
@@ -901,6 +943,57 @@
     } finally { btn.disabled = false; }
   }
 
+  /* ── OFFERTA ── */
+  function toggleOffertaForm(cb){
+    document.getElementById('offertaForm').style.display = cb.checked ? 'block' : 'none';
+  }
+
+  function renderOffertaForm(){
+    if(!configData) return;
+    const o = configData.offerta || {};
+    document.getElementById('offertaAttiva').checked = !!o.attiva;
+    document.getElementById('offertaForm').style.display = o.attiva ? 'block' : 'none';
+    document.getElementById('offertaTesto').value = o.testo || '';
+    document.getElementById('offertaSconto').value = o.sconto_pct || '';
+    document.getElementById('offertaScadenza').value = o.scadenza ? o.scadenza.slice(0,16) : '';
+    // Popola select prodotti
+    const sel = document.getElementById('offertaProdotto');
+    sel.innerHTML = '<option value="">— Seleziona un prodotto —</option>';
+    if(products){
+      Object.values(products.products||{}).flat().forEach(p=>{
+        const opt = document.createElement('option');
+        opt.value = p.id; opt.textContent = p.name + ' (' + p.id + ')';
+        if(p.id===o.prodotto_id) opt.selected=true;
+        sel.appendChild(opt);
+      });
+    }
+  }
+
+  async function saveOfferta(){
+    const token = getToken();
+    if(!token){ alert('Nessun token.'); return; }
+    if(!configData){ alert('Configurazione non caricata.'); return; }
+    const attiva = document.getElementById('offertaAttiva').checked;
+    const testo  = document.getElementById('offertaTesto').value.trim();
+    const pid    = document.getElementById('offertaProdotto').value;
+    const pct    = parseInt(document.getElementById('offertaSconto').value)||0;
+    const scad   = document.getElementById('offertaScadenza').value;
+    if(attiva && (!testo||!pid||!pct||!scad)){
+      setStatus('saveStatusOfferta','error','❌ Compila tutti i campi per attivare l\'offerta.');
+      return;
+    }
+    configData.offerta = { attiva, testo, prodotto_id:pid, sconto_pct:pct, scadenza:scad };
+    const btn = document.getElementById('btnSaveOfferta');
+    btn.disabled=true;
+    setStatus('saveStatusOfferta','loading','Salvataggio...');
+    try {
+      await commitFile('config.json', configData, configSha, attiva ? 'Attiva offerta: '+testo : 'Disattiva offerta');
+      setStatus('saveStatusOfferta','success','✅ Offerta salvata! Il sito si aggiornerà entro 1-2 minuti.');
+    } catch(e){
+      setStatus('saveStatusOfferta','error','❌ '+(e.message||'Errore'));
+    } finally { btn.disabled=false; }
+  }
+
   /* ── SEZIONE / CAT TABS ── */
   function showSection(sec, btn){
     currentSection = sec;
@@ -909,6 +1002,8 @@
     document.getElementById('section-'+sec).classList.add('active');
     btn.classList.add('active');
     if(sec==='orari' && !configData) loadConfig();
+    if(sec==='offerta'){ if(!configData) loadConfig().then(renderOffertaForm); else renderOffertaForm(); }
+    document.getElementById('btnAddMain').style.display = (sec==='offerta') ? 'none' : '';
     document.getElementById('btnAddMain').textContent = sec==='galleria' ? '+ Aggiungi a galleria' : '+ Aggiungi prodotto';
   }
 
@@ -1471,6 +1566,8 @@
     const d = await res.json();
     if(filename==='prodotti.json') prodSha   = d.content.sha;
     if(filename==='galleria.json')  gallerySha= d.content.sha;
+    if(filename==='config.json')    configSha = d.content.sha;
+    if(filename==='coupons.json')   couponsSha = d.content.sha;
   }
 
   async function uploadFile(file, folder){

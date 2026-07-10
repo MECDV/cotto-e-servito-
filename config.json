@@ -9,5 +9,12 @@
     "dom": {"aperto": false, "dalle": "", "alle": ""}
   },
   "chiusura_straordinaria": false,
-  "chiusura_messaggio": ""
+  "chiusura_messaggio": "",
+  "offerta": {
+    "attiva": false,
+    "testo": "",
+    "prodotto_id": "",
+    "sconto_pct": 0,
+    "scadenza": ""
+  }
 }
