@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#1C0F06"/>
+  <text x="256" y="205" font-family="Georgia,serif" font-size="130" font-weight="700" fill="#B8965A" text-anchor="middle" dominant-baseline="middle" letter-spacing="4">Cotto</text>
+  <line x1="80" y1="248" x2="432" y2="248" stroke="#B8965A" stroke-width="1.5" opacity="0.5"/>
+  <text x="256" y="295" font-family="Georgia,serif" font-size="72" font-style="italic" fill="#B8965A" text-anchor="middle" dominant-baseline="middle" opacity="0.85">&amp;</text>
+  <text x="256" y="355" font-family="Georgia,serif" font-size="130" font-weight="700" fill="#B8965A" text-anchor="middle" dominant-baseline="middle" letter-spacing="4">Servito</text>
+</svg>

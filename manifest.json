@@ -1,0 +1,19 @@
+{
+  "name": "Cotto & Servito",
+  "short_name": "Cotto & Servito",
+  "description": "Gastronomia artigianale di Ceprano (FR) — ordina online i tuoi piatti preferiti",
+  "start_url": "/cotto-e-servito-/",
+  "scope": "/cotto-e-servito-/",
+  "display": "standalone",
+  "background_color": "#1C0F06",
+  "theme_color": "#B8965A",
+  "lang": "it",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
