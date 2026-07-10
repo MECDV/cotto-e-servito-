@@ -1,6 +1,6 @@
 # Cotto & Servito — Guida completa al sito web
 > Documento per uso umano e per agenti AI (Claude Code).
-> Aggiornato: giugno 2026.
+> Aggiornato: luglio 2026.
 
 ---
 
@@ -40,6 +40,12 @@ sito chiapposo/
 │
 ├── video/              ← Video caricati dal pannello (si crea al primo upload)
 │
+├── manifest.json       ← PWA manifest per index.html (installabile su mobile)
+├── gestione-manifest.json ← PWA manifest per gestione.html (app admin Android)
+├── sw.js               ← Service Worker (cache-first per statici, network-first per JSON)
+├── icon.svg            ← Icona SVG per PWA e favicon
+├── config.json         ← Configurazione countdown offerta e orari ritiro
+├── coupons.json        ← Database codici coupon/sconto
 ├── ordini-apps-script.gs ← Script Google Apps Script per log ordini su Google Sheet
 ├── 404.html            ← Pagina errore 404 personalizzata
 ├── robots.txt          ← Istruzioni per i motori di ricerca
@@ -60,14 +66,16 @@ sito chiapposo/
 Un singolo file HTML che contiene tutto: CSS, JavaScript e struttura HTML della pagina pubblica. Non è diviso in più file per semplicità di deployment su GitHub Pages.
 
 ### Sezioni della pagina (in ordine dall'alto)
-1. **Hero** — Immagine di apertura con titolo e bottone
-2. **Menu prodotti** — Griglia di prodotti divisi in 4 tab: Primi, Secondi, Fritti, Dolci
-3. **I nostri valori** — Sezione descrittiva
-4. **Galleria** — Griglia foto/video
-5. **Dove siamo** — Mappa e orari
-6. **Footer** — Contatti
-7. **Carrello** (drawer laterale) — Si apre cliccando l'icona in alto
-8. **Modal checkout** — 4 step: riepilogo → dati cliente → consegna/ritiro → conferma
+1. **Hero** — Immagine di apertura con titolo, bottoni CTA e indicatore scroll "Scorri"
+2. **La Storia** — Testo descrittivo con valori aziendali
+3. **Il Metodo** (Tecnologia) — 3 card tecnologia + banner numeri animati (30 giorni, 220°, 500W, 0 additivi)
+4. **Menu prodotti** — Griglia di prodotti divisi in 4 tab: Primi, Secondi, Fritti, Dolci
+5. **Galleria** — Griglia foto/video
+6. **Contatti** — Mappa, orari e form contatto
+7. **Footer** — Link e info
+8. **Carrello** (drawer laterale) — Si apre cliccando l'icona in alto
+9. **Modal checkout** — 4 step: riepilogo → dati cliente → consegna/ritiro → conferma
+10. **Storico ordini** (drawer laterale) — Ordini precedenti con possibilità di ri-ordinare
 
 ### Come carica i prodotti
 ```javascript
@@ -90,14 +98,26 @@ Ogni prodotto diventa una card. Se il prodotto ha più media (`media` array), la
 - Stato salvato in variabile `cart` (array di oggetti `{name, price, img, weight, qty}`)
 - Non persiste al refresh (by design — è un negozio di asporto)
 - Subtotale e totale calcolati dinamicamente
+- Supporta **codici coupon/sconto** (letti da `coupons.json`)
 
 ### Checkout (4 step)
-- **Step 1**: Riepilogo carrello
+- **Step 1**: Riepilogo carrello + campo coupon
 - **Step 2**: Dati cliente (nome, cognome, telefono obbligatori; email opzionale con consenso)
-- **Step 3**: Modalità (consegna a domicilio o ritiro) + fascia oraria
+- **Step 3**: Modalità (consegna a domicilio o ritiro) + **fascia oraria** (slot da 30 min letti da `config.json`)
 - **Step 4**: Riepilogo finale + conferma
 - Navigazione cliccabile tra step già visitati
 - Validazione inline (no `alert()`) — errori sotto ogni campo
+
+### Storico ordini
+- Salvato in `localStorage` (chiave `cotto_ordini`)
+- Drawer laterale accessibile da nav e mobile menu
+- Ogni ordine mostra prodotti, totale, data e modalità di consegna
+- Pulsante "Ri-ordina" aggiunge tutti i prodotti al carrello
+
+### Countdown offerta
+- Banner nella nav con conto alla rovescia (data/ora lette da `config.json`)
+- Sconto automatico applicato al carrello quando il countdown è attivo
+- Gestibile dal pannello admin in `gestione.html`
 
 ### Email di conferma
 - Usa la libreria `emailjs.min.js` (file locale — non CDN per evitare blocchi di Edge)
@@ -316,6 +336,14 @@ Aprire `index.html` o `gestione.html` direttamente nel browser.
 Attenzione: `fetch('./prodotti.json')` funziona solo da server HTTP.
 Per test completi usare: `npx serve .` o `python -m http.server`
 
+### Service Worker e cache
+Il sito usa un service worker (`sw.js`) con strategia cache-first per i file statici.
+**Ogni volta che si modifica `index.html` o altri file statici, bisogna bumppare la versione cache** in `sw.js`:
+```javascript
+const CACHE = 'cotto-v3'; // incrementare a ogni deploy significativo
+```
+Senza questo, gli utenti vedono la versione vecchia in cache.
+
 ---
 
 ## 9. PERMESSI E OPERAZIONI CONSENTITE
@@ -355,6 +383,23 @@ Per test completi usare: `npx serve .` o `python -m http.server`
 | `prodNav(btn, dir)` | Frecce del carousel prodotto |
 | `prodDot(dot, idx)` | Click su pallino carousel |
 | `sendOrder()` | Invia email di conferma via EmailJS |
+| `openOrdiniDrawer()` | Apre il drawer storico ordini |
+| `applyCoupon()` | Verifica e applica codice sconto da coupons.json |
+| `toggleThemeMobile()` | Cambia tema chiaro/scuro dal menu mobile |
+
+### Animazioni e performance (index.html)
+Il sito ha un sistema di animazioni ottimizzato per performance:
+- **Master RAF loop** (`~45fps`): cursore dot, ring, glow globale, glow galleria — tutti su `transform: translate()` (GPU compositing, nessun reflow layout)
+- **Hero interaction**: spotlight + parallax content/blob — RAF throttled (un frame per evento mouse)
+- **Card 3D tilt**: solo su dispositivi con mouse, RAF throttled, getBCR cached su mouseenter
+- **Bottoni magnetici**: RAF throttled
+- **Scroll handler**: RAF throttled (nav scrolled, progress bar, parallax storia)
+- **Counter numeri**: IntersectionObserver su `.shelf-stat .num[data-count]`, conta da 0 al valore target con easeOut
+- **Shimmer card prodotto**: CSS puro `::after` con `transition: transform` al hover
+- **Sparkle hero**: IntersectionObserver, max 1 ogni 750ms, si fermano fuori viewport
+- **`will-change: transform`** impostato su tutti gli elementi animati frequentemente
+
+**Regola critica performance**: NON usare `transition: left/top` su elementi posizionati via JS — causa layout reflow. Usare sempre `transform: translate()`.
 
 ### In `gestione.html`
 | Funzione | Cosa fa |
