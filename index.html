@@ -2647,14 +2647,10 @@
             <input type="date" id="pickup-date" min="">
           </div>
         </div>
-        <div class="form-group" style="margin-bottom:1rem;">
-          <label>Fascia oraria preferita</label>
-          <div class="time-slots">
-            <div class="time-slot selected" onclick="selectTime(this)">09:00–11:00</div>
-            <div class="time-slot" onclick="selectTime(this)">11:00–13:00</div>
-            <div class="time-slot" onclick="selectTime(this)">15:00–17:00</div>
-            <div class="time-slot" onclick="selectTime(this)">17:00–19:00</div>
-          </div>
+        <div class="form-group" style="margin-bottom:1rem;" id="slot-group">
+          <label>Orario di ritiro <span class="req">*</span></label>
+          <div class="time-slots" id="ritiro-slots"></div>
+          <div class="field-error-msg" id="err-slot"></div>
         </div>
       </div>
 
@@ -3172,11 +3168,14 @@
   ══════════════════════════════════════════════ */
   const _DAYS = ['dom','lun','mar','mer','gio','ven','sab'];
   let _orariCfg = null;
+  let _chiusuraStr = false;
 
   async function loadOrariConfig(){
     try {
       const r = await fetch('config.json?t='+Date.now());
-      _orariCfg = (await r.json()).orari;
+      const _cfg = await r.json();
+      _orariCfg = _cfg.orari;
+      _chiusuraStr = _cfg.chiusura_straordinaria || false;
     } catch(e) {
       // fallback hardcoded
       _orariCfg = {
@@ -3893,6 +3892,7 @@
     closeDrawer();
     goStep(1);
     checkoutModal.classList.add('open');
+    generateRitiroSlots();
   });
   checkoutBg.addEventListener('click', closeCheckout);
 
@@ -3909,6 +3909,13 @@
   }
 
   function goStep(n){
+    // Blocca se ritiro senza slot selezionato
+    if(n===2 && deliveryMode==='ritiro' && !selectedTime){
+      const e=document.getElementById('err-slot');
+      if(e) e.textContent='Seleziona un orario di ritiro.';
+      document.getElementById('slot-group').scrollIntoView({behavior:'smooth',block:'nearest'});
+      return;
+    }
     // Blocca se consegna fuori zona (>100km)
     if(n===2 && deliveryMode==='consegna' && shippingBlocked){
       showShippingMsg('❌ Zona non coperta. Non è possibile procedere con la consegna oltre 100 km.',false);
@@ -4099,13 +4106,51 @@
     document.getElementById('ritiro-info').style.display = mode==='ritiro' ? '' : 'none';
     document.getElementById('consegna-info').style.display = mode==='consegna' ? '' : 'none';
     document.getElementById('address-fields').style.display = mode==='consegna' ? '' : 'none';
+    if(mode==='ritiro') generateRitiroSlots();
   }
 
   /* Time slot selection */
   function selectTime(el){
-    document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+    document.querySelectorAll('#ritiro-slots .time-slot').forEach(s=>s.classList.remove('selected'));
     el.classList.add('selected');
     selectedTime = el.textContent;
+    const e = document.getElementById('err-slot');
+    if(e) e.textContent = '';
+  }
+
+  function generateRitiroSlots(){
+    const container = document.getElementById('ritiro-slots');
+    if(!container) return;
+    if(!_orariCfg){
+      container.innerHTML = '<p style="color:var(--text-soft);font-size:0.82rem;">Caricamento orari...</p>';
+      return;
+    }
+    if(_chiusuraStr){
+      container.innerHTML = '<p style="color:var(--red-it);font-size:0.82rem;">⚠️ Negozio temporaneamente chiuso — impossibile selezionare un orario.</p>';
+      selectedTime = '';
+      return;
+    }
+    const now = new Date();
+    const key = _DAYS[now.getDay()];
+    const cfg = _orariCfg[key] || {aperto:false};
+    if(!cfg.aperto){
+      container.innerHTML = '<p style="color:var(--text-soft);font-size:0.82rem;">Il negozio è chiuso oggi — seleziona un altro giorno nel campo sopra.</p>';
+      selectedTime = '';
+      return;
+    }
+    const toMin = t => { const [h,m]=(t||'00:00').split(':').map(Number); return h*60+m; };
+    const fromMin = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+    const slots = [];
+    for(let m=toMin(cfg.dalle); m+30<=toMin(cfg.alle); m+=30) slots.push(fromMin(m));
+    if(!slots.length){
+      container.innerHTML = '<p style="color:var(--text-soft);font-size:0.82rem;">Nessun orario disponibile.</p>';
+      selectedTime = '';
+      return;
+    }
+    if(!slots.includes(selectedTime)) selectedTime = '';
+    container.innerHTML = slots.map(s =>
+      `<div class="time-slot${selectedTime===s?' selected':''}" onclick="selectTime(this)">${s}</div>`
+    ).join('');
   }
 
   /* Payment selection */
