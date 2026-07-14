@@ -2655,8 +2655,14 @@
       </div>
       <button type="button" class="pm-share-btn" id="pmShareBtn" onclick="shareProdotto()">↗ Condividi questo prodotto</button>
       <div class="pm-delivery">
-        <div class="pm-del-row"><span class="pm-del-icon">🚚</span><div><strong>Consegna a domicilio</strong>Da €3 fino a 100 km da Ceprano</div></div>
-        <div class="pm-del-row"><span class="pm-del-icon">🏪</span><div><strong>Ritiro in negozio</strong>Via Ori Martin n.4 · Ceprano (FR) · Gratis</div></div>
+        <div class="pm-del-row"><span class="pm-del-icon">🚚</span><div><strong>Consegna a domicilio</strong>
+          <span style="display:block;margin-top:0.3rem;line-height:1.7;">
+            0–5 km: <b>€3</b> &nbsp;·&nbsp; 5–10 km: <b>€5</b> &nbsp;·&nbsp; 10–15 km: <b>€7</b> &nbsp;·&nbsp; 15–20 km: <b>€10</b><br>
+            20–30 km: <b>€14</b> &nbsp;·&nbsp; 30–50 km: <b>€18</b> &nbsp;·&nbsp; 50–75 km: <b>€25</b> &nbsp;·&nbsp; 75–100 km: <b>€35</b><br>
+            <span style="color:var(--red-it);">Oltre 100 km: non disponibile</span> &nbsp;·&nbsp; Min. ordine: <b>€10</b>
+          </span>
+        </div></div>
+        <div class="pm-del-row"><span class="pm-del-icon">🏪</span><div><strong>Ritiro in negozio</strong>Via Ori Martin n.4 · Ceprano (FR) · Gratis · Nessun minimo</div></div>
         <div class="pm-del-row"><span class="pm-del-icon">❄️</span><div><strong>30 giorni in frigo</strong>Confezionato in atmosfera protetta M.A.P.</div></div>
       </div>
     </div>
@@ -3333,6 +3339,7 @@
   const _DAYS = ['dom','lun','mar','mer','gio','ven','sab'];
   let _orariCfg = null;
   let _chiusuraStr = false;
+  let _minimoConsegna = 10;
 
   async function loadOrariConfig(){
     try {
@@ -3341,6 +3348,7 @@
       _orariCfg = _cfg.orari;
       _chiusuraStr = _cfg.chiusura_straordinaria || false;
       _offerta = _cfg.offerta || null;
+      _minimoConsegna = _cfg.minimo_consegna || 10;
     } catch(e) {
       // fallback hardcoded
       _orariCfg = {
@@ -4233,6 +4241,14 @@
       showShippingMsg('❌ Zona non coperta. Non è possibile procedere con la consegna oltre 100 km.',false);
       return;
     }
+    // Blocca se totale sotto il minimo per la consegna
+    if(n===2 && deliveryMode==='consegna'){
+      const subtot = cart.reduce((s,i)=>s+i.price*i.qty, 0);
+      if(subtot < _minimoConsegna){
+        showShippingMsg(`❌ Importo minimo per la consegna: €${_minimoConsegna.toFixed(2).replace('.',',')}. Aggiungi altri prodotti oppure scegli il ritiro in negozio.`, false);
+        return;
+      }
+    }
     // Validate step 2 required fields before going to step 3
     if(n===3){
         clearAllErrors();
@@ -4436,6 +4452,12 @@
     document.getElementById('consegna-info').style.display = mode==='consegna' ? '' : 'none';
     document.getElementById('address-fields').style.display = mode==='consegna' ? '' : 'none';
     if(mode==='ritiro') generateRitiroSlots();
+    if(mode==='consegna'){
+      const subtot = cart.reduce((s,i)=>s+i.price*i.qty, 0);
+      if(subtot < _minimoConsegna){
+        showShippingMsg(`⚠️ Minimo €${_minimoConsegna.toFixed(2).replace('.',',')} per la consegna a domicilio. Totale attuale: €${subtot.toFixed(2).replace('.',',')}`, false);
+      }
+    }
   }
 
   /* Time slot selection */

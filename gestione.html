@@ -385,7 +385,17 @@
           <!-- righe generate da JS -->
         </div>
 
-        <button type="button" class="btn-save" id="btnSaveOrari" onclick="saveOrari()">Salva orari</button>
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+          <div style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.6rem;font-weight:600;">Importo minimo per la consegna a domicilio</div>
+          <div style="display:flex;align-items:center;gap:0.8rem;">
+            <span style="font-size:1rem;color:var(--text-soft);">€</span>
+            <input type="number" id="minimoConsegna" min="0" step="0.5" placeholder="10"
+              style="width:110px;padding:0.65rem 0.8rem;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-b);font-size:0.95rem;background:var(--cream);color:var(--text);outline:none;">
+            <span style="font-size:0.8rem;color:var(--text-soft);">Impostare 0 per nessun minimo</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn-save" id="btnSaveOrari" onclick="saveOrari()" style="margin-top:1.5rem;">Salva orari</button>
         <div class="save-status" id="saveStatusOrari" style="margin-top:0.8rem;"></div>
       </div>
     </div>
@@ -937,6 +947,8 @@
     document.getElementById('chiusuraCheck').checked = !!configData.chiusura_straordinaria;
     document.getElementById('chiusuraMsg').value     = configData.chiusura_messaggio||'';
     document.getElementById('chiusuraMsgBox').style.display = configData.chiusura_straordinaria ? 'block' : 'none';
+    // Minimo consegna
+    document.getElementById('minimoConsegna').value = configData.minimo_consegna ?? 10;
   }
 
   function toggleGiorno(key, cb){
@@ -971,6 +983,7 @@
     });
     configData.chiusura_straordinaria = document.getElementById('chiusuraCheck').checked;
     configData.chiusura_messaggio     = document.getElementById('chiusuraMsg').value.trim();
+    configData.minimo_consegna        = parseFloat(document.getElementById('minimoConsegna').value) || 0;
 
     const btn = document.getElementById('btnSaveOrari');
     btn.disabled = true;

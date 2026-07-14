@@ -1,4 +1,5 @@
 {
+  "minimo_consegna": 10,
   "orari": {
     "lun": {"aperto": true, "dalle": "09:00", "alle": "19:00"},
     "mar": {"aperto": true, "dalle": "09:00", "alle": "19:00"},
