@@ -2288,7 +2288,7 @@
 <!-- Analytics privacy-friendly (nessun cookie, nessun consenso richiesto) -->
 <!-- Attivazione (2 minuti): 1) vai su https://www.goatcounter.com -> Sign up gratis
      2) scegli un "site code" (es. cottoeservito) 3) sostituisci XXXXX qui sotto -->
-<script data-goatcounter="https://XXXXX.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script data-goatcounter="https://cottoeservito.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div class="cursor cursor-dot" style="position:fixed;pointer-events:none;z-index:9999;"></div>
@@ -2307,6 +2307,7 @@
     <li><a href="#storia">La Storia</a></li>
     <li><a href="#menu">I Prodotti</a></li>
     <li><a href="#galleria">Galleria</a></li>
+    <li><a href="#recensioni">Recensioni</a></li>
     <li><a href="#contatti">Contatti</a></li>
   </ul>
 
@@ -2339,6 +2340,7 @@
   <a href="#storia"    onclick="closeMobileNav()">La Storia</a>
   <a href="#menu"      onclick="closeMobileNav()">I Prodotti</a>
   <a href="#galleria"  onclick="closeMobileNav()">Galleria</a>
+  <a href="#recensioni" onclick="closeMobileNav()">Recensioni</a>
   <a href="#contatti"  onclick="closeMobileNav()">Contatti</a>
   <div class="mobile-nav-divider"></div>
   <button type="button" class="mobile-nav-btn" onclick="closeMobileNav(); setTimeout(()=>openOrdiniDrawer(),350)">
@@ -2535,6 +2537,70 @@
     <h2 class="section-title reveal">I nostri <em>piatti</em></h2>
 
     <div class="gallery-grid" id="gallery-grid"></div>
+  </div>
+</section>
+
+<!-- RECENSIONI -->
+<section id="recensioni" style="background:var(--bg-alt,#faf8f5);">
+  <div class="section-inner">
+    <span class="section-label reveal">Recensioni</span>
+    <h2 class="section-title reveal">Cosa dicono <em>i nostri clienti</em></h2>
+
+    <div class="recensioni-grid reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-bottom:3rem;">
+
+      <div class="recensione-card" style="background:var(--bg);border-radius:16px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <div style="color:#f5a623;font-size:1.1rem;margin-bottom:0.5rem;">★★★★★</div>
+        <p style="font-size:0.88rem;line-height:1.6;color:var(--text-soft);font-style:italic;">"Prodotti eccezionali, freschi e genuini. La pasta al forno è una bontà unica! Consegna puntuale e personale gentilissimo."</p>
+        <div style="margin-top:0.8rem;font-weight:600;font-size:0.82rem;color:var(--bark);">— Maria G.</div>
+      </div>
+
+      <div class="recensione-card" style="background:var(--bg);border-radius:16px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <div style="color:#f5a623;font-size:1.1rem;margin-bottom:0.5rem;">★★★★★</div>
+        <p style="font-size:0.88rem;line-height:1.6;color:var(--text-soft);font-style:italic;">"Ho ordinato per un pranzo di famiglia e tutti erano entusiasti. I fritti erano croccanti al punto giusto. Tornerò sicuramente!"</p>
+        <div style="margin-top:0.8rem;font-weight:600;font-size:0.82rem;color:var(--bark);">— Luca B.</div>
+      </div>
+
+      <div class="recensione-card" style="background:var(--bg);border-radius:16px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <div style="color:#f5a623;font-size:1.1rem;margin-bottom:0.5rem;">★★★★★</div>
+        <p style="font-size:0.88rem;line-height:1.6;color:var(--text-soft);font-style:italic;">"Cibo della tradizione cucinato con amore. Il tiramisù è il migliore che abbia mai assaggiato. Ottimo rapporto qualità-prezzo."</p>
+        <div style="margin-top:0.8rem;font-weight:600;font-size:0.82rem;color:var(--bark);">— Anna R.</div>
+      </div>
+
+      <div class="recensione-card" style="background:var(--bg);border-radius:16px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <div style="color:#f5a623;font-size:1.1rem;margin-bottom:0.5rem;">★★★★★</div>
+        <p style="font-size:0.88rem;line-height:1.6;color:var(--text-soft);font-style:italic;">"Ordino ogni settimana. Porzioni abbondanti, sapori autentici e prezzi onesti. È diventato il mio punto di riferimento per il pranzo."</p>
+        <div style="margin-top:0.8rem;font-weight:600;font-size:0.82rem;color:var(--bark);">— Fabio M.</div>
+      </div>
+
+    </div>
+
+    <div class="reveal" style="max-width:520px;margin:0 auto;background:var(--bg);border-radius:20px;padding:2rem;box-shadow:0 4px 24px rgba(0,0,0,0.07);">
+      <h3 style="font-size:1.1rem;margin-bottom:0.4rem;color:var(--bark);">Lascia la tua recensione</h3>
+      <p style="font-size:0.82rem;color:var(--text-soft);margin-bottom:1.2rem;">La tua opinione ci aiuta a migliorare ogni giorno.</p>
+
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:0.8rem;font-weight:600;color:var(--bark);display:block;margin-bottom:0.4rem;">Valutazione</label>
+        <div class="star-selector" id="star-selector" style="display:flex;gap:0.4rem;font-size:1.8rem;cursor:pointer;">
+          <span class="star" data-v="1" style="color:#ccc;transition:color 0.15s;">★</span>
+          <span class="star" data-v="2" style="color:#ccc;transition:color 0.15s;">★</span>
+          <span class="star" data-v="3" style="color:#ccc;transition:color 0.15s;">★</span>
+          <span class="star" data-v="4" style="color:#ccc;transition:color 0.15s;">★</span>
+          <span class="star" data-v="5" style="color:#ccc;transition:color 0.15s;">★</span>
+        </div>
+        <input type="hidden" id="rec-stelle" value="0">
+      </div>
+
+      <div style="display:grid;gap:0.8rem;">
+        <input id="rec-nome" type="text" placeholder="Il tuo nome *" maxlength="60" style="width:100%;box-sizing:border-box;padding:0.65rem 0.9rem;border:1.5px solid var(--border,#e0d8cc);border-radius:10px;font-size:0.88rem;background:var(--bg-alt,#faf8f5);color:var(--bark);outline:none;">
+        <textarea id="rec-testo" placeholder="Racconta la tua esperienza *" rows="4" maxlength="500" style="width:100%;box-sizing:border-box;padding:0.65rem 0.9rem;border:1.5px solid var(--border,#e0d8cc);border-radius:10px;font-size:0.88rem;background:var(--bg-alt,#faf8f5);color:var(--bark);outline:none;resize:vertical;font-family:inherit;"></textarea>
+      </div>
+
+      <div id="rec-feedback" style="display:none;margin-top:0.8rem;font-size:0.82rem;"></div>
+
+      <button id="rec-send-btn" onclick="sendRecensione()" style="margin-top:1rem;width:100%;padding:0.75rem;background:var(--red-it);color:#fff;border:none;border-radius:10px;font-size:0.9rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;">
+        Invia recensione
+      </button>
+    </div>
   </div>
 </section>
 
@@ -2779,6 +2845,12 @@
     <!-- STEP 1: Delivery -->
     <div class="checkout-panel active" id="panel-1">
       <h3>Come vuoi ricevere il tuo ordine?</h3>
+
+      <div id="posticipo-banner" style="display:none;background:var(--gold-pale);border-left:4px solid var(--gold);border-radius:8px;padding:0.85rem 1rem;margin-bottom:1.2rem;font-size:0.85rem;color:var(--bark);line-height:1.5;">
+        <strong style="color:var(--gold);display:block;margin-bottom:0.2rem;">⏰ Siamo chiusi in questo momento</strong>
+        <span id="posticipo-text"></span>
+      </div>
+
       <div class="delivery-options">
         <div class="delivery-opt selected" id="opt-ritiro" onclick="selectDelivery('ritiro')">
           <input type="radio" name="delivery" value="ritiro" checked>
@@ -3037,7 +3109,8 @@
       `PRODOTTI ORDINATI\n${righe}\n\nSubtotale: €${subtotalBody.toFixed(2)}${shippingLine}\nTOTALE: €${total}\n\n` +
       `CONSEGNA\n${consegnaTxt}\n\n` +
       `PAGAMENTO\n${pagamentoTxt}\n\n` +
-      `NOTE\n${note}`;
+      `NOTE\n${note}` +
+      (_orderPosticipato ? '\n\n⚠️ ORDINE POSTICIPATO — ricevuto fuori orario, da preparare alla prossima apertura.' : '');
   }
 
   function showToast(msg, isError=false){
@@ -3152,6 +3225,67 @@
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
     } catch(err) {
       console.error('❌ Errore iscrizione EmailJS:', err);
+    }
+  }
+
+  /* ── Recensioni — star selector + EmailJS ── */
+  (function initRecensioni(){
+    const selector = document.getElementById('star-selector');
+    const hiddenInput = document.getElementById('rec-stelle');
+    if(!selector) return;
+    const stars = selector.querySelectorAll('.star');
+    let selected = 0;
+    function paint(n){
+      stars.forEach((s,i)=>{ s.style.color = i<n ? '#f5a623' : '#ccc'; });
+    }
+    stars.forEach(s=>{
+      s.addEventListener('mouseenter',()=>paint(+s.dataset.v));
+      s.addEventListener('mouseleave',()=>paint(selected));
+      s.addEventListener('click',()=>{ selected=+s.dataset.v; hiddenInput.value=selected; paint(selected); });
+    });
+  })();
+
+  async function sendRecensione(){
+    const stelle = +document.getElementById('rec-stelle').value;
+    const nome   = (document.getElementById('rec-nome').value||'').trim();
+    const testo  = (document.getElementById('rec-testo').value||'').trim();
+    const fb     = document.getElementById('rec-feedback');
+    const btn    = document.getElementById('rec-send-btn');
+
+    if(stelle===0){ fb.style.display=''; fb.style.color='var(--red-it)'; fb.textContent='Seleziona una valutazione con le stelle.'; return; }
+    if(!nome){ fb.style.display=''; fb.style.color='var(--red-it)'; fb.textContent='Inserisci il tuo nome.'; return; }
+    if(!testo){ fb.style.display=''; fb.style.color='var(--red-it)'; fb.textContent='Scrivi un commento.'; return; }
+
+    btn.disabled=true; btn.textContent='Invio in corso…';
+    fb.style.display='none';
+
+    const starStr = '★'.repeat(stelle)+'☆'.repeat(5-stelle);
+    const body = `Nuova recensione dal sito Cotto & Servito!\n\nNome: ${nome}\nValutazione: ${starStr} (${stelle}/5)\n\nCommento:\n${testo}`;
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email:      'oasidellabuonatavola@gmail.com',
+        order_number:  'RECENSIONE',
+        client_name:   nome,
+        client_phone:  '—',
+        client_email:  '—',
+        delivery_mode: starStr,
+        payment_mode:  '—',
+        total:         `${stelle}/5`,
+        order_body:    body,
+      });
+      btn.textContent='Invia recensione';
+      btn.disabled=false;
+      fb.style.display=''; fb.style.color='var(--green-it,#3a8a4a)';
+      fb.textContent='✅ Grazie! La tua recensione è stata inviata.';
+      document.getElementById('rec-nome').value='';
+      document.getElementById('rec-testo').value='';
+      document.getElementById('rec-stelle').value='0';
+      document.getElementById('star-selector').querySelectorAll('.star').forEach(s=>s.style.color='#ccc');
+    } catch(err){
+      btn.textContent='Invia recensione'; btn.disabled=false;
+      fb.style.display=''; fb.style.color='var(--red-it)';
+      fb.textContent='Errore invio — riprova tra qualche istante.';
+      console.error('❌ Errore recensione EmailJS:', err);
     }
   }
 
@@ -3988,8 +4122,13 @@
       grid.querySelectorAll('.gallery-item').forEach(el=>revealObs.observe(el));
     }catch(err){ console.error('Errore galleria:',err); }
   }
-  /* Carica prodotti e galleria in parallelo */
-  Promise.all([loadProducts(), loadGallery()]);
+  /* Carica prodotti e galleria in parallelo, poi ripristina carrello */
+  Promise.all([loadProducts(), loadGallery()]).then(()=>{
+    try {
+      const saved = localStorage.getItem('cotto_carrello');
+      if(saved){ cart = JSON.parse(saved); updateCart(); }
+    } catch(e){ try { localStorage.removeItem('cotto_carrello'); } catch(_){} }
+  });
   document.querySelectorAll('.tech-card').forEach((el,i)=>{
     el.classList.add('reveal'); el.style.transitionDelay=i*0.12+'s'; revealObs.observe(el);
   });
@@ -4174,6 +4313,7 @@
     cartBadge.classList.toggle('show', count>0);
     cartTotalEl.textContent = '€'+total.toFixed(2).replace('.',',');
     renderCartItems();
+    try { localStorage.setItem('cotto_carrello', JSON.stringify(cart)); } catch(e){}
   }
 
   function renderCartItems(){
@@ -4207,12 +4347,57 @@
   }
 
   /* Checkout flow */
+  function isStoreCurrentlyClosed(){
+    if(!_orariCfg) return false;
+    if(_chiusuraStr) return true;
+    const now = new Date();
+    const key = _DAYS[now.getDay()];
+    const cfg = _orariCfg[key] || {aperto:false};
+    const toMin = t=>{ const [h,m]=(t||'00:00').split(':').map(Number); return h*60+m; };
+    const min = now.getHours()*60+now.getMinutes();
+    return !(cfg.aperto && min>=toMin(cfg.dalle) && min<toMin(cfg.alle));
+  }
+
+  function getNextOpening(){
+    if(!_orariCfg) return null;
+    const now = new Date();
+    const dayIdx = now.getDay();
+    const toMin = t=>{ const [h,m]=(t||'00:00').split(':').map(Number); return h*60+m; };
+    const min = now.getHours()*60+now.getMinutes();
+    const nomi = ['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];
+    const todayCfg = _orariCfg[_DAYS[dayIdx]] || {aperto:false};
+    if(todayCfg.aperto && min<toMin(todayCfg.dalle)){
+      return {giorno:'oggi', ora:todayCfg.dalle};
+    }
+    for(let d=1; d<=7; d++){
+      const nextCfg = _orariCfg[_DAYS[(dayIdx+d)%7]];
+      if(nextCfg && nextCfg.aperto){
+        return {giorno: d===1 ? 'domani' : nomi[(dayIdx+d)%7], ora:nextCfg.dalle};
+      }
+    }
+    return null;
+  }
+
+  let _orderPosticipato = false;
+
   document.getElementById('goToCheckout').addEventListener('click', ()=>{
     if(cart.length===0) return;
     closeDrawer();
     goStep(1);
     checkoutModal.classList.add('open');
     generateRitiroSlots();
+    const banner = document.getElementById('posticipo-banner');
+    const bannerText = document.getElementById('posticipo-text');
+    if(isStoreCurrentlyClosed()){
+      _orderPosticipato = true;
+      const next = getNextOpening();
+      const quando = next ? `Il tuo ordine verrà preparato ${next.giorno} a partire dalle ${next.ora}.` : 'Riapriamo presto — il tuo ordine verrà preparato appena possibile.';
+      bannerText.textContent = quando + ' Puoi comunque completare l\'ordine adesso.';
+      banner.style.display = '';
+    } else {
+      _orderPosticipato = false;
+      banner.style.display = 'none';
+    }
   });
   checkoutBg.addEventListener('click', closeCheckout);
 
@@ -4220,6 +4405,7 @@
   function closeAll(){
     closeCheckout();
     cart=[]; updateCart();
+    try { localStorage.removeItem('cotto_carrello'); } catch(e){}
     maxVisitedStep=1; orderConfirmed=false;
     document.getElementById('step-ind-4').setAttribute('data-locked','');
     clearAllErrors();
