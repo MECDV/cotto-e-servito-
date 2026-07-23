@@ -1,4 +1,4 @@
-const CACHE = 'cotto-v5';
+const CACHE = 'cotto-v6';
 
 const STATIC = [
   '/cotto-e-servito-/',

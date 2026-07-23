@@ -3147,12 +3147,13 @@
     };
 
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-      showToast('✅ Ordine inviato! Controlla la tua email.');
+      const res = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      console.log('✅ EmailJS ordine OK:', res.status, res.text);
+      showToast('✅ Ordine inviato! Controlla la tua email (controlla anche la cartella Spam).');
     } catch(err) {
-      console.error('❌ Errore EmailJS:', err);
+      console.error('❌ Errore EmailJS ordine:', err);
       const errMsg = (err && (err.text || err.message)) ? (err.text || err.message) : JSON.stringify(err);
-      showToast('⚠️ Errore invio: ' + errMsg, true);
+      showToast('⚠️ Email non inviata (errore ' + (err?.status||'?') + ': ' + errMsg + '). Ordine salvato — contattaci via WhatsApp.', true);
     }
   }
 
@@ -3188,7 +3189,7 @@
       `Cotto & Servito — L'Oasi della Buona Tavola\nVia Ori Martin n.4, 03024 Ceprano (FR)`;
 
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      const res = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         to_email:      email,
         order_number:  ordN,
         client_name:   nomeCompleto,
@@ -3199,8 +3200,10 @@
         total:         '€'+total,
         order_body:    body,
       });
+      console.log('✅ EmailJS conferma cliente OK:', res.status, res.text);
     } catch(err) {
       console.error('❌ Errore email conferma cliente:', err);
+      showToast('⚠️ Email di conferma non inviata al cliente (errore ' + (err?.status||'?') + '). Contatta il cliente direttamente.', true);
     }
   }
 
